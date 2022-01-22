@@ -1,9 +1,9 @@
 <template>
-  <Tutorial/>
 </template>
 
 <script>
-export default {
-  name: 'IndexPage'
-}
+  export default {
+    layout:'auth',
+    name: 'IndexPage'
+  }
 </script>

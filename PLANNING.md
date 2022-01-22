@@ -1,0 +1,27 @@
+Memorised
+--Technologies
+    --VueJs
+    --NuxtJS
+    --TailwindCss
+    --Laravel Lumen (BE later will be nodeJs);
+
+--Pages
+    --Landing
+    --About
+--Authentication Pages
+    --Login
+    --Signup
+    --Forgot Password
+    --Reset Password
+--User Pages
+    --Home
+        --Sidebar Options
+            --Home
+            --Profile
+            --Memories
+            --My Circle
+            --Privacy
+            --Settings
+    --Memories Page
+    --Feature Request
+    --Feedback Page
