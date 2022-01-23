@@ -1,11 +1,13 @@
 <template>
-  <div class="flex w-full flex-col bg-gradient-to-t from-cyan-300 to-cyan-100 rounded-xl">
+  <div
+    class=" sticky top-20 flex w-full flex-col bg-gradient-to-t from-cyan-300 to-cyan-100 rounded-xl"
+  >
     <div class="flex flex-col justify-center w-full px-2 pt-6 sidebar-wrapper">
       <a
         href
         v-for="item in sidemenu"
         :key="item"
-        class="sidebar-item text-gray-800 hover:text-white rounded hover:bg-cyan-600 w-full py-2 px-4"
+        class="sidebar-item text-gray-800 hover:text-white rounded hover:bg-cyan-500 w-full py-2 px-4"
       >
         <div>
           <span class="mr-2">
@@ -16,7 +18,7 @@
       </a>
     </div>
     <div class="flex justify-center items-center h-20">
-        Copyright &copy; 2022
+      Copyright &copy; 2022
     </div>
   </div>
 </template>
@@ -73,7 +75,7 @@ export default {
             type: "fa",
             name: "gear",
           },
-        }
+        },
       ],
     };
   },
@@ -82,7 +84,13 @@ export default {
 </script>
 
 <style scoped>
-    .sidebar-wrapper .sidebar-item:not(:last-child) {
-        margin-bottom: 10px;
-    }
+.from-top-64 {
+  top:70px
+}
+.sidebar-item {
+  transition: all ease-in-out 0.3s;
+}
+.sidebar-wrapper .sidebar-item:not(:last-child) {
+  margin-bottom: 10px;
+}
 </style>

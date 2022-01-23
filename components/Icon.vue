@@ -11,7 +11,7 @@
 export default {
   props: {
     size: {
-      default: '14px',
+      default: 'inherit',
     },
     name : {default : ""},
     type: {
