@@ -66,6 +66,7 @@
 import People from "@/components/People/index.vue";
 import UserPosts from "@/components/UserPosts.vue";
 import Icon from "~/components/Icon.vue";
+//This was edited 2 min ago
 export default {
   components: { People, UserPosts, Icon },
   layout: "auth",
