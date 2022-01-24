@@ -11,7 +11,7 @@
 
 <script>
 import UserPost from "@/components/Post/index.vue";
-import PostSkeleton from "./Post/PostSkeleton.vue";
+import PostSkeleton from "@/components/Post/PostSkeleton.vue";
 export default {
   name: "UserPosts",
   components: { UserPost, PostSkeleton },
