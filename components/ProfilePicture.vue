@@ -9,11 +9,12 @@
 
 <script>
 export default {
-    props : {
-        size : {default : 10},
-        url : {default : ""},
-        loading : {default : false}
-    }
+  props: ["name"],
+  props: {
+    size: { default: 10 },
+    url: { default: "" },
+    loading: { default: false },
+  }
 };
 </script>
 

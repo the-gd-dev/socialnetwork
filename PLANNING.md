@@ -4,13 +4,14 @@ Memorised
     --NuxtJS
     --TailwindCss
     --Laravel Lumen (BE later will be nodeJs);
+    --MySQL ( MongoDB || Firebase later )
 
 --Pages
     --Landing
     --About
---Authentication Pages
+--Authentication Pages ( Public Pages )
     --Login
-    --Signup
+    --Signup (First Name, Last Name, Email, Password, Retype Password)
     --Forgot Password
     --Reset Password
 --User Pages

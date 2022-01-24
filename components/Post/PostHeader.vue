@@ -3,7 +3,7 @@
     <div class="">
       <post-user :userId="userId" />
     </div>
-    <div class="flex">
+    <div class="flex post-options">
       <post-options />
     </div>
   </div>
@@ -16,4 +16,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+  .post-options .drop-popup {
+    top: 0 !important;
+  }
+</style>

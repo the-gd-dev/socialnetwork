@@ -46,7 +46,7 @@
                   name="bell"
                   type="fa"
                   size="26px"
-                  customClass="text-emerald-500 hover:text-emerald-800 cursor-pointer"
+                  :customClass="` ${popups.notifications ? 'text-emerald-800' : 'text-emerald-500'} hover:text-emerald-800 cursor-pointer`"
                 />
               </button>
             </template>
@@ -58,10 +58,10 @@
             <template #drop-option>
               <button
                 @click="togglePopup('useroptions')"
-                class="username flex items-center space-x-2 text-emerald-500 focus:text-emerald-800 hover:text-emerald-800 cursor-pointer"
+                :class="`username flex items-center space-x-2 ${popups.useroptions ? 'text-emerald-800' : 'text-emerald-500'} hover:text-emerald-800 cursor-pointer`"
               >
                 <Icon name="user-circle" type="fa" size="26px" />
-                <a href="#" class="text-gray-800 font-semibold">John Doe</a>
+                <a href="#" class="font-semibold">John Doe</a>
               </button>
             </template>
             <template #drop-content>

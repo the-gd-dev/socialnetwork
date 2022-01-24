@@ -3,8 +3,8 @@
     <div class="container mx-auto">
       <Navbar :auth="true" />
       <div class="flex">
-        <div class="md:w-1/5 hidden md:inline-block"><Sidebar /></div>
-        <div class="w-full md:w-4/5" @click="containerClickHandler"><Nuxt /></div>
+        <div class="lg:w-1/5 hidden lg:inline-block"><Sidebar /></div>
+        <div class="w-full lg:w-4/5" @click="containerClickHandler"><Nuxt /></div>
       </div>
     </div>
   </div>
