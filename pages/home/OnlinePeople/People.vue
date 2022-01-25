@@ -6,7 +6,7 @@
       <h5 class="font-semibold">People</h5>
       <div class="count font-semibold">{{ users.length || 0 }}</div>
     </div>
-    <div class="horizontal-bar"></div>
+    <horizontal-bar />
     <div class="flex flex-col space-y-2 people-container">
       <div class="loading" v-if="loading">
         <person-skeleton v-for="user in 10" :key="user" />
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import Person from './Person.vue';
+import Person from '~/components/Person.vue';
 import PersonSkeleton from './PersonSkeleton.vue';
 export default {
   components: { Person, PersonSkeleton },
@@ -32,7 +32,7 @@ export default {
   async created() {
     this.loading = true;
     const { data } = await this.$axios.get(
-      `https://randomuser.me/api/?results=100`
+      `https://randomuser.me/api/?results=15`
     );
     const people = [];
 

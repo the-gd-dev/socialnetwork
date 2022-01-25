@@ -4,7 +4,9 @@
       <Navbar :auth="true" />
       <div class="flex">
         <div class="lg:w-1/5 hidden lg:inline-block"><Sidebar /></div>
-        <div class="w-full lg:w-4/5" @click="containerClickHandler"><Nuxt /></div>
+        <div class="w-full lg:w-4/5" @click="containerClickHandler">
+          <Nuxt />
+        </div>
       </div>
     </div>
   </div>
@@ -19,3 +21,8 @@ export default {
   },
 };
 </script>
+<style>
+  .modal-opened {
+    overflow:hidden !important;
+  }
+</style>
