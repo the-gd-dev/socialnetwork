@@ -25,15 +25,30 @@
         :showStatus="false"
         :showInfo="true"
         :connectOptions="true"
+        @add-friend="addFriend"
+        @remove-friend="removeFriend"
       />
     </div>
+    <modal
+      headerTitle="Remove Friend"
+      animation="zoom"
+      :showModal="removeFriendAlert"
+      @close-modal="removeFriendAlert = false"
+      width="300"
+    >
+      Hello world
+    </modal>
   </div>
 </template>
 
 <script>
+import Modal from '~/components/Modal/Modal.vue';
 export default {
+  components: { Modal },
   data() {
     return {
+
+      removeFriendAlert : false,
       loading: false,
       users: [],
     };
@@ -58,6 +73,14 @@ export default {
     });
     this.users = people;
     this.loading = false;
+  },
+  methods: {
+    addFriend(){
+
+    },
+    removeFriend(){
+      this.removeFriendAlert = true;
+    }
   },
 };
 </script>

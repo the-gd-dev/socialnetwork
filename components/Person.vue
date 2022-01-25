@@ -35,8 +35,8 @@
         <div v-else class="w-3 h-3 rounded-full bg-gray-400"></div>
       </div>
       <div v-if="connectOptions" class="flex space-x-2 my-auto">
-          <button class="flex items-center space-x-1 bg-emerald-300 hover:bg-emerald-500 p-1 px-2 rounded-full"><span>Add</span><icon name="plus"  class="my-auto"  /></button>
-          <button class="flex items-center space-x-1 bg-gray-300 hover:bg-gray-400 p-1 px-2 rounded-full"><span>Remove</span><icon name="times" class="my-auto" /></button>
+          <button class="flex items-center space-x-1 bg-emerald-300 hover:bg-emerald-500 p-1 px-2 rounded-full" @click="$emit('add-friend')"><span>Add</span><icon name="plus"  class="my-auto"  /></button>
+          <button class="flex items-center space-x-1 bg-gray-300 hover:bg-gray-400 p-1 px-2 rounded-full" @click="$emit('remove-friend')"><span>Remove</span><icon name="times" class="my-auto" /></button>
       </div>
     </div>
   </div>

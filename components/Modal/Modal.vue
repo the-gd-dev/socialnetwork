@@ -1,7 +1,7 @@
 <template>
-  <div :class="`overlay-modal ${showModal ? 'show' : ''}`">
+  <div :class="`overlay-modal ${showModal ? 'show' : ''} ${position}`">
     <div
-      :class="`modal-wrapper bg-gradient-to-tl from-${background}-300 to-${background}-100 shadow-lg`"
+      :class="`modal-wrapper  border border-gray-300 ${showModal ? animation+'In' : animation+'Out'} bg-gradient-to-tl from-${background}-300 to-${background}-100`"
       :style="{
         width: width + 'px',
         height: height + 'px',
@@ -33,12 +33,14 @@
 <script>
 export default {
   props: {
+    position:{default : 'absolute'},
     background: { default: "gray" },
     width: { default: 500 },
     height: { default: '100%' },
     rounded: { default: 10 },
     showModal: { default: false },
     headerTitle: { default: "" },
+    animation:{default : 'fade'}
   },
   layout: "auth",
   name: "Modal",
@@ -53,6 +55,9 @@ export default {
     close() {
       this.showModal = false;
       this.$emit("close-modal");
+      setTimeout(() => {
+        
+      }, 300);
     },
   },
   computed: {
@@ -69,18 +74,46 @@ export default {
 </script>
 
 <style scoped>
-.modal-container {
+@keyframes fadeIn {
+    0% {opacity: 0.3;top:-25px;}
+    100% {opacity: 1;top:0px;}
+}
+@keyframes fadeOut {
+    0% {opacity: 1;top:0px;}
+    100% {opacity: 0.3;top:-25px;}
+}
+@keyframes zoomIn {
+    0% {transform: scale(0.5);opacity: 0;}
+    100% {transform: scale(1);opacity: 1;}
+}
+
+@keyframes zoomOut {
+    0% {transform: scale(1);opacity: 1;}
+    100% {transform: scale(0.3);opacity: 0;}
+}
+.modal-wrapper.zoomIn {
+    animation: zoomIn 0.3s ease-in-out;
+}
+.modal-wrapper.zoomOut {
+    animation: zoomOut 0.3s ease-in-out;
+}
+.modal-wrapper.fadeIn {
+    animation: fadeIn 0.3s ease-in-out;
+}
+.modal-wrapper.fadeOut {
+    animation: fadeOut 0.3s ease-in-out;
 }
 .modal-wrapper {
+  position: relative;
   margin: auto;
   transition: all ease-in-out 0.3s;
+  animation: fadeIn 0.3s ease-in-out;
 }
 .overlay-modal.show {
   display: flex;
   z-index: 9999;
 }
 .overlay-modal {
-  position: fixed;
   display: none;
   align-items: center;
   justify-items: center;
