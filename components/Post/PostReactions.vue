@@ -33,7 +33,7 @@
             :key="reaction._id"
             @click="selectReactionHandler(reaction)"
           >
-            <div class="">
+            <div class="flex items-center">
               <icon
                 :name="reaction.name"
                 size="28px"
@@ -149,19 +149,17 @@ export default {
   top: 0;
   transition: all ease-in-out 0.3s;
 }
-.reaction:hover .rxn-icon {
-  transform: scale(1.25);
-}
+
 .reaction .reaction-title,
 .reaction .rxn-icon {
   transition: all ease-in-out 0.3s;
 }
 .reaction:hover .reaction-title {
-  height: 100%;
+  width: 100%;
   padding-left: 8px;
 }
 .reaction .reaction-title {
-  height: 0px;
+  width: 0px;
   overflow: hidden;
 }
 </style>

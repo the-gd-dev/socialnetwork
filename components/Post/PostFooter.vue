@@ -1,8 +1,8 @@
 <template>
-  <div class="post-footer px-4 py-2">
-    <div class="flex space-x-2 items-center">
-      <div class="1/3"><post-reactions /></div>
-      <div class="1/3">
+  <div class="post-footer px-4 py-2 flex justify-center">
+    <div class="flex space-x-3 items-center ">
+      <div class="w-1/7"><post-reactions /></div>
+      <div class="w-4/6">
         <form class="w-full max-w-lg">
           <div class="flex items-center rounded-full overflow-hidden bg-white">
             <input
@@ -20,7 +20,7 @@
           </div>
         </form>
       </div>
-      <div class="1/3">
+      <div class="w-1/7">
         <button
           class="flex-shrink-0 bg-white w-10 h-8 mr-1 bg-gray-800 text-white rounded-full"
           type="button"
