@@ -1,7 +1,7 @@
 <template>
-  <div class="drop-option flex items-center">
-    <slot name="drop-option"></slot>
-    <div :class="`drop-popup ${popup === true ? 'shown' : ''}`">
+  <div class="flex items-center drop-option-wrapper">
+    <div :class="`drop-option ${customClass}`"><slot name="drop-option"></slot></div>
+    <div :class="`drop-popup${popup === true ? ' shown' : ''}`">
       <slot name="drop-content"></slot>
     </div>
   </div>
@@ -13,12 +13,15 @@ export default {
     popup: {
       default: false,
     },
+    customClass :{
+      default : ""
+    }
   },
 };
 </script>
 
 <style scoped>
-.drop-option {
+.drop-option-wrapper {
   position: relative;
 }
 .drop-popup {
@@ -31,10 +34,9 @@ export default {
   overflow: hidden;
   transition: all ease-in-out 0.3s;
 }
-.drop-popup.shown,
-.drop-option:hover .drop-popup {
+.drop-popup.shown {
   opacity: 1;
-  z-index: 999;
+  z-index: 900;
   top: 50px;
   max-height: initial !important;
 }

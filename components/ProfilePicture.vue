@@ -3,7 +3,9 @@
     <div class="m-auto" v-if="loading">
       <spinner spinnerSize="spinner-lg" />
     </div>
-    <img :src="url" @load="$emit('loading-complete')" />
+    <nuxt-link :to="`profile/${userId}`">
+      <img :src="url" @load="$emit('loading-complete')" />
+    </nuxt-link>
   </div>
 </template>
 
@@ -11,10 +13,11 @@
 export default {
   props: ["name"],
   props: {
+    userId: { default: "" },
     size: { default: 10 },
     url: { default: "" },
     loading: { default: false },
-  }
+  },
 };
 </script>
 

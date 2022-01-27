@@ -62,7 +62,8 @@ export default {
   },
   computed: {
     isModalToggle() {
-      return this.showModal;
+      if(this.position === 'fixed') return this.showModal;
+      return false;
     },
   },
   watch: {

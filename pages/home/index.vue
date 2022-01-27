@@ -1,13 +1,17 @@
 <template>
   <div class="right-side">
     <div class="flex items-start">
-      <div class="relative top-3 flex flex-col w-full md:w-1/2 xl:w-2/5 mx-6">
+      <div
+        class="relative top-3 flex flex-col w-full md:w-3/5 lg:w-1/2 xl:w-2/5 mx-6"
+      >
         <!-- user-posts -->
         <create-post @click="createPostModal = true" />
         <!-- user-posts -->
         <user-posts />
       </div>
-      <div class="sticky top-20 hidden md:inline-block w-1/2 xl:w-2/5">
+      <div
+        class="sticky top-20 hidden md:inline-block md:w-2/5 lg:w-1/2 xl:w-2/5"
+      >
         <!-- Memories & Events -->
         <!-- <memories /> -->
         <!-- New Friends -->
@@ -29,7 +33,7 @@ import Events from "./MemoriesAndEvents/Events.vue";
 import Icon from "~/components/Icon.vue";
 import FindPeople from "./FindPeople/NewPeople.vue";
 import Modal from "~/components/Modal/Modal.vue";
-import HorizontalBar from '~/components/HorizontalBar.vue';
+import HorizontalBar from "~/components/HorizontalBar.vue";
 export default {
   components: {
     People,
@@ -51,6 +55,3 @@ export default {
   },
 };
 </script>
-<style scoped>
-
-</style>

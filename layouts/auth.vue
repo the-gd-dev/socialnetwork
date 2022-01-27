@@ -1,10 +1,11 @@
 <template>
   <div class="flex justify-center">
+    <div :class="`overlay ${overlay ? 'show' : ''}`"></div>
     <div class="container mx-auto">
       <Navbar :auth="true" />
       <div class="flex">
-        <div class="lg:w-1/5 hidden lg:inline-block"><Sidebar /></div>
-        <div class="w-full lg:w-4/5" @click="containerClickHandler">
+        <div class="xl:w-1/6 hidden xl:inline-block"><Sidebar /></div>
+        <div class="w-full xl:w-5/6" @click="containerClickHandler">
           <Nuxt />
         </div>
       </div>
@@ -14,6 +15,25 @@
 <script>
 import { globalEvent } from "@/helpers/globalEvent";
 export default {
+  data() {
+    return {
+      toggleOverlay: false,
+    };
+  },
+  computed: {
+    overlay() {
+      return this.toggleOverlay;
+    },
+  },
+  created() {
+    globalEvent.$on("overlay", (data) => {
+      this.toggleOverlay = data.toggle;
+      document.body.classList.remove("overlay-opened");
+      if (this.toggleOverlay) {
+        document.body.classList.add("overlay-opened");
+      }
+    });
+  },
   methods: {
     containerClickHandler() {
       globalEvent.$emit("container-clicked");
@@ -22,7 +42,30 @@ export default {
 };
 </script>
 <style>
-  .modal-opened {
-    overflow:hidden !important;
+  body.overlay-opened{
+    overflow: hidden;
   }
+</style>
+<style scoped>
+.overlay.show {
+  display: flex;
+  z-index: 900;
+}
+.overlay {
+  position: fixed;
+  display: none;
+  align-items: center;
+  justify-items: center;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  -moz-backdrop-filter: blur(3px);
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  z-index: -1;
+}
 </style>

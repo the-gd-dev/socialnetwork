@@ -1,10 +1,10 @@
 <template>
   <div
-    class="sticky top-2 z-900 flex p-2 px-6 justify-between bg-gradient-to-r from-emerald-300 to-emerald-200 items-center rounded-xl my-2"
+    class="sticky top-2 z-900 flex p-2 px-6 justify-between bg-cyan-600 items-center rounded-xl my-2"
   >
     <div class="flex space-x-2">
-      <div class="text-xl font-bold text-emerald-900">
-        <a href="#">Memorised</a>
+      <div class="text-xl font-semibold text-white">
+        <a href="#">Website Title</a>
       </div>
       <div class="nav-links"></div>
     </div>
@@ -24,7 +24,64 @@
         </a>
       </div>
       <div v-if="auth" class="flex items-center">
-        <div class="flex space-x-4">
+        <!-- Mobile Menu -->
+        <div class="flex lg:hidden space-x-4">
+          <button>
+            <Icon
+              name="comments"
+              type="fa"
+              size="26px"
+              :customClass="` ${
+                popups.notifications ? 'text-white' : 'text-cyan-800'
+              } hover:text-white cursor-pointer`"
+            />
+          </button>
+          <button>
+            <Icon
+              name="bell"
+              type="fa"
+              size="26px"
+              :customClass="` ${
+                popups.notifications ? 'text-white' : 'text-cyan-800'
+              } hover:text-white cursor-pointer`"
+            />
+          </button>
+          <drop-popup :popup="popups.useroptions" customClass="custom-zindex">
+            <template #drop-option>
+              <button
+                @click="togglePopup('useroptions')"
+                :class="`username flex items-center space-x-2 ${
+                  popups.useroptions ? 'text-white' : 'text-cyan-800'
+                } hover:text-white cursor-pointer`"
+              >
+                <Icon name="user-circle" type="fa" size="26px" />
+              </button>
+            </template>
+            <template #drop-content>
+              <div
+                class="flex flex-col bg-blue-100 w-40 pr-2 pl-8 py-2 rounded-lg"
+              >
+                <a
+                  href="#"
+                  v-for="item in navbarLinks.auth"
+                  :key="item._id"
+                  class="text-lg text-gray-800 mb-1 hover:font-semibold"
+                >
+                  <span class="mr-2"
+                    ><Icon
+                      :name="item.icon.name"
+                      :type="item.icon.type"
+                      size="18px"
+                  /></span>
+
+                  {{ item.title }}
+                </a>
+              </div>
+            </template>
+          </drop-popup>
+        </div>
+        <!-- Large Screen -->
+        <div class="hidden lg:flex space-x-4">
           <!-- <drop-popup>
             <template #drop-option>
               <Icon
@@ -39,14 +96,16 @@
               <messages />
             </template>
           </drop-popup> -->
-          <drop-popup :popup="popups.notifications">
+          <drop-popup :popup="popups.notifications" customClass="custom-zindex">
             <template #drop-option>
               <button @click="togglePopup('notifications')">
                 <Icon
                   name="bell"
                   type="fa"
                   size="26px"
-                  :customClass="` ${popups.notifications ? 'text-emerald-800' : 'text-emerald-500'} hover:text-emerald-800 cursor-pointer`"
+                  :customClass="` ${
+                    popups.notifications ? 'text-white' : 'text-cyan-800'
+                  } hover:text-white cursor-pointer`"
                 />
               </button>
             </template>
@@ -54,11 +113,13 @@
               <notifications />
             </template>
           </drop-popup>
-          <drop-popup :popup="popups.useroptions">
+          <drop-popup :popup="popups.useroptions" customClass="custom-zindex">
             <template #drop-option>
               <button
                 @click="togglePopup('useroptions')"
-                :class="`username flex items-center space-x-2 ${popups.useroptions ? 'text-emerald-800' : 'text-emerald-500'} hover:text-emerald-800 cursor-pointer`"
+                :class="`username flex items-center space-x-2 ${
+                  popups.useroptions ? 'text-white' : 'text-cyan-800'
+                } hover:text-white cursor-pointer`"
               >
                 <Icon name="user-circle" type="fa" size="26px" />
                 <a href="#" class="font-semibold">John Doe</a>
@@ -180,11 +241,15 @@ export default {
   },
 };
 </script>
-
+<style>
+.custom-zindex + .drop-popup.shown {
+  z-index: 1000 !important;
+}
+</style>
 <style scoped>
 .top-18 {
 }
-.z-900{
-  z-index: 900;
+.z-900 {
+  z-index: 999;
 }
 </style>

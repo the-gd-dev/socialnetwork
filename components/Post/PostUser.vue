@@ -10,11 +10,18 @@
       </div>
     </div>
   </div>
-  <div v-else class="flex justify-content items-center space-x-2 py-2 ">
+  <div v-else class="flex justify-content items-center space-x-2 py-2">
     <Icon v-if="!user.photo" name="user-circle" size="40px" />
-    <profile-picture :url="user.photo" :loading="user.profilePicLoading" @loading-complete="user.profilePicLoading = false" />
+    <profile-picture
+      :userId="user.id"
+      :url="user.photo"
+      :loading="user.profilePicLoading"
+      @loading-complete="user.profilePicLoading = false"
+    />
     <div class="flex flex-col space-y-0">
-      <div class="text-lg font-semibold leading-5">{{ user.name }}</div>
+      <div class="text-lg font-semibold leading-5">
+        <nuxt-link :to="`profiles/${user.id}`">{{ user.name }}</nuxt-link>
+      </div>
       <div class="text-sm">30 min ago</div>
     </div>
   </div>
@@ -36,12 +43,12 @@ export default {
       `https://randomuser.me/api/?id=${this.userId}`
     );
     this.user = {
-      id: data.results[0].id.value,
+      id: data.results[0].login.uuid,
       name: data.results[0].name.first + " " + data.results[0].name.last,
       username: data.results[0].username,
       email: data.results[0].email,
       photo: data.results[0].picture.medium,
-      profilePicLoading:true
+      profilePicLoading: true,
     };
     this.loading = false;
   },

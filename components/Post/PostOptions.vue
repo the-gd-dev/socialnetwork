@@ -1,12 +1,14 @@
 <template>
-  <drop-popup>
+  <drop-popup :popup="showPopup">
     <template #drop-option>
-      <Icon
-        name="ellipsis"
-        type="fa"
-        size="18px"
-        customClass="cursor-pointer"
-      />
+      <button @click="showPopup = !showPopup">
+        <Icon
+          name="ellipsis"
+          type="fa"
+          size="18px"
+          customClass="cursor-pointer"
+        />
+      </button>
     </template>
     <template #drop-content>
       <div
@@ -37,6 +39,7 @@ export default {
   name: "PostOptions",
   data() {
     return {
+      showPopup: false,
       userPostOptions: [
         {
           _id: 1,

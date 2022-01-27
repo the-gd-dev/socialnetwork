@@ -5,20 +5,24 @@
     <div class="m-auto" v-if="post.photo.loading">
       <spinner spinnerSize="spinner-2xl" />
     </div>
-    <img
-      :src="post.photo.url"
-      @load="post.photo.loading = false"
-      alt=""
-      srcset=""
-      :class="`image ${post.photo.loading ? '' : 'loaded'}`"
-    />
+    <div>
+      <nuxt-link :to="`posts/${post.id}`">
+        <img
+          :src="post.photo.url"
+          @load="post.photo.loading = false"
+          alt=""
+          srcset=""
+          :class="`image ${post.photo.loading ? '' : 'loaded'}`"
+        />
+      </nuxt-link>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: "PostContent",
-  props: ["post"],
+  props: ["post"]
 };
 </script>
 

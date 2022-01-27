@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import Person from '~/components/Person.vue';
-import PersonSkeleton from './PersonSkeleton.vue';
+import Person from '~/components/Person/Person.vue';
+import PersonSkeleton from '~/components/Person/PersonSkeleton.vue';
 export default {
   components: { Person, PersonSkeleton },
   data() {
@@ -38,7 +38,7 @@ export default {
 
     data.results.map((user) => {
       people.push({
-        id: user.id.value,
+        id: user.login.uuid,
         name: user.name.first + " " + user.name.last,
         username: user.username,
         email: user.email,
@@ -64,7 +64,7 @@ export default {
     background: #cfcfcf;
 } */
 .people-container {
-  height: 585px;
+  height: 715px;
   overflow-y: auto;
   overflow-x: hidden;
 }

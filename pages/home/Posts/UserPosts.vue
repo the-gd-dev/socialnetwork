@@ -24,7 +24,7 @@ export default {
   async created() {
     this.loading = true;
     const response_posts = await this.$axios.get(
-      `https://jsonplaceholder.typicode.com/posts?_start=0&_limit=10`
+      `https://jsonplaceholder.typicode.com/posts?_start=0&_limit=4`
     );
     response_posts.data.map((post, key) => {
       post.photo = {
@@ -34,7 +34,7 @@ export default {
     });
     this.posts = response_posts.data;
     this.loading = false;
-  },
+  }
 };
 </script>
 

@@ -16,8 +16,9 @@ export default {
 };
 </script>
 
-<style scoped>
-  .post-options .drop-popup {
-    top: 0 !important;
+<style>
+  .post-options .drop-popup.shown, 
+  .post-options .drop-option:hover + .drop-popup{
+    top: 35px !important; 
   }
 </style>

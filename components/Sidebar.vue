@@ -1,13 +1,14 @@
 <template>
   <div
-    class=" sticky top-20 flex w-full flex-col bg-gradient-to-t from-cyan-300 to-cyan-100 rounded-xl"
+    class=" sticky top-20 flex w-full flex-col bg-cyan-400 rounded-xl"
   >
     <div class="flex flex-col justify-center w-full px-2 pt-6 sidebar-wrapper">
-      <a
+      <nuxt-link
         href
+        to="/home"
         v-for="item in sidemenu"
         :key="item"
-        class="sidebar-item text-gray-800 hover:text-white rounded hover:bg-cyan-500 w-full py-2 px-4"
+        class="sidebar-item text-gray-800 hover:text-white rounded w-full py-2 px-4"
       >
         <div>
           <span class="mr-2">
@@ -15,7 +16,7 @@
           </span>
           {{ item.title }}
         </div>
-      </a>
+      </nuxt-link>
     </div>
     <div class="flex justify-center items-center h-20">
       Copyright &copy; 2022
@@ -54,7 +55,7 @@ export default {
         },
         {
           _id: 4,
-          title: "My Circle",
+          title: "Friends",
           icon: {
             type: "fa",
             name: "users",
@@ -88,7 +89,7 @@ export default {
   top:70px
 }
 .sidebar-item {
-  transition: all ease-in-out 0.3s;
+  transition: all ease-in-out 0.25s;
 }
 .sidebar-wrapper .sidebar-item:not(:last-child) {
   margin-bottom: 10px;
