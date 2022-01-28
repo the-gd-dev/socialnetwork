@@ -20,7 +20,7 @@
     />
     <div class="flex flex-col space-y-0">
       <div class="text-lg font-semibold leading-5">
-        <nuxt-link :to="`profiles/${user.id}`">{{ user.name }}</nuxt-link>
+        <nuxt-link :to="`/profiles/${user.id}`">{{ user.name }}</nuxt-link>
       </div>
       <div class="text-sm">30 min ago</div>
     </div>

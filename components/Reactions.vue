@@ -2,10 +2,10 @@
   <div class="flex">
     <div class="reacted">
       <button
-        :class="`px-2 rounded-full flex justify-center items-center ${
+        :class="`flex items-center ${
           selectedReaction.selected
-            ? selectedReaction.gradientClass
-            : 'bg-white'
+            ? selectedReaction.customClass
+            : ''
         }`"
       >
         <icon
@@ -33,7 +33,7 @@
             :key="reaction._id"
             @click="selectReactionHandler(reaction)"
           >
-            <div class="flex items-center">
+            <div class="flex items-center h-10">
               <icon
                 :name="reaction.name"
                 size="28px"

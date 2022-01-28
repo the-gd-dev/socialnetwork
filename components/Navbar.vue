@@ -1,12 +1,13 @@
 <template>
   <div
-    class="sticky top-2 z-900 flex p-2 px-6 justify-between bg-cyan-600 items-center rounded-xl my-2"
+    class="sticky top-0 lg:top-2 z-900 flex p-2 px-6 justify-between bg-cyan-600 items-center lg:rounded-xl my-2"
   >
     <div class="flex space-x-2">
+      <button class="text-white text-xl lg:hidden"><icon name="bars" /></button>
       <div class="text-xl font-semibold text-white">
         <a href="#">Website Title</a>
       </div>
-      <div class="nav-links"></div>
+      <!-- <div class="nav-links"></div> -->
     </div>
     <div class="flex">
       <div class="auth-header space-x-2" v-if="!auth">

@@ -3,7 +3,7 @@
     <div class="m-auto" v-if="loading">
       <spinner spinnerSize="spinner-lg" />
     </div>
-    <nuxt-link :to="`profile/${userId}`">
+    <nuxt-link :to="`/profiles/${userId}`">
       <img :src="url" @load="$emit('loading-complete')" />
     </nuxt-link>
   </div>

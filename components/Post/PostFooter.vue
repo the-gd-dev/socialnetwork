@@ -1,7 +1,11 @@
 <template>
-  <div class="post-footer px-4 py-2 flex justify-center">
-    <div class="flex space-x-3 items-center ">
-      <div class="w-1/7"><post-reactions /></div>
+  <div class="post-footer px-4 py-2 flex justify-center w-full">
+    <div class="flex space-x-3 items-center w-full">
+      <div class="w-1/7"> 
+        <div class="px-3 rounded-full bg-white flex justify-center items-center">
+          <Reactions />
+        </div>
+      </div>
       <div class="w-4/6">
         <form class="w-full max-w-lg">
           <div class="flex items-center rounded-full overflow-hidden bg-white">
@@ -22,10 +26,11 @@
       </div>
       <div class="w-1/7">
         <button
-          class="flex-shrink-0 bg-white w-10 h-8 mr-1 bg-gray-800 text-white rounded-full"
+          class="flex bg-white h-8 mr-1 bg-gray-800 space-x-2 text-white px-4 items-center rounded-full"
           type="button"
         >
           <icon type="fa-solid" name="share-nodes" />
+          <div v-if="shareBtnTitle"> Share </div>
         </button>
       </div>
     </div>
@@ -34,7 +39,8 @@
 
 <script>
 export default {
-    name:'PostFooter'
+    name:'PostFooter',
+    props : ['shareBtnTitle']
 };
 </script>
 
