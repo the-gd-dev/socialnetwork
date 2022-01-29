@@ -1,13 +1,13 @@
 <template>
   <div
-    class=" sticky top-20 flex w-full flex-col bg-cyan-400 rounded-xl"
+    class="sticky top-20 flex w-full flex-col bg-cyan-400 rounded-xl"
   >
     <div class="flex flex-col justify-center w-full px-2 pt-6 sidebar-wrapper">
       <nuxt-link
         href
         to="/home"
         v-for="item in sidemenu"
-        :key="item"
+        :key="item._id"
         class="sidebar-item text-gray-800 hover:text-white rounded w-full py-2 px-4"
       >
         <div>
@@ -26,6 +26,7 @@
 
 <script>
 export default {
+  name : "Sidebar",
   data() {
     return {
       sidemenu: [

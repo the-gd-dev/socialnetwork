@@ -157,6 +157,7 @@
 <script>
 import { globalEvent } from "@/helpers/globalEvent";
 export default {
+  name : "Navbar",
   props: {
     auth: { default: false },
   },
