@@ -1,6 +1,6 @@
 <template>
   <div
-    class="new-friends-area bg-gradient-to-tl from-gray-200 to-gray-100 rounded-xl py-2"
+    class="new-friends-area bg-gray-100 shadow-md border border-gray-200 rounded-xl py-2"
   >
     <div class="flex flex-col px-4">
       <div class="text-2xl font-semibold text-gray-800">Do I know you ?</div>
@@ -100,25 +100,7 @@ export default {
       }
     },
     async randomPeople() {
-      this.loading = true;
-      const { data } = await this.$axios.get(
-        `https://randomuser.me/api/?results=15`
-      );
-      const people = [];
-
-      data.results.map((user) => {
-        people.push({
-          id:  user.login.uuid,
-          name: user.name.first + " " + user.name.last,
-          username: user.username,
-          email: user.email,
-          photo: user.picture.medium,
-          profilePicLoading: true,
-          location: user.location,
-        });
-      });
-      this.users = people;
-      this.loading = false;
+      
       return true;
     },
     addFriend() {},

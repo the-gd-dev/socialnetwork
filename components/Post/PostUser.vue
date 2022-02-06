@@ -10,46 +10,45 @@
       </div>
     </div>
   </div>
-  <div v-else class="flex justify-content items-center space-x-2 py-2">
-    <Icon v-if="!user.photo" name="user-circle" size="40px" />
-    <profile-picture
-      :userId="user.id"
-      :url="user.photo"
-      :loading="user.profilePicLoading"
-      @loading-complete="user.profilePicLoading = false"
-    />
+  <div v-else class="flex justify-content items-center space-x-2 py-1">
+    <div class="flex">
+      <Icon v-if="!user.photo" name="user-circle" size="34px" customClass="text-gray-600" />
+      <profile-picture
+        v-else
+        :userId="postUser.id"
+        :url="postUser.photo"
+        :loading="postUser.profilePicLoading"
+        @loading-complete="postUser.profilePicLoading = false"
+      />
+    </div>
     <div class="flex flex-col space-y-0">
-      <div class="text-lg font-semibold leading-5">
-        <nuxt-link :to="`/${user.id}`">{{ user.name }}</nuxt-link>
+      <div class="text-md font-semibold leading-4 text-gray-600">
+        <nuxt-link :to="`/${postUser.id}`" class="">{{ postUser.name }}</nuxt-link>
       </div>
-      <div class="text-sm">30 min ago</div>
+      <div class="text-sm text-gray-500">{{ formatTimeToHuman(postTime) }}</div>
     </div>
   </div>
 </template>
 
 <script>
+import { axiosGet } from "~/helpers/axiosHelpers";
 export default {
   name: "PostUser",
-  props: ["userId"],
+  props: ["userId", "postTime"],
   data() {
     return {
       loading: true,
-      user: {},
+      postUser: {},
     };
   },
   async created() {
     this.loading = true;
-    const { data } = await this.$axios.get(
-      `https://randomuser.me/api/?id=${this.userId}`
-    );
-    this.user = {
-      id: data.results[0].login.uuid,
-      name: data.results[0].name.first + " " + data.results[0].name.last,
-      username: data.results[0].username,
-      email: data.results[0].email,
-      photo: data.results[0].picture.medium,
-      profilePicLoading: true,
-    };
+    try {
+      let { data } = await axiosGet("users/" + this.userId);
+      this.postUser = data.user;
+    } catch (response) {
+      console.log(response.data);
+    }
     this.loading = false;
   },
 };

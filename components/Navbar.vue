@@ -1,6 +1,6 @@
 <template>
   <div
-    class="sticky top-0 lg:top-2 z-900 flex p-2 px-6 justify-between bg-cyan-600 items-center lg:rounded-xl my-2"
+    class="sticky top-0 lg:top-2 z-900 flex p-2 px-6 justify-between bg-cyan-400 items-center lg:rounded-md my-2"
   >
     <div class="flex space-x-2">
       <button class="text-white text-xl lg:hidden"><icon name="bars" /></button>
@@ -11,8 +11,7 @@
     </div>
     <div class="flex">
       <div class="auth-header space-x-2" v-if="!auth">
-        <a
-          href="#"
+        <button
           v-for="item in navbarLinks.noauth"
           :key="item._id"
           class="text-lg text-emerald-900 hover:font-semibold"
@@ -22,7 +21,7 @@
           /></span>
 
           {{ item.title }}
-        </a>
+        </button>
       </div>
       <div v-if="auth" class="flex items-center">
         <!-- Mobile Menu -->
@@ -56,6 +55,7 @@
                 } hover:text-white cursor-pointer`"
               >
                 <Icon name="user-circle" type="fa" size="26px" />
+                 <a href="#" class="font-semibold">{{user.first_name}}</a>
               </button>
             </template>
             <template #drop-content>
@@ -63,10 +63,10 @@
                 class="flex flex-col bg-blue-100 w-40 pr-2 pl-8 py-2 rounded-lg"
               >
                 <a
-                  href="#"
                   v-for="item in navbarLinks.auth"
                   :key="item._id"
-                  class="text-lg text-gray-800 mb-1 hover:font-semibold"
+                  @click="() => item.onClickHandler()"
+                  class="text-lg text-gray-800 mb-1 hover:font-semibold cursor-pointer"
                 >
                   <span class="mr-2"
                     ><Icon
@@ -123,17 +123,17 @@
                 } hover:text-white cursor-pointer`"
               >
                 <Icon name="user-circle" type="fa" size="26px" />
-                <a href="#" class="font-semibold">John Doe</a>
+                <a href="#" class="font-semibold">{{user.name}}</a>
               </button>
             </template>
             <template #drop-content>
               <div
-                class="flex flex-col bg-blue-100 w-40 pr-2 pl-8 py-2 rounded-lg"
+                class="flex flex-col bg-blue-100 w-40 pr-2 pl-8 py-2 rounded-lg cursor-pointer"
               >
                 <a
-                  href="#"
                   v-for="item in navbarLinks.auth"
                   :key="item._id"
+                  @click="() => item.onClickHandler()"
                   class="text-lg text-gray-800 mb-1 hover:font-semibold"
                 >
                   <span class="mr-2"
@@ -157,7 +157,7 @@
 <script>
 import { globalEvent } from "@/helpers/globalEvent";
 export default {
-  name : "Navbar",
+  name: "Navbar",
   props: {
     auth: { default: false },
   },
@@ -181,6 +181,7 @@ export default {
           {
             _id: 1,
             title: "Settings",
+            onClickHandler: function (params) {},
             icon: {
               type: "fa",
               name: "gear",
@@ -189,6 +190,7 @@ export default {
           {
             _id: 2,
             title: "Privacy",
+            onClickHandler: function (params) {},
             icon: {
               type: "fa",
               name: "lock",
@@ -197,6 +199,9 @@ export default {
           {
             _id: 3,
             title: "Logout",
+            onClickHandler: (params) => {
+              this.logOut();
+            },
             icon: {
               type: "fa-solid",
               name: "arrow-right-from-bracket",
@@ -205,6 +210,7 @@ export default {
           {
             _id: 4,
             title: "Help",
+            onClickHandler: function (params) {},
             icon: {
               type: "fa",
               name: "circle-info",
@@ -233,6 +239,11 @@ export default {
     };
   },
   methods: {
+    logOut() {
+      this.$store.dispatch("auth/reset").then(() => {
+        this.$router.push("/");
+      });
+    },
     togglePopup(key) {
       for (const index in this.popups) {
         if (Object.hasOwnProperty.call(this.popups, index)) {

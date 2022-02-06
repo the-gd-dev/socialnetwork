@@ -118,17 +118,11 @@ export default {
   data() {
     return {
       commentsCount: 0,
+      post : {}
     };
   },
-  async asyncData({ params, $axios }) {
-    const { data } = await $axios.get(
-      `https://jsonplaceholder.typicode.com/posts/${params.id}`
-    );
-    data.photo = {
-      url: `https://picsum.photos/id/10${params.id}/600/600`,
-      loading: true,
-    };
-    return { post: data };
+  async created() {
+   
   },
 };
 </script>

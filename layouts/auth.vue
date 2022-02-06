@@ -1,11 +1,11 @@
 <template>
   <div class="flex justify-center">
     <div :class="`overlay ${overlay ? 'show' : ''}`"></div>
-    <div class="container mx-auto">
+    <div class="xl:mx-4">
       <Navbar :auth="true" />
-      <div class="flex">
-        <div class="xl:w-1/6 hidden xl:inline-block"><Sidebar /></div>
-        <div class="w-full xl:w-5/6" @click="containerClickHandler">
+      <div class="flex relative">
+        <div class="xl:w-64 hidden xl:inline-block"><Sidebar /></div>
+        <div class="w-full" @click="containerClickHandler">
           <Nuxt />
         </div>
       </div>

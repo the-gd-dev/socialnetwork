@@ -1,10 +1,10 @@
 <template>
   <div class="post-header flex justify-between px-4">
     <div class="">
-      <post-user :userId="userId" />
+      <post-user :userId="userId"  :postTime="updatedAt || createdAt" />
     </div>
     <div class="flex post-options">
-      <post-options />
+      <post-options @delete="$emit('delete-post')"/>
     </div>
   </div>
 </template>
@@ -12,13 +12,7 @@
 <script>
 export default {
   name: "PostHeader",
-  props: ["userId"],
+  props: ["userId", "createdAt", "updatedAt"],
 };
 </script>
 
-<style>
-  .post-options .drop-popup.shown, 
-  .post-options .drop-option:hover + .drop-popup{
-    top: 35px !important; 
-  }
-</style>

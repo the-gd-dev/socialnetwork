@@ -23,11 +23,11 @@
         </div>
       </div>
     </div>
-    <div class="flex-1 space-y-2 py-1">
+    <div class="flex-1 space-y-2 py-1 pr-5">
       <div class="space-y-3">
-        <div class="grid grid-cols-6 gap-4 px-2">
-          <div class="h-8 w-24 bg-emerald-300 rounded-full col-span-3"></div>
-          <div class="h-8 w-24 bg-gray-400 rounded-full col-span-3"></div>
+        <div class="grid grid-cols-6 gap-4">
+          <div class="h-8 w-14 lg:w-24 xl:w-20 bg-emerald-300 rounded-full col-span-3"></div>
+          <div class="h-8 w-14 lg:w-24 xl:w-20 bg-gray-400 rounded-full col-span-3"></div>
         </div>
       </div>
     </div>

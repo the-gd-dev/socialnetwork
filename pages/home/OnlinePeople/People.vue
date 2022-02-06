@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import Person from '~/components/Person/Person.vue';
-import PersonSkeleton from '~/components/Person/PersonSkeleton.vue';
+import Person from "~/components/Person/Person.vue";
+import PersonSkeleton from "~/components/Person/PersonSkeleton.vue";
 export default {
   components: { Person, PersonSkeleton },
   data() {
@@ -30,24 +30,6 @@ export default {
     };
   },
   async created() {
-    this.loading = true;
-    const { data } = await this.$axios.get(
-      `https://randomuser.me/api/?results=15`
-    );
-    const people = [];
-
-    data.results.map((user) => {
-      people.push({
-        id: user.login.uuid,
-        name: user.name.first + " " + user.name.last,
-        username: user.username,
-        email: user.email,
-        photo: user.picture.medium,
-        profilePicLoading: true,
-      });
-    });
-    this.users = people;
-    this.loading = false;
   },
 };
 </script>

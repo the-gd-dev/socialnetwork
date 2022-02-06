@@ -8,9 +8,9 @@
       </div>
       <div class="w-4/6">
         <form class="w-full max-w-lg">
-          <div class="flex items-center rounded-full overflow-hidden bg-white">
+          <div class="flex items-center rounded-full overflow-hidden bg-white border border-gray-200">
             <input
-              class="appearance-none bg-transparent border-none w-full text-gray-800 mr-3 py-2 px-2 leading-tight focus:outline-none"
+              class="appearance-none bg-transparent  w-full text-gray-800 mr-3 py-2 px-2 leading-tight focus:outline-none"
               type="text"
               placeholder="Write a comment ..."
               aria-label="Full name"

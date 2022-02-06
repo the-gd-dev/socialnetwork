@@ -1,94 +1,100 @@
 <template>
-  <div class="flex flex-col lg:px-6">
-    <div
-      class="p-4"
-      :style="`background: url(${cover}) center no-repeat;background-size : cover;height:300px;`"
-    >
-      <div class="flex-w-full">
-        <button class="bg-gray-100 p-1 px-4 text-white shadow-lg">
-          <icon name="edit" customClass="text-gray-800" />
-          <span class="text-gray-800">Change Cover</span>
-        </button>
+  <div class="outer-profile-container mt-3">
+    <div class="flex flex-col lg:px-6">
+      <div
+        class="mb-12 lg:rounded-xl p-4"
+        :style="`background: url(${cover}) center no-repeat;background-size : cover;height:300px;`"
+      >
+        <div class="flex-w-full">
+          <button class="bg-gray-100 p-1 px-4 text-white shadow-lg">
+            <icon name="edit" customClass="text-gray-800" />
+            <span class="text-gray-800">Change Cover</span>
+          </button>
+        </div>
       </div>
-      <div class="flex bg-white mt-28 flex-col shadow-lg">
-        <div class="flex py-4 px-4 flex-col lg:flex-row">
-          <div class="flex justify-center lg:justify-start w-full lg:w-2/3">
-            <div
-              class="flex flex-col lg:flex-row items-center justify-center lg:justify-start lg:space-x-4"
-            >
-              <div class="user-picture">
-                <profile-picture
-                  :linkToProfile="false"
-                  :size="28"
-                  :userId="user.id"
-                  :url="user.photo"
-                  :loading="user.profilePicLoading"
-                  @loading-complete="user.profilePicLoading = false"
-                />
-              </div>
-              <div class="user-details">
-                <div class="flex flex-col items-center lg:items-start">
-                  <div class="text-xl font-semibold text-shadow py-2 lg:py-0">
-                    {{ user.name }}
-                  </div>
-                  <div class="text-lg text-shadow w-full lg:w-2/3">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos
-                    nisi facilis perferendis cumque a.
+      <div class="px-4 profile-navigation-box sticky top-16 lg:top-20 z-20">
+        <div
+          class="flex bg-white border border-gray-100 flex-col shadow-lg rounded-xl"
+        >
+          <div class="flex py-4 px-4 flex-col lg:flex-row">
+            <div class="flex justify-center lg:justify-start w-full lg:w-2/3">
+              <div
+                class="flex flex-col lg:flex-row items-center justify-center lg:justify-start lg:space-x-4"
+              >
+                <div class="user-picture">
+                  <profile-picture
+                    :linkToProfile="false"
+                    :size="28"
+                    :userId="user.id"
+                    :url="user.photo"
+                    :loading="user.profilePicLoading"
+                    @loading-complete="user.profilePicLoading = false"
+                  />
+                </div>
+                <div class="user-details">
+                  <div class="flex flex-col items-center lg:items-start">
+                    <div class="text-xl font-semibold text-shadow py-2 lg:py-0">
+                      {{ user.name }}
+                    </div>
+                    <div class="text-lg text-shadow w-full lg:w-2/3">
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Eos nisi facilis perferendis cumque a.
+                    </div>
                   </div>
                 </div>
+                <!-- <div class="w-full lg:w-2/7"></div> -->
               </div>
-              <!-- <div class="w-full lg:w-2/7"></div> -->
+            </div>
+            <div
+              class="w-full space-x-2 lg:w-1/3 flex items-center justify-center lg:justify-end py-2 lg:py-0"
+            >
+              <button
+                class="bg-blue-400 p-1 px-4 text-white hover:bg-blue-500 shadow-lg"
+              >
+                <icon name="edit" />
+                <span>Change Picture</span>
+              </button>
+              <button
+                class="bg-teal-400 p-1 px-4 text-white hover:bg-teal-500 shadow-lg"
+              >
+                <icon name="edit" />
+                <span>Edit Profile</span>
+              </button>
             </div>
           </div>
+          <horizontal-bar color="#538dd5" height="1" />
           <div
-            class="w-full space-x-2 lg:w-1/3 flex items-center justify-center lg:justify-end py-2 lg:py-0"
+            class="tabs-container flex flex-col items-center lg:items-start px-4"
           >
-            <button
-              class="bg-blue-400 p-1 px-4 text-white hover:bg-blue-500 shadow-lg"
-            >
-              <icon name="edit" />
-              <span>Change Picture</span>
-            </button>
-            <button
-              class="bg-teal-400 p-1 px-4 text-white hover:bg-teal-500 shadow-lg"
-            >
-              <icon name="edit" />
-              <span>Edit Profile</span>
-            </button>
-          </div>
-        </div>
-        <horizontal-bar color="#538dd5" height="1" />
-        <div
-          class="tabs-container flex flex-col items-center lg:items-start px-4"
-        >
-          <div class="flex tab">
-            <nuxt-link
-              class="text-lg font-semibold py-2 px-3 border-b-2"
-              v-for="tab in tabs"
-              :key="tab._id"
-              :to="`/${profileId}/${tab._slug}`"
-              :class="`${
-                tab._slug === displayPage
-                  ? 'border-blue-400'
-                  : 'border-transparent hover:bg-gray-200'
-              }`"
-            >
-              {{ tab.title }}
-              <span class="text-gray-400" v-if="tab.count">{{
-                tab.count
-              }}</span>
-            </nuxt-link>
+            <div class="flex tab">
+              <nuxt-link
+                class="text-lg font-semibold py-2 px-3 border-b-2"
+                v-for="tab in tabs"
+                :key="tab._id"
+                :to="`/${profileId}/${tab._slug}`"
+                :class="`${
+                  tab._slug === displayPage
+                    ? 'border-blue-400'
+                    : 'border-transparent hover:bg-gray-100'
+                }`"
+              >
+                {{ tab.title }}
+                <span class="text-gray-400" v-if="tab.count">{{
+                  tab.count
+                }}</span>
+              </nuxt-link>
+            </div>
           </div>
         </div>
       </div>
       <!-- Selected Tab Span -->
       <div
         v-if="displayPage !== ''"
-        class="flex bg-white mt-2 flex-col shadow-lg"
+        class="flex bg-white mt-2 flex-col shadow-lg relative px-4 lg:px-0"
       >
         <div class="tab-span show p-4"><slot></slot></div>
       </div>
-      <div v-else>
+      <div v-else class="flex mt-2 flex-col relative px-4 lg:px-0">
         <slot></slot>
       </div>
     </div>
@@ -147,28 +153,10 @@ export default {
         },
       ],
       cover: "https://picsum.photos/600/600",
-      user: {},
     };
   },
   async mounted() {
-    let storedUser = JSON.parse(window.localStorage.getItem("user"));
-    if (window.localStorage.getItem("user")) {
-      return (this.user = storedUser);
-    } else {
-      const { data } = await this.$axios.get(
-        `https://randomuser.me/api/?id=${this.profileId}`
-      );
-      const user = {
-        id: data.results[0].login.uuid,
-        name: data.results[0].name.first + " " + data.results[0].name.last,
-        username: data.results[0].username,
-        email: data.results[0].email,
-        photo: data.results[0].picture.large,
-        profilePicLoading: true,
-      };
-      window.localStorage.setItem("user", JSON.stringify(user));
-      return (this.user = user);
-    }
+    
   },
 };
 </script>
@@ -192,5 +180,8 @@ export default {
 
 .text-shadow-none {
   text-shadow: none;
+}
+.profile-navigation-box {
+  margin-top: -195px;
 }
 </style>

@@ -1,7 +1,15 @@
 <template>
-  <div :class="`overlay-modal ${showModal ? 'show' : ''} ${position}`">
+  <div
+    :class="`overlay-modal ${showModal ? 'show' : ''} ${position}`"
+    :style="{
+      height: overlayHeight != '100%' ? overlayHeight + 'px' : overlayHeight,
+    }"
+    @click="close"
+  >
     <div
-      :class="`modal-wrapper  border border-gray-300 ${showModal ? animation+'In' : animation+'Out'} bg-gradient-to-tl from-${background}-300 to-${background}-100`"
+      :class="`modal-wrapper  border border-gray-300 ${
+        showModal ? animation + 'In' : animation + 'Out'
+      } bg-gradient-to-tl from-${background}-300 to-${background}-100`"
       :style="{
         width: width + 'px',
         height: height + 'px',
@@ -33,14 +41,15 @@
 <script>
 export default {
   props: {
-    position:{default : 'absolute'},
+    position: { default: "absolute" },
     background: { default: "gray" },
     width: { default: 500 },
-    height: { default: '100%' },
+    height: { default: "100%" },
+    overlayHeight: { default: "100%" },
     rounded: { default: 10 },
     showModal: { default: false },
     headerTitle: { default: "" },
-    animation:{default : 'fade'}
+    animation: { default: "fade" },
   },
   layout: "auth",
   name: "Modal",
@@ -55,14 +64,12 @@ export default {
     close() {
       this.showModal = false;
       this.$emit("close-modal");
-      setTimeout(() => {
-        
-      }, 300);
+      setTimeout(() => {}, 300);
     },
   },
   computed: {
     isModalToggle() {
-      if(this.position === 'fixed') return this.showModal;
+      if (this.position === "fixed") return this.showModal;
       return false;
     },
   },
@@ -76,33 +83,57 @@ export default {
 
 <style scoped>
 @keyframes fadeIn {
-    0% {opacity: 0.3;top:-25px;}
-    100% {opacity: 1;top:0px;}
+  0% {
+    opacity: 0.3;
+    top: -25px;
+  }
+  100% {
+    opacity: 1;
+    top: 0px;
+  }
 }
 @keyframes fadeOut {
-    0% {opacity: 1;top:0px;}
-    100% {opacity: 0.3;top:-25px;}
+  0% {
+    opacity: 1;
+    top: 0px;
+  }
+  100% {
+    opacity: 0.3;
+    top: -25px;
+  }
 }
 @keyframes zoomIn {
-    0% {transform: scale(0.5);opacity: 0;}
-    100% {transform: scale(1);opacity: 1;}
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 @keyframes zoomOut {
-    0% {transform: scale(1);opacity: 1;}
-    100% {transform: scale(0.3);opacity: 0;}
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
 }
 .modal-wrapper.zoomIn {
-    animation: zoomIn 0.3s ease-in-out;
+  animation: zoomIn 0.3s ease-in-out;
 }
 .modal-wrapper.zoomOut {
-    animation: zoomOut 0.3s ease-in-out;
+  animation: zoomOut 0.3s ease-in-out;
 }
 .modal-wrapper.fadeIn {
-    animation: fadeIn 0.3s ease-in-out;
+  animation: fadeIn 0.3s ease-in-out;
 }
 .modal-wrapper.fadeOut {
-    animation: fadeOut 0.3s ease-in-out;
+  animation: fadeOut 0.3s ease-in-out;
 }
 .modal-wrapper {
   position: relative;
