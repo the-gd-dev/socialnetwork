@@ -7,9 +7,9 @@
     <div class="left flex items-center space-x-2">
       <profile-picture
         :userId="person.id"
-        :url="person.photo.url"
-        :loading="person.photo.profilePicLoading"
-        @loading-complete="person.photo.profilePicLoading = false"
+        :url="person.user_meta.display_picture"
+        :loading="person.user_meta.profilePicLoading"
+        @loading-complete="person.user_meta.profilePicLoading = false"
       />
       <div class="flex flex-col space-y-0">
         <nuxt-link :to="`profiles/${person.id}`" v-if="!noLinkToProfile">
@@ -30,18 +30,13 @@
         </div>
         <div class="text-sm" v-if="showStatus">{{ statusOrMessage }}</div>
         <div class="text-sm" v-if="showInfo">
-          {{ person.location.country }}
+          {{ person.location ? person.location.country : ''}}
         </div>
       </div>
     </div>
     <div class="right">
       <div class="user-status mt-1" v-if="showStatus">
-        <!-- user status -->
-        <div
-          v-if="person.status"
-          class="w-3 h-3 rounded-full bg-green-500"
-        ></div>
-        <div v-else class="w-3 h-3 rounded-full bg-gray-400"></div>
+        <user-status :status="person.status" />
       </div>
       <div v-if="connectOptions" class="flex space-x-2 my-auto">
         <button class="flex items-center" @click="$emit('add-friend')">
@@ -67,11 +62,13 @@
 </template>
 
 <script>
+import UserStatus from "../UserStatus.vue";
 export default {
+  components: { UserStatus },
   name: "Person",
   props: {
     statusOrMessage: { default: "offline" },
-    person: { default: {} },
+    personData: { default: {} },
     trimLength: {
       default: 15,
     },
@@ -79,6 +76,17 @@ export default {
     showInfo: { default: false },
     connectOptions: { default: false },
     noLinkToProfile: { default: false },
+  },
+  data() {
+    return {
+      person: {},
+    };
+  },
+  created() {
+    this.person = {
+      ...this.personData,
+      user_meta: { ...this.personData.user_meta, profilePicLoading: false },
+    };
   },
 };
 </script>

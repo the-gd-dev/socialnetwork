@@ -15,11 +15,11 @@ import PostSkeleton from "@/components/Post/PostSkeleton.vue";
 export default {
   name: "UserPosts",
   components: { UserPost, PostSkeleton },
-  props : {
-    posts : [],
-    loading : false
-  }
+  props: {
+    posts: { default: [] },
+    loading: { default: false },
+  },
 };
-</script>
+</script> 
 
 <style></style>

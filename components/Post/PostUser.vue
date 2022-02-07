@@ -12,18 +12,25 @@
   </div>
   <div v-else class="flex justify-content items-center space-x-2 py-1">
     <div class="flex">
-      <Icon v-if="!user.photo" name="user-circle" size="34px" customClass="text-gray-600" />
+      <Icon
+        v-if="!thisUser.user_meta.display_picture"
+        name="user-circle"
+        size="34px"
+        customClass="text-gray-600"
+      />
       <profile-picture
         v-else
-        :userId="postUser.id"
-        :url="postUser.photo"
-        :loading="postUser.profilePicLoading"
-        @loading-complete="postUser.profilePicLoading = false"
+        :userId="thisUser.id"
+        :url="thisUser.user_meta.display_picture"
+        :loading="thisUser.user_meta.profilePicLoading"
+        @loading-complete="thisUser.user_meta.profilePicLoading = false"
       />
     </div>
     <div class="flex flex-col space-y-0">
       <div class="text-md font-semibold leading-4 text-gray-600">
-        <nuxt-link :to="`/${postUser.id}`" class="">{{ postUser.name }}</nuxt-link>
+        <nuxt-link :to="`/${thisUser.id}`" class="">{{
+          thisUser.name
+        }}</nuxt-link>
       </div>
       <div class="text-sm text-gray-500">{{ formatTimeToHuman(postTime) }}</div>
     </div>
@@ -34,22 +41,35 @@
 import { axiosGet } from "~/helpers/axiosHelpers";
 export default {
   name: "PostUser",
-  props: ["userId", "postTime"],
+  props: ["userId", "postTime", "postUser"],
   data() {
     return {
       loading: true,
-      postUser: {},
+      thisUser: {},
     };
   },
   async created() {
     this.loading = true;
-    try {
-      let { data } = await axiosGet("users/" + this.userId);
-      this.postUser = data.user;
-    } catch (response) {
-      console.log(response.data);
+    if (!this.userId) {
+      let USER = {
+        ...this.postUser,
+        user_meta: { ...this.postUser.user_meta, profilePicLoading: false },
+      };
+      this.thisUser = USER;
+    } else {
+      await this.getUser(this.userId);
     }
     this.loading = false;
+  },
+  methods: {
+    async getUser(id) {
+      try {
+        // let { data } = await axiosGet("users/" + id);
+        // this.thisUser = { ...data.user, profilePicLoading: false };
+      } catch (response) {
+        console.log(response.data);
+      }
+    },
   },
 };
 </script>

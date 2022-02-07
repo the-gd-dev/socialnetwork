@@ -1,7 +1,11 @@
 <template>
   <div class="flex space-x-4">
-    <div class="my-auto post-options">
-      <privacy :toggle="showPopup" @toggle-privacy="(v) => (showPopup = v)" />
+    <div class="my-auto">
+      <privacy
+        :toggle="showPopup"
+        @toggle-privacy="(v) => (showPopup = !showPopup)"
+        :selected="$store.state.utility.privacy[0]"
+      />
     </div>
     <button @click="$emit('delete')">
       <Icon
@@ -11,7 +15,6 @@
         customClass="cursor-pointer text-gray-500 hover:text-gray-800"
       />
     </button>
-    
   </div>
 </template>
 
@@ -27,8 +30,8 @@ export default {
   },
 };
 </script>
-<style scoped>
-.post-options{
-  margin-top: -340px;
+<style>
+.privacy-options .drop-popup{
+  margin-top: -20px;
 }
 </style>

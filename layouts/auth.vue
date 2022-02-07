@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-center">
     <div :class="`overlay ${overlay ? 'show' : ''}`"></div>
-    <div class="xl:mx-4">
+    <div class="w-full xl:mx-4">
       <Navbar :auth="true" />
       <div class="flex relative">
         <div class="xl:w-64 hidden xl:inline-block"><Sidebar /></div>

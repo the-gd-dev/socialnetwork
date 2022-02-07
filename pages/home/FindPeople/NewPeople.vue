@@ -27,9 +27,9 @@
       <!-- Single Row -->
       <person
         class="pl-4"
-        v-for="user in users"
-        :key="user.id"
-        :user="user"
+        v-for="person in people"
+        :key="person.id"
+        :personData="person"
         :trimLength="nameTrim"
         :showStatus="false"
         :showInfo="true"
@@ -73,6 +73,7 @@
 import Modal from "~/components/Modal/Modal.vue";
 import Person from "~/components/Person/Person.vue";
 import PersonSkeleton from "~/components/Person/PersonSkeleton.vue";
+import { axiosGet } from "~/helpers/axiosHelpers";
 export default {
   components: { Modal, Person, PersonSkeleton },
   data() {
@@ -81,7 +82,7 @@ export default {
       removeFriendAlert: false,
       loading: false,
       refresh: false,
-      users: [],
+      people: [],
       windowInnerWidth: 1366,
     };
   },
@@ -100,7 +101,10 @@ export default {
       }
     },
     async randomPeople() {
-      
+      this.loading = true;
+      let { data } = await axiosGet("people");
+      this.people = data.people.filter(u => u.uuid !== this.user.id);
+      this.loading = false;
       return true;
     },
     addFriend() {},
@@ -118,7 +122,7 @@ export default {
 
 <style scoped>
 .new-people-container {
-  max-height: 700px;
+  max-height: 750px;
   overflow-y: auto;
 }
 .new-people-container::-webkit-scrollbar {

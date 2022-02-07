@@ -5,7 +5,7 @@
     <div class="flex flex-col justify-center w-full px-2 pt-6 sidebar-wrapper">
       <nuxt-link
         href
-        to="/home"
+        :to="item.url"
         v-for="item in sidemenu"
         :key="item._id"
         class="sidebar-item text-gray-800 rounded w-full py-2 px-4"
@@ -26,13 +26,14 @@
 
 <script>
 export default {
-  name : "Sidebar",
+  name: "Sidebar",
   data() {
     return {
       sidemenu: [
         {
           _id: 1,
           title: "Home",
+          url: "/home",
           icon: {
             type: "fa",
             name: "home",
@@ -41,6 +42,7 @@ export default {
         {
           _id: 2,
           title: "Profile",
+          url: "",
           icon: {
             type: "fa",
             name: "user",
@@ -49,6 +51,7 @@ export default {
         {
           _id: 3,
           title: "Memories",
+          url: "/memories",
           icon: {
             type: "fa",
             name: "clock-rotate-left",
@@ -57,6 +60,7 @@ export default {
         {
           _id: 4,
           title: "Friends",
+          url: "/friends",
           icon: {
             type: "fa",
             name: "users",
@@ -65,6 +69,7 @@ export default {
         {
           _id: 5,
           title: "Privacy",
+          url: "/privacy",
           icon: {
             type: "fa",
             name: "lock",
@@ -73,6 +78,7 @@ export default {
         {
           _id: 6,
           title: "Settings",
+          url: "/settings",
           icon: {
             type: "fa",
             name: "gear",
@@ -81,13 +87,16 @@ export default {
       ],
     };
   },
-  asyncData() {},
+  created() {
+    let option = this.sidemenu.find((i) => i.title === "Profile");
+    option.url = "/" + this.user.id;
+  },
 };
 </script>
 
 <style scoped>
 .from-top-64 {
-  top:70px
+  top: 70px;
 }
 .sidebar-item {
   transition: all ease-in-out 0.25s;

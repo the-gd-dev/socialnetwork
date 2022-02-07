@@ -15,7 +15,7 @@
     "
   >
     <post-header
-      :userId="post.user_id"
+      :postUser="post.user"
       :createdAt="post.created_at"
       :updatedAt="post.updated_at"
       @delete-post="deletePostAlert = true"

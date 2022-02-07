@@ -17,15 +17,14 @@
         />
         <div v-else>Create an beautiful post up there.</div>
       </div>
-      <!-- <div
+      <div
         class="sticky top-20 hidden md:inline-block md:w-2/5 lg:w-1/2 xl:w-1/3"
       >
-        <memories />
+        <!-- <memories /> -->
         <find-people />
-      </div> -->
-      <div class="sticky top-20 w-2/3 ml-2 hidden xl:inline-block">
+      </div>
+      <div class="sticky top-20 w-1/6 ml-2 hidden xl:inline-block">
         <!-- <people /> -->
-        <messages />
       </div>
     </div>
   </div>
@@ -42,7 +41,6 @@ import FindPeople from "./FindPeople/NewPeople.vue";
 import Modal from "~/components/Modal/Modal.vue";
 import HorizontalBar from "~/components/HorizontalBar.vue";
 import { axiosGet } from "~/helpers/axiosHelpers";
-import Messages from '~/components/Messages.vue';
 export default {
   components: {
     People,
@@ -54,7 +52,6 @@ export default {
     FindPeople,
     Modal,
     HorizontalBar,
-    Messages,
   },
   layout: "auth",
   name: "Home",
@@ -68,8 +65,8 @@ export default {
   },
   async created() {
     this.postsLoading = true;
-    await this.$store.dispatch('utility/fetchReactions');
-    await this.$store.dispatch('utility/fetchPrivacy');
+    await this.$store.dispatch("utility/fetchReactions");
+    await this.$store.dispatch("utility/fetchPrivacy");
     await this.getPosts();
     this.postsLoading = false;
   },
@@ -83,7 +80,7 @@ export default {
     async getPosts() {
       try {
         let { data } = await axiosGet("posts");
-        this.posts = data.posts;
+        this.posts = data.posts.data;
       } catch (response) {
         console.log(response.data);
       }
