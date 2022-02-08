@@ -37,7 +37,7 @@ import CreatePost from "./NewPost/CreatePost.vue";
 import Memories from "./MemoriesAndEvents/Memories.vue";
 import Events from "./MemoriesAndEvents/Events.vue";
 import Icon from "~/components/Icon.vue";
-import FindPeople from "./FindPeople/NewPeople.vue";
+import FindPeople from "./FindPeople/main.vue";
 import Modal from "~/components/Modal/Modal.vue";
 import HorizontalBar from "~/components/HorizontalBar.vue";
 import { axiosGet } from "~/helpers/axiosHelpers";
@@ -77,6 +77,7 @@ export default {
       await this.getPosts();
       this.postsLoading = false;
     },
+    
     async getPosts() {
       try {
         let { data } = await axiosGet("posts");

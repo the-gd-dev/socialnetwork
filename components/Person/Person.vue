@@ -30,7 +30,7 @@
         </div>
         <div class="text-sm" v-if="showStatus">{{ statusOrMessage }}</div>
         <div class="text-sm" v-if="showInfo">
-          {{ person.location ? person.location.country : ''}}
+          {{ person.location ? person.location.country : "" }}
         </div>
       </div>
     </div>
@@ -39,23 +39,64 @@
         <user-status :status="person.status" />
       </div>
       <div v-if="connectOptions" class="flex space-x-2 my-auto">
-        <button class="flex items-center" @click="$emit('add-friend')">
-          <div
-            class="flex w-30 justify-between bg-emerald-200 hover:bg-emerald-500 text-emerald-800 hover:text-white p-1 px-2 rounded-full"
+        <div v-if="!person.request_sent" class="flex space-x-2">
+          <button
+            class="flex items-center"
+            @click="$emit('add-friend', { person })"
           >
-            <span class="mr-1 hidden lg:inline-block">Add Friend</span
-            ><icon name="plus" class="my-auto" />
-          </div>
-          <!-- <div class="bg-teal-100 text-teal-500 p-1 px-2 rounded-full"><span class="mr-1 hidden lg:inline-block">Sent</span><icon name="check-circle"  class="my-auto"  /></div> -->
-        </button>
-        <button class="flex items-center" @click="$emit('remove-friend')">
-          <div
-            class="flex w-30 justify-between bg-white hover:bg-gray-100 text-gray-800 p-1 px-2 rounded-full"
+            <div
+              class="flex w-10 lg:w-28 xl:w-32 justify-center bg-emerald-200 hover:bg-emerald-500 text-emerald-800 hover:text-white p-1 px-2 rounded-full space-x-1"
+            >
+              <span class="hidden lg:inline-block">Add Friend</span
+              ><icon name="user-plus" class="my-auto" />
+            </div>
+          </button>
+          <button
+            class="flex items-center"
+            @click="$emit('remove-friend', { person })"
           >
-            <span class="mr-1 hidden lg:inline-block">Remove</span>
-            <icon name="times" class="my-auto" />
+            <div
+              class="items-center justify-center w-10 lg:w-28 xl:w-32 bg-white hover:bg-gray-100 text-gray-800 p-1 px-2 rounded-full space-x-1"
+            >
+              <span class="hidden lg:inline-block">Remove</span>
+              <icon name="times" class="my-auto" />
+            </div>
+          </button>
+        </div>
+        <div class="flex space-x-2" v-else>
+          <div
+            class="flex justify-center items-center w-10 lg:w-28 xl:w-32 bg-teal-100 text-teal-500 p-1 px-2 rounded-full space-x-2"
+          >
+            <span class="hidden lg:inline-block">Sent</span
+            ><icon name="check-circle" class="my-auto" />
           </div>
-        </button>
+          <div v-if="showUndo">
+            <button
+              class="flex items-center"
+              @click="$emit('remove-friend', { person })"
+            >
+              <div
+                class="flex items-center justify-center w-10 lg:w-28 xl:w-32 bg-white hover:bg-gray-100 text-gray-800 p-1 px-2 rounded-full space-x-1"
+              >
+                <span class="hidden lg:inline-block">Undo</span>
+                <icon name="undo" class="my-auto" />
+              </div>
+            </button>
+          </div>
+          <div v-else>
+            <button
+              class="flex items-center"
+              @click="$emit('remove-friend', { person })"
+            >
+              <div
+                class="flex items-center justify-center w-10 lg:w-28 xl:w-32 bg-white hover:bg-gray-100 text-gray-800 p-1 px-2 rounded-full space-x-1"
+              >
+                <span class="hidden lg:inline-block">Cancel</span>
+                <icon name="times" class="my-auto" />
+              </div>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -67,6 +108,7 @@ export default {
   components: { UserStatus },
   name: "Person",
   props: {
+    showUndo: { default: false },
     statusOrMessage: { default: "offline" },
     personData: { default: {} },
     trimLength: {

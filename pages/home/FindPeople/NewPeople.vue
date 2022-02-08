@@ -1,18 +1,18 @@
 <template>
-  <div
-    class="new-friends-area bg-gray-100 shadow-md border border-gray-200 rounded-xl py-2"
-  >
-    <div class="flex flex-col px-4">
-      <div class="text-2xl font-semibold text-gray-800">Do I know you ?</div>
-      <div class="flex justify-between">
+  <div class="people">
+    <div class="flex flex-col lg:flex-row justify-between items-center px-4">
+      <div class="text-2xl font-semibold text-gray-800">
+        Do I know you ?
         <div class="text-sm text-gray-600">May be you know them.</div>
+      </div>
+      <div>
         <button
-          @click="refreshPeople"
-          class="bg-gray-300 text-gray-600 px-4 text-sm rounded-full flex space-x-1"
+          @click="$emit('toggle')"
+          class="bg-teal-100 text-teal-600 px-4 py-1 text-sm rounded-full flex space-x-2"
         >
-          <div>Refresh</div>
-          <div :class="refresh ? 'animate-spin' : ''">
-            <icon name="refresh" />
+          <div>Sent Requests</div>
+          <div>
+            <icon name="check-circle" />
           </div>
         </button>
       </div>
@@ -30,42 +30,33 @@
         v-for="person in people"
         :key="person.id"
         :personData="person"
-        :trimLength="nameTrim"
+        :trimLength="10"
         :showStatus="false"
         :showInfo="true"
         :connectOptions="true"
         @add-friend="addFriend"
         @remove-friend="removeFriend"
+        :showUndo="showUndoButton"
       />
     </div>
-    <modal
-      headerTitle="Remove Friend"
-      animation="zoom"
-      :showModal="removeFriendAlert"
-      @close-modal="removeFriendAlert = false"
-      width="300"
+    <div
+      class="flex flex-col justify-center items-center"
+      v-if="!loading && people.length === 0"
     >
-      <div class="flex py-2">
-        <div class="">I don't know this person.</div>
+      <div class="text-lg text-gray-500">No People Around.</div>
+      <div class="text-sm text-gray-600">
+        Hit superpowered refresh button and wait for new people to load.
       </div>
-      <template #modal-footer>
-        <div class="bg-transparant py-2">
-          <div class="flex space-x-2 justify-end">
-            <button
-              class="bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-4 py-1"
-            >
-              Yes
-            </button>
-            <button
-              class="bg-white text-gray-800 hover:bg-gray-100 rounded-lg px-4 py-1"
-              @click="removeFriendAlert = false"
-            >
-              No
-            </button>
-          </div>
+      <button
+        @click="randomPeople"
+        class="bg-blue-200 text-blue-600 px-6 py-2 text-sm rounded-full flex space-x-2 my-4"
+      >
+        <div>Refresh</div>
+        <div>
+          <icon name="refresh" />
         </div>
-      </template>
-    </modal>
+      </button>
+    </div>
   </div>
 </template>
 
@@ -73,43 +64,53 @@
 import Modal from "~/components/Modal/Modal.vue";
 import Person from "~/components/Person/Person.vue";
 import PersonSkeleton from "~/components/Person/PersonSkeleton.vue";
-import { axiosGet } from "~/helpers/axiosHelpers";
+import { axiosGet, axiosPost } from "~/helpers/axiosHelpers";
 export default {
+  name: "NewPeople",
   components: { Modal, Person, PersonSkeleton },
   data() {
     return {
       nameTrim: 15,
-      removeFriendAlert: false,
+      showRequests: false,
       loading: false,
-      refresh: false,
       people: [],
       windowInnerWidth: 1366,
+      showUndoButton: false,
     };
-  },
-  mounted() {
-    this.windowInnerWidth = window.innerWidth;
   },
   async created() {
     await this.randomPeople();
   },
+  mounted() {
+    this.windowInnerWidth = window.innerWidth;
+  },
   methods: {
-    async refreshPeople() {
-      if (this.refresh === false) {
-        this.refresh = true;
-        await this.randomPeople();
-        this.refresh = false;
-      }
-    },
     async randomPeople() {
       this.loading = true;
       let { data } = await axiosGet("people");
-      this.people = data.people.filter(u => u.uuid !== this.user.id);
+      this.people = data.people.filter((u) => u.uuid !== this.user.id);
       this.loading = false;
       return true;
     },
-    addFriend() {},
-    removeFriend() {
-      this.removeFriendAlert = true;
+    async addFriend(payload) {
+      let { data } = await axiosPost("friend/add", { id: payload.person.uuid });
+      payload.person.request_sent = true;
+      this.showUndoButton = true;
+      setTimeout(() => {
+        this.showUndoButton = false;
+        this.removeFriend(payload);
+      }, 2000);
+    },
+    async removeFriend(payload) {
+      if (this.showUndoButton) {
+        await axiosPost("friend/remove", {
+          id: payload.person.uuid,
+        });
+        payload.person.request_sent = false;
+        return false;
+      } else {
+        this.people = this.people.filter((p) => p.id !== payload.person.id);
+      }
     },
   },
   watch: {

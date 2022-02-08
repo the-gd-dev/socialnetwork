@@ -62,9 +62,7 @@ export default {
   },
   methods: {
     close() {
-      this.showModal = false;
       this.$emit("close-modal");
-      setTimeout(() => {}, 300);
     },
   },
   computed: {
