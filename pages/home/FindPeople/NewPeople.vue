@@ -87,7 +87,7 @@ export default {
   methods: {
     async randomPeople() {
       this.loading = true;
-      let { data } = await axiosGet("people");
+      let { data } = await axiosGet("people","user="+this.user.id);
       this.people = data.people.filter((u) => u.uuid !== this.user.id);
       this.loading = false;
       return true;
@@ -97,8 +97,10 @@ export default {
       payload.person.request_sent = true;
       this.showUndoButton = true;
       setTimeout(() => {
-        this.showUndoButton = false;
-        this.removeFriend(payload);
+        if (payload.request_sent) {
+          this.showUndoButton = false;
+          this.removeFriend(payload);
+        }
       }, 2000);
     },
     async removeFriend(payload) {

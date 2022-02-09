@@ -6,13 +6,13 @@
   >
     <div class="left flex items-center space-x-2">
       <profile-picture
-        :userId="person.id"
+        :userId="person.uuid"
         :url="person.user_meta.display_picture"
         :loading="person.user_meta.profilePicLoading"
         @loading-complete="person.user_meta.profilePicLoading = false"
       />
       <div class="flex flex-col space-y-0">
-        <nuxt-link :to="`profiles/${person.id}`" v-if="!noLinkToProfile">
+        <nuxt-link :to="`/${person.uuid}`" v-if="!noLinkToProfile">
           <div class="text-md font-semibold leading-5 my-auto">
             {{
               person.name.length > trimLength

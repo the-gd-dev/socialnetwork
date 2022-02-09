@@ -4,7 +4,6 @@
       <privacy
         :toggle="showPopup"
         @toggle-privacy="(v) => (showPopup = !showPopup)"
-        :selected="$store.state.utility.privacy[0]"
       />
     </div>
     <button @click="$emit('delete')">

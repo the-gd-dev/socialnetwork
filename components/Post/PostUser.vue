@@ -20,28 +20,36 @@
       />
       <profile-picture
         v-else
-        :userId="thisUser.id"
+        :linkToProfile="!linkToProfileDisable"
+        :userId="thisUser.uuid"
         :url="thisUser.user_meta.display_picture"
         :loading="thisUser.user_meta.profilePicLoading"
         @loading-complete="thisUser.user_meta.profilePicLoading = false"
       />
     </div>
     <div class="flex flex-col space-y-0">
-      <div class="text-md font-semibold leading-4 text-gray-600">
-        <nuxt-link :to="`/${thisUser.id}`" class="">{{
+      <div
+        v-if="!linkToProfileDisable"
+        class="text-md font-semibold leading-4 text-gray-600"
+      >
+        <nuxt-link :to="`/${thisUser.uuid}`" class="">{{
           thisUser.name
         }}</nuxt-link>
       </div>
+
+      <div v-else class="text-md font-semibold leading-4 text-gray-600">
+        {{ thisUser.name }}
+      </div>
+
       <div class="text-sm text-gray-500">{{ formatTimeToHuman(postTime) }}</div>
     </div>
   </div>
 </template>
 
 <script>
-import { axiosGet } from "~/helpers/axiosHelpers";
 export default {
   name: "PostUser",
-  props: ["userId", "postTime", "postUser"],
+  props: ["userId", "postTime", "postUser", "linkToProfileDisable"],
   data() {
     return {
       loading: true,

@@ -2,8 +2,10 @@
   <div class="outer-profile-container mt-3">
     <div class="flex flex-col lg:px-6">
       <div
-        class="mb-12 lg:rounded-xl p-4"
-        :style="`background: url(${cover}) center no-repeat;background-size : cover;height:300px;`"
+        class="mb-12 lg:rounded-xl p-4 user-cover"
+        :style="`background: url(${
+          thisUser.user_meta ? thisUser.user_meta.cover : ''
+        }) no-repeat center;`"
       >
         <div class="flex-w-full">
           <button class="bg-gray-100 p-1 px-4 text-white shadow-lg">
@@ -25,16 +27,20 @@
                   <profile-picture
                     :linkToProfile="false"
                     :size="28"
-                    :userId="user.id"
-                    :url="user.photo"
-                    :loading="user.profilePicLoading"
-                    @loading-complete="user.profilePicLoading = false"
+                    :userId="thisUser.id"
+                    :url="
+                      thisUser.user_meta
+                        ? thisUser.user_meta.display_picture
+                        : ''
+                    "
+                    :loading="thisUser.profilePicLoading"
+                    @loading-complete="thisUser.profilePicLoading = false"
                   />
                 </div>
                 <div class="user-details">
                   <div class="flex flex-col items-center lg:items-start">
                     <div class="text-xl font-semibold text-shadow py-2 lg:py-0">
-                      {{ user.name }}
+                      {{ thisUser.name }}
                     </div>
                     <div class="text-lg text-shadow w-full lg:w-2/3">
                       Lorem ipsum dolor sit amet consectetur adipisicing elit.
@@ -71,7 +77,7 @@
                 class="text-lg font-semibold py-2 px-3 border-b-2"
                 v-for="tab in tabs"
                 :key="tab._id"
-                :to="`/${profileId}/${tab._slug}`"
+                :to="`/${profileId}${tab._slug ? '/' + tab._slug : ''}`"
                 :class="`${
                   tab._slug === displayPage
                     ? 'border-blue-400'
@@ -90,11 +96,11 @@
       <!-- Selected Tab Span -->
       <div
         v-if="displayPage !== ''"
-        class="flex bg-white mt-2 flex-col shadow-lg relative px-4 lg:px-0"
+        class="flex bg-white mt-2 flex-col shadow-lg relative px-2 lg:px-0"
       >
         <div class="tab-span show p-4"><slot></slot></div>
       </div>
-      <div v-else class="flex mt-2 flex-col relative px-4 lg:px-0">
+      <div v-else class="flex mt-2 flex-col relative px-2 lg:px-0">
         <slot></slot>
       </div>
     </div>
@@ -102,6 +108,7 @@
 </template>
 
 <script>
+import { axiosGet } from "~/helpers/axiosHelpers";
 export default {
   props: {
     displayPage: { default: "" },
@@ -152,16 +159,23 @@ export default {
           active: false,
         },
       ],
-      cover: "https://picsum.photos/600/600",
+      thisUser: {},
     };
   },
   async mounted() {
-    
+    let { data } = await axiosGet("users/" + this.profileId);
+    this.thisUser = { ...data.user, profilePicLoading: false };
+    this.$emit("user-data-loaded", this.thisUser);
   },
 };
 </script>
 
 <style scoped>
+.user-cover {
+  background-size: cover !important;
+  height: 300px;
+  width: 100%;
+}
 .tabs-container .tab,
 .tabs-container {
   transition: all ease-in-out 0.3s;

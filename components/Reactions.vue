@@ -53,6 +53,7 @@
 </template>
 
 <script>
+import api from "~/api";
 export default {
   props: {
     size: { default: "24px" },
@@ -73,6 +74,10 @@ export default {
   },
   async created() {
     this.loading = true;
+    if (this.$store.state.utility.privacy.length === 0) {
+      const response = await api.utils.reactions();
+      this.$store.commit("utility/set_reactions", response.data.reactions);
+    }
     this.reactionList = this.$store.state.utility.reactions;
     this.loading = false;
   },

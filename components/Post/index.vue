@@ -1,20 +1,10 @@
 <template>
   <!-- bg-gradient-to-tl from-gray-300 to-gray-200 -->
   <div
-    class="
-      overflow-hidden
-      post
-      flex flex-col
-      w-full
-      bg-white
-      shadow-md
-      border border-gray-200
-      mb-2
-      last:mb-0
-      rounded-md
-    "
+    class="overflow-hidden post flex flex-col w-full bg-white shadow-md border border-gray-200 mb-2 last:mb-0 rounded-md"
   >
     <post-header
+      :linkDisabled="linkToProfile"
       :postUser="post.user"
       :createdAt="post.created_at"
       :updatedAt="post.updated_at"
@@ -42,26 +32,12 @@
         <div class="bg-transparant py-2">
           <div class="flex space-x-2 justify-end">
             <button
-              class="
-                bg-blue-500
-                hover:bg-blue-600
-                text-white
-                rounded-lg
-                px-4
-                py-1
-              "
+              class="bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-4 py-1"
             >
               Yes, I know
             </button>
             <button
-              class="
-                bg-white
-                text-gray-800
-                hover:bg-gray-100
-                rounded-lg
-                px-4
-                py-1
-              "
+              class="bg-white text-gray-800 hover:bg-gray-100 rounded-lg px-4 py-1"
               @click="deletePostAlert = false"
             >
               No
@@ -75,12 +51,10 @@
 
 <script>
 import Modal from "../Modal/Modal.vue";
-import { globalEvent } from "~/helpers/globalEvent";
-
 export default {
   components: { Modal },
   name: "Post",
-  props: ["post"],
+  props: ["post", "linkToProfile"],
   data() {
     return {
       deletePostAlert: false,
