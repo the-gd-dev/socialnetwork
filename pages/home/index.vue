@@ -23,8 +23,8 @@
         <!-- <memories /> -->
         <find-people />
       </div>
-      <div class="sticky top-20 w-1/6 ml-2 hidden xl:inline-block">
-        <!-- <people /> -->
+      <div class="sticky top-20 w-1/3 ml-4 hidden xl:inline-block">
+        <friend-requests />
       </div>
     </div>
   </div>
@@ -41,6 +41,7 @@ import FindPeople from "./FindPeople/main.vue";
 import Modal from "~/components/Modal/Modal.vue";
 import HorizontalBar from "~/components/HorizontalBar.vue";
 import { axiosGet } from "~/helpers/axiosHelpers";
+import FriendRequests from './FriendRequests/index.vue';
 export default {
   components: {
     People,
@@ -52,6 +53,7 @@ export default {
     FindPeople,
     Modal,
     HorizontalBar,
+    FriendRequests,
   },
   layout: "auth",
   name: "Home",

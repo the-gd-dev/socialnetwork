@@ -8,7 +8,7 @@
         }) no-repeat center;`"
       >
         <div class="flex-w-full">
-          <button class="bg-gray-100 p-1 px-4 text-white shadow-lg">
+          <button class="bg-gray-100 p-1 px-4 text-white shadow-lg rounded-full">
             <icon name="edit" customClass="text-gray-800" />
             <span class="text-gray-800">Change Cover</span>
           </button>
@@ -18,7 +18,7 @@
         <div
           class="flex bg-white border border-gray-100 flex-col shadow-lg rounded-xl"
         >
-          <div class="flex py-4 px-4 flex-col lg:flex-row">
+          <div class="lg:flex hidden py-4 px-4 flex-col lg:flex-row">
             <div class="flex justify-center lg:justify-start w-full lg:w-2/3">
               <div
                 class="flex flex-col lg:flex-row items-center justify-center lg:justify-start lg:space-x-4"
@@ -55,16 +55,56 @@
               class="w-full space-x-2 lg:w-1/3 flex items-center justify-center lg:justify-end py-2 lg:py-0"
             >
               <button
-                class="bg-blue-400 p-1 px-4 text-white hover:bg-blue-500 shadow-lg"
+                class="p-1 text-lg px-4 bg-gray-200 hover:bg-gray-300 px-4 text-gray-800 text-left inline rounded-full"
               >
                 <icon name="edit" />
-                <span>Change Picture</span>
+                <span>Profile Picture</span>
               </button>
               <button
-                class="bg-teal-400 p-1 px-4 text-white hover:bg-teal-500 shadow-lg"
+                class="p-1 px-4 text-lg bg-blue-200 hover:bg-blue-300 px-4 text-blue-600 inline rounded-full"
               >
                 <icon name="edit" />
                 <span>Edit Profile</span>
+              </button>
+            </div>
+          </div>
+          <div class="lg:hidden flex py-2 px-4 flex-col lg:flex-row">
+            <div class="flex flex-row justify-start items-center space-x-2">
+              <div class="user-picture">
+                <profile-picture
+                  :linkToProfile="false"
+                  :size="16"
+                  :userId="thisUser.id"
+                  :url="
+                    thisUser.user_meta ? thisUser.user_meta.display_picture : ''
+                  "
+                  :loading="thisUser.profilePicLoading"
+                  @loading-complete="thisUser.profilePicLoading = false"
+                />
+              </div>
+              <div class="flex flex-col">
+                <div class="text-xl font-semibold">
+                  {{ thisUser.name }}
+                </div>
+                <div class="text-md leading-0">
+                  Lorem ipsum, dolor sit amet...
+                </div>
+              </div>
+              <div class="flex flex-col">
+                <button
+                  class="p-1 bg-blue-200 hover:bg-blue-300 px-4 text-blue-600 inline rounded-full"
+                >
+                  <icon name="edit" />
+                  <span>Edit Profile</span>
+                </button>
+              </div>
+            </div>
+            <div class="flex mt-1">
+              <button
+                class="p-1 bg-gray-200 hover:bg-gray-300 px-4 text-gray-800 text-left inline rounded-full"
+              >
+                <icon name="edit" />
+                <span>Profile Picture</span>
               </button>
             </div>
           </div>
@@ -96,7 +136,7 @@
       <!-- Selected Tab Span -->
       <div
         v-if="displayPage !== ''"
-        class="flex bg-white mt-2 flex-col shadow-lg relative px-2 lg:px-0"
+        class="flex mt-2 flex-col relative"
       >
         <div class="tab-span show p-4"><slot></slot></div>
       </div>

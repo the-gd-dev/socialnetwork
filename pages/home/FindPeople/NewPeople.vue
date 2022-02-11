@@ -6,7 +6,7 @@
         <div class="text-sm text-gray-600">May be you know them.</div>
       </div>
       <div>
-        <button
+        <!-- <button
           @click="$emit('toggle')"
           class="bg-teal-100 text-teal-600 px-4 py-1 text-sm rounded-full flex space-x-2"
         >
@@ -14,7 +14,7 @@
           <div>
             <icon name="check-circle" />
           </div>
-        </button>
+        </button> -->
       </div>
     </div>
     <horizontal-bar class="my-2" />
@@ -87,7 +87,7 @@ export default {
   methods: {
     async randomPeople() {
       this.loading = true;
-      let { data } = await axiosGet("people","user="+this.user.id);
+      let { data } = await axiosGet("people", "user=" + this.user.id);
       this.people = data.people.filter((u) => u.uuid !== this.user.id);
       this.loading = false;
       return true;

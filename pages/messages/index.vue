@@ -1,5 +1,7 @@
 <template>
-  <div class="messages rounded-lg w-full flex flex-col justify-center xl:pl-4 mt-2">
+  <div
+    class="messages rounded-lg w-full flex flex-col justify-center xl:pl-4 mt-2"
+  >
     <div class="w-full">
       <div class="flex flex-col bg-gray-100 shadow-md border border-gray-200">
         <div class="flex message-header justify-between p-2 px-3">
@@ -24,12 +26,13 @@
             </div>
             <div class="buddies" v-else>
               <person
+                class="pl-4"
+                v-for="person in users"
                 :statusOrMessage="'hiee'"
                 :noLinkToProfile="true"
                 @person-clicked="messageToHandler"
-                v-for="person in users"
                 :key="person.id"
-                :person="person"
+                :personData="person"
               />
             </div>
           </div>
@@ -136,9 +139,9 @@ import HorizontalBar from "~/components/HorizontalBar.vue";
 import Person from "~/components/Person/Person.vue";
 import ProfilePicture from "~/components/ProfilePicture.vue";
 import Reactions from "~/components/Reactions.vue";
-import people from "~/data/people";
 import PersonSkeleton from "~/components/Person/PersonSkeleton.vue";
 import UserStatus from "~/components/UserStatus.vue";
+import { axiosGet } from '~/helpers/axiosHelpers';
 export default {
   name: "Messages",
   layout: "auth",
@@ -157,13 +160,14 @@ export default {
       selectedUser: {},
     };
   },
-  created() {
+  async created() {
     this.loading = true;
-    setTimeout(() => {
-      this.users = people;
-      this.selectedUser = people[0];
-      this.loading = false;
-    }, 2000);
+    let { data } = await axiosGet("people", "user=" + this.user.id);
+    data.people.map(d => d.selected = false);
+    this.users = data.people.filter((u) => u.uuid !== this.user.id);
+    this.users[0].selected  = true;
+    this.selectedUser = this.users[0];
+    this.loading = false;
   },
   methods: {
     messageToHandler(person) {

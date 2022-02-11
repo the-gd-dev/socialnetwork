@@ -50,46 +50,56 @@ export default {
         },
         {
           _id: 3,
-          title: "Memories",
-          url: "/memories",
+          title: "Messages",
+          url: "/messages",
           icon: {
             type: "fa",
-            name: "clock-rotate-left",
+            name: "comment",
           },
         },
-        {
-          _id: 4,
-          title: "Friends",
-          url: "/friends",
-          icon: {
-            type: "fa",
-            name: "users",
-          },
-        },
-        {
-          _id: 5,
-          title: "Privacy",
-          url: "/privacy",
-          icon: {
-            type: "fa",
-            name: "lock",
-          },
-        },
-        {
-          _id: 6,
-          title: "Settings",
-          url: "/settings",
-          icon: {
-            type: "fa",
-            name: "gear",
-          },
-        },
+        // {
+        //   _id: 3,
+        //   title: "Memories",
+        //   url: "/memories",
+        //   icon: {
+        //     type: "fa",
+        //     name: "clock-rotate-left",
+        //   },
+        // },
+        // {
+        //   _id: 4,
+        //   title: "Friends",
+        //   url: "/friends",
+        //   icon: {
+        //     type: "fa",
+        //     name: "users",
+        //   },
+        // },
+        // {
+        //   _id: 5,
+        //   title: "Privacy",
+        //   url: "/privacy",
+        //   icon: {
+        //     type: "fa",
+        //     name: "lock",
+        //   },
+        // },
+        // {
+        //   _id: 6,
+        //   title: "Settings",
+        //   url: "/settings",
+        //   icon: {
+        //     type: "fa",
+        //     name: "gear",
+        //   },
+        // },
       ],
     };
   },
   created() {
     let option = this.sidemenu.find((i) => i.title === "Profile");
-    option.url = "/" + this.user.id;
+   248
+   248
   },
 };
 </script>
