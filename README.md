@@ -90,7 +90,3 @@ Alias: `-v`. Show version number and exit.
 Overwrite the target directory.
 
 ## Credits
-
-- [egoist](https://github.com/egoist)
-- [clarko](https://github.com/clarkdo)
-- All our contributors ([list](https://github.com/nuxt/create-nuxt-app/contributors)).
