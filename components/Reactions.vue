@@ -2,7 +2,7 @@
   <div class="flex">
     <div class="reacted">
       <button
-        :class="`flex items-center ${
+        :class="`flex justify-center items-center ${
           selectedReaction.selected
             ? selectedReaction.customClass
             : 'text-gray-600'
@@ -15,7 +15,7 @@
             selectedReaction.selected ? selectedReaction.customClass : ''
           "
         />
-        &nbsp;&nbsp;
+        &nbsp;
         <span class="text-sm font-semibold"> {{ selectedReaction.label }}</span>
       </button>
       <div class="reactions bg-white rounded-full px-2">
@@ -74,7 +74,7 @@ export default {
   },
   async created() {
     this.loading = true;
-    if (this.$store.state.utility.privacy.length === 0) {
+    if (this.$store.state.utility.reactions.length === 0) {
       const response = await api.utils.reactions();
       this.$store.commit("utility/set_reactions", response.data.reactions);
     }

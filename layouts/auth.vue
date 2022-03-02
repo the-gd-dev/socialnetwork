@@ -10,6 +10,7 @@
         </div>
       </div>
     </div>
+   
   </div>
 </template>
 <script>
@@ -42,9 +43,9 @@ export default {
 };
 </script>
 <style>
-  body.overlay-opened{
-    overflow: hidden;
-  }
+body.overlay-opened {
+  overflow: hidden;
+}
 </style>
 <style scoped>
 .overlay.show {

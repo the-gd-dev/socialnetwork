@@ -31,16 +31,18 @@ export default {
 .spinner-md {
   height: 35px;
   width: 35px;
-  border-width: 5px;
+  border-width: 3px;
 }
 .spinner-sm {
   height: 30px;
   width: 30px;
+  border-width: 3px;
 }
 
-.spinner-sm {
+.spinner-xsm {
   height: 25px;
   width: 25px;
+  border-width: 3px;
 }
 .spinner {
   border-color: rgb(75, 75, 75);

@@ -1,23 +1,25 @@
 <template>
   <keep-alive>
     <div
-      :class="`flex overflow-hidden h-${size} w-${size} rounded-full items-center border-2 border-gray-400`"
+      :class="`flex overflow-hidden h-${size} w-${size}`"
     >
-      <div class="m-auto" v-if="loading">
-        <spinner spinnerSize="spinner-lg" />
-      </div>
+      <!-- <div class="m-auto" v-if="loading">
+        <spinner spinnerSize="spinner-md" />
+      </div> -->
       <nuxt-link :to="`/${userId}`" v-if="linkToProfile">
         <img
           :src="url"
+          :alt="userId"
           @load="$emit('loading-complete')"
-          class="w-full h-full"
+          class="w-full h-full  rounded-full items-center border-2 border-gray-400"
         />
       </nuxt-link>
       <div v-else>
         <img
           :src="url"
+          :alt="userId"
           @load="$emit('loading-complete')"
-          class="w-full h-full"
+          class="w-full h-full  rounded-full items-center border-2 border-gray-400"
         />
       </div>
     </div>

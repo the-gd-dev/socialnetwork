@@ -5,12 +5,24 @@
         class="flex flex-col bg-gradient-to-tl from-gray-200 to-gray-200 lg:mb-2 last:mb-0"
       >
         <div class="flex justify-between px-4">
-          <div class="">
-            <post-user :userId="post.userId" />
+          <div class="" v-if="post.user">
+            <post-user :postUser="post.user" :postTime="post.created_at" />
+          </div>
+        </div>
+        <!-- Post Text -->
+        <div
+          class="bg-gray-100 post-content flex w-full px-4"
+          v-if="post.text && !post.photo"
+        >
+          <div class="text-3xl text-gray-800 text-center m-auto">
+            {{ post.text }}
           </div>
         </div>
         <!-- Post Content -->
-        <div class="flex items-center justify-center overflow-hidden">
+        <div
+          class="flex items-center justify-center overflow-hidden"
+          v-if="post.photo"
+        >
           <div class="m-auto" v-if="post.photo.loading">
             <spinner spinnerSize="spinner-2xl" />
           </div>
@@ -61,10 +73,15 @@
     <div class="w-full lg:w-1/2 lg:pl-6">
       <div class="comments-section">
         <div class="comments-section-header py-2">
-          <div class="add-comment-form flex items-center space-x-2">
+          <form
+            @submit.prevent="postComment"
+            class="add-comment-form flex items-center space-x-2"
+          >
             <input
+              required
               placeholder="Write a comment..."
               type="text"
+              v-model="comment"
               class="border pl-2 border-gray-400 w-full rounded-xl"
               :style="{ height: '40px' }"
             />
@@ -73,35 +90,40 @@
             >
               Comment
             </button>
-          </div>
-          <div class="flex justify-between items-center mb-1">
-            <div class="text-md font-semibold text-gray-700">{{ commentsCount }} Comments</div>
-          </div>
+          </form>
         </div>
         <div class="comments-section-body">
-          <div class="post-comments-container-wrap-scroll">
-            <post-comments
-              :postId="post.id"
-              @comments-loaded="(count) => (commentsCount = count)"
-            />
+          <div class="flex justify-end items-center" v-if="commentsCount > 0">
+            <div class="text-md font-semibold text-gray-700">
+              {{
+                commentsCount > 1
+                  ? commentsCount + " Comments"
+                  : commentsCount + " Comment"
+              }}
+            </div>
           </div>
-        </div>
-      </div>
-      <div class="accordian">
-        <div
-          class="accordian-header cursor-pointer bg-gradient-to-tl from-gray-200 to-gray-200 p-2 px-4"
-        >
-          <div class="flex justify-between items-center">
-            <h1 class="text-lg font-semibold">Post Settings</h1>
-            <div class="close-open-btn-container">
-              <div class="text-lg">
-                <icon name="cog" />
-              </div>
+          <div class="post-comments-container-wrap-scroll" v-if="post.id">
+            <post-comments
+              :reload="reloadComments"
+              :postId="post.id"
+              @comments-loaded="loadCommentsHandler"
+            />
+            <div class="flex justify-center">
+              <button
+                @click="reloadComments = true"
+                class="bg-blue-200 text-blue-600 px-6 py-2 text-sm rounded-full flex space-x-2"
+              >
+                <div v-if="commentsCount > 0">Load more comments ...</div>
+                <div v-else>refresh comments</div>
+                <div>
+                  <icon name="refresh" />
+                </div>
+              </button>
             </div>
           </div>
         </div>
-        <div class="accordian-body"></div>
       </div>
+      
     </div>
   </div>
 </template>
@@ -112,27 +134,54 @@ import SinglePost from "~/components/Post/index.vue";
 import PostFooter from "~/components/Post/PostFooter.vue";
 import PostUser from "~/components/Post/PostUser.vue";
 import Spinner from "~/components/Spinner.vue";
+import { axiosGet, axiosPost } from "~/helpers/axiosHelpers";
 export default {
   components: { SinglePost, PostFooter, PostUser, Spinner, PostComments },
   layout: "auth",
   data() {
     return {
+      reloadComments: false,
+      comment: "",
       commentsCount: 0,
-      post : {}
+      post: {
+        photo: {},
+      },
     };
   },
   async created() {
-   
+    let postId = this.$route.params.id;
+    let { data } = await axiosGet("posts/" + postId);
+    this.post = data.post;
+  },
+  methods: {
+    loadCommentsHandler(count) {
+      this.commentsCount = count;
+      this.reloadComments = false;
+    },
+    async postComment() {
+      const { result } = await axiosPost("comments/add", {
+        comment: this.comment,
+        post_id: this.post.id,
+      });
+      this.comment = "";
+      this.reloadComments = true;
+    },
   },
 };
 </script>
 <style scoped>
-/* .accordian:not(:last-child) {
-  margin-bottom : 1em
-} */
-.post-comments-container-wrap-scroll {
-  /* max-height: 620px;
-  overflow-y: auto;
-  padding-right: 1em; */
+.post-content {
+  min-height: 200px;
+}
+.post-content-img {
+  min-height: 400px;
+}
+
+.post-content .image.loaded {
+  filter: blur(0px);
+}
+.post-content .image {
+  /* filter: blur(10px); */
+  transition: all ease-in-out 0.3s;
 }
 </style>

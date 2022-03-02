@@ -18,8 +18,12 @@
         </div>
       </nuxt-link>
     </div>
-    <div class="flex justify-center items-center h-20">
-      Copyright &copy; 2022
+    <div class="flex flex-col justify-center items-center py-6">
+      <div class="text-sm font-semibold text-gray-500">
+        SocialNetwork &copy;2022
+      </div>
+      <div class="text-sm font-bold text-gray-700 my-1">The Good Developer</div>
+      <div class="flex  space-x-2 text-sm font-bold text-green-400"><NuxtIcon /> <LaravelLumen /></div>
     </div>
   </div>
 </template>
@@ -98,8 +102,8 @@ export default {
   },
   created() {
     let option = this.sidemenu.find((i) => i.title === "Profile");
-   248
-   248
+    248;
+    248;
   },
 };
 </script>

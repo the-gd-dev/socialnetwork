@@ -16,11 +16,13 @@
 </template>
 
 <script>
+import { axiosGet } from "~/helpers/axiosHelpers";
 import Comment from "./Comment.vue";
 import CommentSkeleton from "./CommentSkeleton.vue";
 export default {
   components: { Comment, CommentSkeleton },
   props: {
+    reload: { default: false },
     postId: { default: null },
   },
   data() {
@@ -31,18 +33,22 @@ export default {
   },
   async created() {
     this.loadingComments = true;
-    await this.loadCommentsHandler();
+    if (!this.postId) return false;
+    const { data } = await axiosGet("comments/all", "post_id=" + this.postId);
+    this.comments = data.comments.data;
+    this.$emit("comments-loaded",  data.comments.total);
     this.loadingComments = false;
   },
-  methods: {
-    async loadCommentsHandler() {
-      if (!this.postId) return false;
-      const { data } = await this.$axios.get(
-        `https://jsonplaceholder.typicode.com/comments?postId=${this.postId}&_start=0&_limit=4`
-      );
-      this.comments = data;
-      this.$emit("comments-loaded", this.comments.length);
-      console.log(data);
+  watch: {
+    async reload(v) {
+      if (v) {
+        const { data } = await axiosGet(
+          "comments/all",
+          "post_id=" + this.postId
+        );
+        this.comments = data.comments.data;
+        this.$emit("comments-loaded", data.comments.total);
+      }
     },
   },
 };

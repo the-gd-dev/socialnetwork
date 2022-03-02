@@ -18,13 +18,22 @@
           <div>
             <div class="flex space-x-4">
               <a href="#" class="hidden lg:block text-white text-lg"> Help</a>
-              <a href="#" class="hidden lg:block text-white text-lg"> Support</a>
-              <a href="#" class="hidden lg:block text-white text-lg"> Careers</a>
+              <a href="#" class="hidden lg:block text-white text-lg">
+                Support</a
+              >
+              <a href="#" class="hidden lg:block text-white text-lg">
+                Careers</a
+              >
               <a href="#" class="text-white text-lg">
-                <select class="bg-transparent text-lg" v-model="selectedLanguage">
+                <select
+                  class="bg-transparent text-lg"
+                  v-model="selectedLanguage"
+                >
                   <option
-                   class="text-black"
-                   :class="selectedLanguage === lang.language ? 'bg-gray-200' : ''"
+                    class="text-black"
+                    :class="
+                      selectedLanguage === lang.language ? 'bg-gray-200' : ''
+                    "
                     v-for="lang in languages"
                     :key="lang.id"
                     :value="lang.language"
@@ -41,18 +50,24 @@
     <!-- Mid Content -->
     <Nuxt />
     <!-- Mid Content -->
-    <footer class="flex items-center justify-center bg-white p-8">
-      This will be footer.
+    <footer class="flex flex-col items-center justify-center bg-white p-6">
+      <div class="text-sm font-semibold text-gray-500">
+        SocialNetwork &copy;2022
+      </div>
+      <div class="text-sm font-bold text-gray-700 my-1">The Good Developer</div>
+      <div class="flex space-x-2 text-sm font-bold text-green-400">
+        <NuxtIcon /> <LaravelLumen />
+      </div>
     </footer>
   </div>
 </template>
 <script>
-import api from '~/api';
+import api from "~/api";
 export default {
   data() {
     return {
       languages: [],
-      selectedLanguage :'English'
+      selectedLanguage: "English",
     };
   },
   async created() {

@@ -59,11 +59,8 @@ export default {
   async created() {
     this.loading = true;
     if (!this.userId) {
-      let USER = {
-        ...this.postUser,
-        user_meta: { ...this.postUser.user_meta, profilePicLoading: false },
-      };
-      this.thisUser = USER;
+      this.thisUser = this.postUser;
+      this.thisUser.user_meta.profilePicLoading = true;
     } else {
       await this.getUser(this.userId);
     }
@@ -71,12 +68,16 @@ export default {
   },
   methods: {
     async getUser(id) {
-      try {
-        // let { data } = await axiosGet("users/" + id);
-        // this.thisUser = { ...data.user, profilePicLoading: false };
-      } catch (response) {
-        console.log(response.data);
-      }
+      // try {
+      //   let { data } = await axiosGet("users/" + id);
+      //   let user = data.user;
+      //   this.thisUser = {
+      //     ...user,
+      //     user_meta: { ...user.user_meta, profilePicLoading: false },
+      //   };
+      // } catch (response) {
+      //   console.log(response.data);
+      // }
     },
   },
 };
