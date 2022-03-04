@@ -11,6 +11,7 @@
         />
         <!-- user-posts -->
         <user-posts
+          @on-delete="aPostIsDeleted"
           :posts="posts"
           :loading="postsLoading"
           v-if="posts.length > 0"
@@ -41,7 +42,7 @@ import FindPeople from "./FindPeople/main.vue";
 import Modal from "~/components/Modal/Modal.vue";
 import HorizontalBar from "~/components/HorizontalBar.vue";
 import { axiosGet } from "~/helpers/axiosHelpers";
-import FriendRequests from './FriendRequests/index.vue';
+import FriendRequests from "./FriendRequests/index.vue";
 export default {
   components: {
     People,
@@ -79,7 +80,7 @@ export default {
       await this.getPosts();
       this.postsLoading = false;
     },
-    
+
     async getPosts() {
       try {
         let { data } = await axiosGet("posts");
@@ -87,6 +88,9 @@ export default {
       } catch (response) {
         console.log(response.data);
       }
+    },
+    aPostIsDeleted(id) {
+      this.posts = this.posts.filter((p) => p.id !== id);
     },
   },
 };

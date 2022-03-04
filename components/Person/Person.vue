@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex person justify-between px-2 cursor-pointer hover:bg-gray-300 py-2"
+    class="flex person justify-between items-center px-2 cursor-pointer hover:bg-gray-300 py-2"
     :class="person.selected ? 'bg-gray-300 sticky top-0' : ''"
     @click="$emit('person-clicked', person)"
   >
@@ -38,64 +38,34 @@
       <div class="user-status mt-1" v-if="showStatus">
         <user-status :status="person.status" />
       </div>
+      <!-- For New People Section -->
       <div v-if="connectOptions" class="flex space-x-2 my-auto">
-        <div v-if="!person.request_sent" class="flex space-x-2">
-          <button
-            class="flex items-center"
-            @click="$emit('add-friend', { person })"
-          >
-            <div
-              class="flex w-10 lg:w-28 xl:w-32 justify-center bg-emerald-200 hover:bg-emerald-500 text-emerald-800 hover:text-white p-1 px-2 rounded-full space-x-1"
-            >
-              <span class="hidden lg:inline-block">Add Friend</span
-              ><icon name="user-plus" class="my-auto" />
-            </div>
-          </button>
-          <button
-            class="flex items-center"
-            @click="$emit('remove-friend', { person })"
-          >
-            <div
-              class="items-center justify-center w-10 lg:w-28 xl:w-32 bg-white hover:bg-gray-100 text-gray-800 p-1 px-2 rounded-full space-x-1"
-            >
-              <span class="hidden lg:inline-block">Remove</span>
-              <icon name="times" class="my-auto" />
-            </div>
-          </button>
+        <add-btn-group
+          v-if="!person.request_sent"
+          class="flex space-x-2"
+          @on-add="$emit('add-friend', { person })"
+          @on-remove="$emit('remove-friend', { person })"
+        />
+        <sent-btn-group
+          v-else
+          :undo="showUndo"
+          @on-undo="$emit('remove-friend', { person })"
+          @on-remove="$emit('remove-friend', { person })"
+        />
+      </div>
+      <!-- For Requests Section -->
+      <div v-else class="flex space-x-2 my-auto">
+        <div class="flex space-x-2" v-if="person.requestType == 'sent'">
+          <sent-btn-group
+            @on-undo="$emit('remove-friend', person.requestId)"
+            @on-remove="$emit('remove-friend', person.requestId)"
+          />
         </div>
-        <div class="flex space-x-2" v-else>
-          <div
-            class="flex justify-center items-center w-10 lg:w-28 xl:w-32 bg-teal-100 text-teal-500 p-1 px-2 rounded-full space-x-2"
-          >
-            <span class="hidden lg:inline-block">Sent</span
-            ><icon name="check-circle" class="my-auto" />
-          </div>
-          <div v-if="showUndo">
-            <button
-              class="flex items-center"
-              @click="$emit('remove-friend', { person })"
-            >
-              <div
-                class="flex items-center justify-center w-10 lg:w-28 xl:w-32 bg-white hover:bg-gray-100 text-gray-800 p-1 px-2 rounded-full space-x-1"
-              >
-                <span class="hidden lg:inline-block">Undo</span>
-                <icon name="undo" class="my-auto" />
-              </div>
-            </button>
-          </div>
-          <div v-else>
-            <button
-              class="flex items-center"
-              @click="$emit('remove-friend', { person })"
-            >
-              <div
-                class="flex items-center justify-center w-10 lg:w-28 xl:w-32 bg-white hover:bg-gray-100 text-gray-800 p-1 px-2 rounded-full space-x-1"
-              >
-                <span class="hidden lg:inline-block">Cancel</span>
-                <icon name="times" class="my-auto" />
-              </div>
-            </button>
-          </div>
+        <div class="flex space-x-2" v-if="person.requestType == 'recieved'">
+          <recieved-btn-group
+            @on-confirm="$emit('confirm-request', person.requestId)"
+            @on-decline="$emit('decline-request', person.requestId)"
+          />
         </div>
       </div>
     </div>
@@ -104,8 +74,11 @@
 
 <script>
 import UserStatus from "../UserStatus.vue";
+import AddBtnGroup from "./AddBtnGroup.vue";
+import RecievedBtnGroup from "./RecievedBtnGroup.vue";
+import SentBtnGroup from "./SentBtnGroup.vue";
 export default {
-  components: { UserStatus },
+  components: { UserStatus, SentBtnGroup, RecievedBtnGroup, AddBtnGroup },
   name: "Person",
   props: {
     showUndo: { default: false },

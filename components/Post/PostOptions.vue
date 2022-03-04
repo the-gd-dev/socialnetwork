@@ -2,11 +2,12 @@
   <div class="flex space-x-4">
     <div class="my-auto">
       <privacy
+        v-if="owner"
         :toggle="showPopup"
         @toggle-privacy="(v) => (showPopup = !showPopup)"
       />
     </div>
-    <button @click="$emit('delete')">
+    <button @click="$emit('delete')" v-if="owner">
       <Icon
         name="trash"
         type="fa"
@@ -20,6 +21,7 @@
 <script>
 import Privacy from "../Privacy.vue";
 export default {
+  props : ['owner'],
   components: { Privacy },
   name: "PostOptions",
   data() {

@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-100 shadow-md border border-gray-200 rounded-xl py-2">
+  <div class="bg-gray-100 shadow-md border border-gray-200 rounded-xl py-2 h-auto">
     <recieved-requests v-if="!toggleView" @toggle="toggleView = !toggleView"/>
     <sent-requests v-else @toggle="toggleView = !toggleView"/>
   </div>
@@ -20,4 +20,6 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+
+</style>

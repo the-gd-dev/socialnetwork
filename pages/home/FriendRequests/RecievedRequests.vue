@@ -19,32 +19,36 @@
     </div>
 
     <horizontal-bar class="my-2" />
-    <div class="flex flex-col new-people-container" v-if="loading">
+    <scroll-area v-if="loading">
       <div class="loading">
         <person-skeleton v-for="user in 12" :key="user" :findPeople="true" />
       </div>
-    </div>
-    <div v-else class="flex flex-col new-people-container">
+    </scroll-area>
+    <scroll-area :maxHeight="730" v-else>
       <!-- Single Row -->
       <person
         class="pl-4"
         v-for="request in friendRequests"
         :key="request.id"
-        :personData="request.user"
+        :personData="{
+          ...request.request,
+          requestType: 'recieved',
+          requestId: request.id,
+        }"
         :trimLength="nameTrim"
         :showStatus="false"
         :showInfo="true"
-        :connectOptions="true"
-        @remove-friend="removeFriendRequest"
+        @confirm-request="confirmFriendRequest"
+        @decline-request="removeFriendRequest"
       />
-    </div>
+    </scroll-area>
     <div
       class="flex flex-col justify-center items-center"
       v-if="friendRequests.length === 0"
     >
-      <div class="text-lg text-gray-500">No Friend Request Found.</div>
+      <div class="text-lg text-gray-500">No Incoming Requests Found.</div>
       <div class="text-sm text-gray-600 text-center">
-        Let new people find you and send you a friend request. <br />
+        Find people who had sent you a friend request. <br />
         You can refresh the requests with below button.
       </div>
       <button
@@ -93,10 +97,11 @@
 import Modal from "~/components/Modal/Modal.vue";
 import Person from "~/components/Person/Person.vue";
 import PersonSkeleton from "~/components/Person/PersonSkeleton.vue";
+import ScrollArea from "~/components/ScrollArea.vue";
 import { axiosGet, axiosPost } from "~/helpers/axiosHelpers";
 export default {
   name: "RecievedRequests",
-  components: { Modal, Person, PersonSkeleton },
+  components: { Modal, Person, PersonSkeleton, ScrollArea },
   data() {
     return {
       nameTrim: 15,
@@ -114,23 +119,31 @@ export default {
     this.windowInnerWidth = window.innerWidth;
   },
   methods: {
+    async confirmFriendRequest(requestId) {
+      await axiosPost("friends/confirm", {
+        id: requestId,
+      });
+      this.friendRequests = this.friendRequests.filter(
+        (f) => f.id !== requestId
+      );
+    },
     async getFriendRequests() {
       this.showRequests = !this.showRequests;
       try {
-        let { data } = await axiosGet("friend/requests","type=recieved");
+        let { data } = await axiosGet("friends/requests", "type=recieved");
         this.friendRequests = data.requests;
         this.friendRequests.map((r) => (r.user.request_sent = true));
       } catch (response) {
-        console.log(response.data);
+        console.log(response);
       }
     },
-    removeFriendRequest(payload) {
+    removeFriendRequest(requestId) {
       this.removeFriendAlert = true;
-      this.removePerson = payload.person;
+      this.removePerson = requestId;
     },
     async confirmRemove() {
-      await axiosPost("friend/remove", {
-        id: this.removePerson.uuid,
+      await axiosPost("friends/remove", {
+        id: this.removePerson,
       });
       await this.getFriendRequests();
       this.closeAlert();

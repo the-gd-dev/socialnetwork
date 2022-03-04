@@ -8,7 +8,7 @@
       :postUser="post.user"
       :createdAt="post.created_at"
       :updatedAt="post.updated_at"
-      @delete-post="deletePostAlert = true"
+      @delete-post="deleteThisPost(post)"
     />
     <post-content :post="post" />
     <post-footer :post="post" />
@@ -32,6 +32,7 @@
         <div class="bg-transparant py-2">
           <div class="flex space-x-2 justify-end">
             <button
+              @click="deletePostFinally"
               class="bg-blue-500 hover:bg-blue-600 text-white rounded-lg px-4 py-1"
             >
               Yes, I know
@@ -50,6 +51,7 @@
 </template>
 
 <script>
+import { axiosPost } from '~/helpers/axiosHelpers';
 import Modal from "../Modal/Modal.vue";
 export default {
   components: { Modal },
@@ -58,13 +60,22 @@ export default {
   data() {
     return {
       deletePostAlert: false,
+      deletePostId: "",
     };
   },
-  created() {
-    // globalEvent.$on("container-clicked", () => {
-    //   this.deletePostAlert = false;
-    // });
-  },
+  methods :{
+    async deletePostFinally(){
+      let result  = await axiosPost('delete-post', {post_id : this.deletePostId});
+      this.$emit('post-deleted', this.deletePostId);
+      this.deletePostId = "";
+      this.deletePostAlert =  false;
+      this.$emit('post-deleted');
+    },
+    deleteThisPost(post){
+      this.deletePostAlert =  true;
+      this.deletePostId = post.id;
+    }
+  }
 };
 </script>
 

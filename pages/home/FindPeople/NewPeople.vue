@@ -5,17 +5,6 @@
         Do I know you ?
         <div class="text-sm text-gray-600">May be you know them.</div>
       </div>
-      <div>
-        <!-- <button
-          @click="$emit('toggle')"
-          class="bg-teal-100 text-teal-600 px-4 py-1 text-sm rounded-full flex space-x-2"
-        >
-          <div>Sent Requests</div>
-          <div>
-            <icon name="check-circle" />
-          </div>
-        </button> -->
-      </div>
     </div>
     <horizontal-bar class="my-2" />
     <div class="flex flex-col new-people-container" v-if="loading">
@@ -87,26 +76,32 @@ export default {
   methods: {
     async randomPeople() {
       this.loading = true;
-      let { data } = await axiosGet("people", "user=" + this.user.id);
-      this.people = data.people.filter((u) => u.uuid !== this.user.id);
+      let { data } = await axiosGet("people");
+      this.people = data.people.filter((u) => {
+        if (u.uuid !== this.user.id) {
+          u.request_sent = false;
+        }
+        return u;
+      });
       this.loading = false;
       return true;
     },
     async addFriend(payload) {
-      let { data } = await axiosPost("friend/add", { id: payload.person.uuid });
+      let { data } = await axiosPost("friends/add", { id: payload.person.uuid });
       payload.person.request_sent = true;
+      payload.person.requestId = data.id;
       this.showUndoButton = true;
       setTimeout(() => {
-        if (payload.request_sent) {
+        if (payload.person.request_sent) {
           this.showUndoButton = false;
           this.removeFriend(payload);
         }
-      }, 2000);
+      }, 3000);
     },
     async removeFriend(payload) {
       if (this.showUndoButton) {
-        await axiosPost("friend/remove", {
-          id: payload.person.uuid,
+        await axiosPost("friends/remove", {
+          id: payload.person.requestId,
         });
         payload.person.request_sent = false;
         return false;

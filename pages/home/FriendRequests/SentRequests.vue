@@ -19,25 +19,28 @@
     </div>
 
     <horizontal-bar class="my-2" />
-    <div class="flex flex-col new-people-container" v-if="loading">
+    <scroll-area v-if="loading">
       <div class="loading">
         <person-skeleton v-for="user in 12" :key="user" :findPeople="true" />
       </div>
-    </div>
-    <div v-else class="flex flex-col new-people-container">
+    </scroll-area>
+    <scroll-area :maxHeight="730" v-else>
       <!-- Single Row -->
       <person
         class="pl-4"
         v-for="request in friendRequests"
         :key="request.id"
-        :personData="request.user"
+        :personData="{
+          ...request.user,
+          requestType: 'sent',
+          requestId: request.id,
+        }"
         :trimLength="nameTrim"
         :showStatus="false"
         :showInfo="true"
-        :connectOptions="true"
         @remove-friend="removeFriendRequest"
       />
-    </div>
+    </scroll-area>
     <div
       class="flex flex-col justify-center items-center"
       v-if="friendRequests.length === 0"
@@ -92,10 +95,11 @@
 import Modal from "~/components/Modal/Modal.vue";
 import Person from "~/components/Person/Person.vue";
 import PersonSkeleton from "~/components/Person/PersonSkeleton.vue";
+import ScrollArea from "~/components/ScrollArea.vue";
 import { axiosGet, axiosPost } from "~/helpers/axiosHelpers";
 export default {
   name: "SentRequests",
-  components: { Modal, Person, PersonSkeleton },
+  components: { Modal, Person, PersonSkeleton, ScrollArea },
   data() {
     return {
       nameTrim: 15,
@@ -116,20 +120,20 @@ export default {
     async getFriendRequests() {
       this.showRequests = !this.showRequests;
       try {
-        let { data } = await axiosGet("friend/requests", "type=sent");
+        let { data } = await axiosGet("friends/requests", "type=sent");
         this.friendRequests = data.requests;
         this.friendRequests.map((r) => (r.user.request_sent = true));
       } catch (response) {
         console.log(response.data);
       }
     },
-    removeFriendRequest(payload) {
+    removeFriendRequest(requestId) {
       this.removeFriendAlert = true;
-      this.removePerson = payload.person;
+      this.removePerson = requestId;
     },
     async confirmRemove() {
-      await axiosPost("friend/remove", {
-        id: this.removePerson.uuid,
+      await axiosPost("friends/remove", {
+        id: this.removePerson,
       });
       await this.getFriendRequests();
       this.closeAlert();

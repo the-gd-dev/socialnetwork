@@ -271,7 +271,7 @@ export default {};
 .iconic {
   position: relative;
   outline: none;
-  width: 25px;
-  height: 25px;
+  width: 18px;
+  height: 18px;
 }
 </style>

@@ -2,7 +2,7 @@
   <div class="flex flex-col lg:flex-row py-2 px-6">
     <div class="w-full lg:w-1/2">
       <div
-        class="flex flex-col bg-gradient-to-tl from-gray-200 to-gray-200 lg:mb-2 last:mb-0"
+        class="flex flex-col bg-gradient-to-tl from-gray-200 to-gray-200 lg:mb-2 last:mb-0 rounded-xl"
       >
         <div class="flex justify-between px-4">
           <div class="" v-if="post.user">
@@ -171,7 +171,7 @@ export default {
 </script>
 <style scoped>
 .post-content {
-  min-height: 200px;
+  min-height: 250px;
 }
 .post-content-img {
   min-height: 400px;

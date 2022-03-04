@@ -8,8 +8,14 @@
           <div class="text-lg font-semibold text-gray-900">Friends</div>
         </div>
       </div>
-      <div class="w-full flex bg-white flex-col md:flex-row md:flex-wrap rounded-xl shadow-lg border border-gray-200 justify-start pr-4 py-4 mt-4">
-        <div v-for="i in 50" :key="i" class="friend-wrapper w-full md:w-1/2 lg:w-1/3 xl:w-1/6 pb-4 pl-4">
+      <div
+        class="w-full flex bg-white flex-col md:flex-row md:flex-wrap rounded-xl shadow-lg border border-gray-200 justify-start pr-4 py-4 mt-4"
+      >
+        <div
+          v-for="friend in friends"
+          :key="friend.id"
+          class="friend-wrapper w-full md:w-1/2 lg:w-1/3 xl:w-1/6 pb-4 pl-4"
+        >
           <div
             class="friend flex flex-col justify-center items-center border-2 rounded-lg border-gray-200 py-3"
           >
@@ -21,17 +27,44 @@
                 class="w-full h-full"
               />
             </div>
-            <div class="text-lg font-semibold">John Doe</div>
-            <div class="text-md text-center">Lorem ipsum dolor</div>
+            <div class="text-lg font-semibold text-gray-800">
+              {{ friend.user.name }}
+            </div>
+            <div class="text-md text-center text-gray-500">
+              {{ friend.user.user_meta.bio_text || "I'm your friend" }}
+            </div>
             <div class="flex flex-col space-y-2 px-4 w-full py-4">
-              <button class="bg-cyan-200 w-full text-cyan-500 p-1 rounded-lg">
+              <nuxt-link
+                :to="`/${friend.user.uuid}/friends`"
+                class="flex justify-center space-x-2 bg-cyan-200 w-full text-cyan-500 p-1 rounded-lg"
+              >
                 <Icon name="users" />
-                Friends
-              </button>
-              <button class="bg-cyan-200 text-cyan-500 w-full p-1 rounded-lg">
+                <span>Friends</span>
+              </nuxt-link>
+              <nuxt-link
+                :to="`/${friend.user.uuid}/photos`"
+                class="flex justify-center space-x-2 bg-cyan-200 text-cyan-500 w-full p-1 rounded-lg"
+              >
                 <Icon name="image" />
-                Photos
-              </button>
+
+                <span>Photos</span>
+              </nuxt-link>
+            </div>
+          </div>
+        </div>
+        <div
+          v-if="friends.length === 0"
+          class="flex w-full flex-col justify-center items-center px-4"
+        >
+          <div class="text-3xl font-semibold text-gray-800">
+            No Friends
+            <div class="text-lg text-gray-600">You've no friends yet.</div>
+            <div class="text-lg text-gray-600">
+              Find people and send them a request if they accept.
+            </div>
+            <div class="">
+              <span class="text-2xl font-semibold text-gray-800">Bingo </span>
+              <span class="text-lg text-gray-600"> you're friends.</span>
             </div>
           </div>
         </div>
@@ -42,13 +75,22 @@
 
 <script>
 import ProfileLayout from "~/components/Profile/index.vue";
+import { axiosGet } from '~/helpers/axiosHelpers';
 export default {
   name: "Friends",
   layout: "auth",
   components: { ProfileLayout },
-  asyncData({ params }) {
-    return { userId: params.id };
+  data() {
+    return {
+      userId: "",
+      friends: [],
+    };
   },
+  async created() {
+    this.userId = this.$route.params.id;
+    let { data } = await axiosGet("friends", "userId=" + this.userId);
+    this.friends = data.friends;
+  }
 };
 </script>
 <style scoped></style>
