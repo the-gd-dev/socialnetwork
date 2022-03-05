@@ -11,7 +11,6 @@ export const actions = {
             resolve(true);
           })
           .catch((error) => {
-            console.log("Provided token is invalid:", error);
             resetAuthToken();
             resolve(false);
           });

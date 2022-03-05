@@ -16,10 +16,10 @@
       >
         <a
           href="#"
-          v-for="option in privacies"
+          v-for="(option, ok) in privacies"
           :key="option._id"
           class="hover:bg-gray-200 px-2"
-          @click="$emit('selected', option)"
+          @click="onSelect(option, ok)"
         >
           <span class="mr-2"
             ><Icon :name="option.icon" :type="option.type" size="16px"
@@ -41,14 +41,19 @@ export default {
       privacies: [],
     };
   },
-  async mounted() {
+  async created() {
     if (this.$store.state.utility.privacy.length === 0) {
-      console.log("zero privacies");
       const response = await api.utils.privacy();
       this.$store.commit("utility/set_privacy", response.data.privacies);
     }
-    this.privacies = this.$store.state.utility.privacy;
-    this.privacySelected = this.privacies[(this.selected - 1)];
+    this.privacies = [...this.$store.state.utility.privacy];
+    this.privacySelected = this.privacies.find(p => p.id == this.selected);
+  },
+  methods: {
+    onSelect(selected, index) {
+      this.privacySelected = selected;
+      this.$emit("set-privacy", selected);
+    },
   },
 };
 </script>

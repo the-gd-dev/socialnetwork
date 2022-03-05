@@ -39,12 +39,12 @@
               />
             </div>
             <div
-              class="flex z-10 space-x-2 justify-end items-baseline px-2 py-2 bg-gray-100"
+              class="flex z-10 space-x-2 justify-end items-baseline px-2 py-2 border-top"
             >
               <label
                 for="sn-photo"
-                class="transition add-post-action px-2 rounded-lg bg-green-200 text-green-900 hover:bg-green-500 hover:text-white"
-                ><icon name="camera" customClass="" /> Photo</label
+                class="transition add-post-action cursor-pointer px-2 rounded-lg bg-green-200 text-green-900 hover:bg-green-500 hover:text-white"
+                ><icon name="camera" customClass="" /> Add Photos</label
               >
               <!-- <button class="transition add-post-action  px-2 rounded-lg bg-rose-200 text-rose-900 hover:bg-rose-500 hover:text-white"><icon name="video" customClass="" /> Video</button>
                 <button class="transition add-post-action  px-2 rounded-lg bg-yellow-200 text-yellow-900 hover:bg-yellow-500 hover:text-white"><icon name="face-smile" customClass="" /> Feelings</button>

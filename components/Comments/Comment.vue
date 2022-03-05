@@ -34,13 +34,23 @@
       </p>
     </div>
     <!-- Reply and React -->
-    <div class="flex space-x-3 justify-center">
-      <button class="text-sm font-semibold">
-        <div class="flex justify-center items-center">
-          <Reactions size="20px" />
-        </div>
-      </button>
-      <button class="text-sm font-semibold">Reply</button>
+    <div class="flex space-x-3 justify-between py-2 border-t">
+      <div class="comment-reactions flex justify-center items-center space-x-2">
+        <button class="text-sm font-semibold">
+          <div class="flex justify-center items-center">
+            <Reactions size="20px" />
+          </div>
+        </button>
+        <button class="text-sm font-semibold">Reply</button>
+      </div>
+      <div class="comment-actions" v-if="user.id === comment.user.uuid">
+        <button
+          class="bg-red-200 hover:bg-red-500 hover:text-white text-sm text-red-500 py-1 px-2 rounded-lg"
+        >
+          <Icon name="trash" />
+          <span>Delete</span>
+        </button>
+      </div>
     </div>
   </div>
 </template>

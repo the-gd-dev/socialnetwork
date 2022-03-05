@@ -39,3 +39,8 @@ export const actions = {
     }
   },
 };
+export const getters = {
+  getReactions(state) {
+    return state.reactions;
+  },
+};

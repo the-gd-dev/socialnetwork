@@ -32,7 +32,7 @@
           <button
             class="reaction"
             v-for="reaction in reactionList"
-            :key="reaction._id"
+            :key="reaction.id"
             @click="selectReactionHandler(reaction)"
           >
             <div class="flex items-center h-10">
@@ -57,12 +57,13 @@ import api from "~/api";
 export default {
   props: {
     size: { default: "24px" },
+    selected: { default: null },
   },
   data() {
     return {
       loading: false,
       selectedReaction: {
-        _id: 1,
+        id: 1,
         selected: false,
         name: "face-smile",
         customClass: "text-yellow-500",
@@ -74,20 +75,33 @@ export default {
   },
   async created() {
     this.loading = true;
-    if (this.$store.state.utility.reactions.length === 0) {
+    var rxns = this.$store.getters["utility/getReactions"].slice();
+    if (rxns.length === 0) {
       const response = await api.utils.reactions();
-      this.$store.commit("utility/set_reactions", response.data.reactions);
+      rxns = response.data.reactions.slice();
+      this.$store.commit("utility/set_reactions", rxns);
     }
-    this.reactionList = this.$store.state.utility.reactions;
+    this.reactionList = rxns;
+    if (this.selected) {
+      this.selectedReaction = this.selected;
+      this.selectedReaction.selected = true;
+    }
     this.loading = false;
   },
   methods: {
     selectReactionHandler(rxn) {
-      this.reactionList.map((r) => {
-        if (r._id === rxn._id) r.selected = !r.selected;
-        else r.selected = false;
-      });
       this.selectedReaction = rxn;
+      this.$emit("reaction", rxn);
+    },
+  },
+  watch: {
+    selected(rxn) {
+      if (rxn) {
+        this.selectedReaction = rxn;
+        if (!rxn.hasOwnProperty("selected")) {
+          this.selectedReaction.selected = true;
+        }
+      }
     },
   },
 };

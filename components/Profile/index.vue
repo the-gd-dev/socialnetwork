@@ -7,8 +7,10 @@
           thisUser.user_meta ? thisUser.user_meta.cover : ''
         }) no-repeat center;`"
       >
-        <div class="flex-w-full">
-          <button class="bg-gray-100 p-1 px-4 text-white shadow-lg rounded-full">
+        <div class="flex-w-full" v-if="thisUser.uuid === user.id">
+          <button
+            class="bg-gray-100 p-1 px-4 text-white shadow-lg rounded-full"
+          >
             <icon name="edit" customClass="text-gray-800" />
             <span class="text-gray-800">Change Cover</span>
           </button>
@@ -33,8 +35,16 @@
                         ? thisUser.user_meta.display_picture
                         : ''
                     "
-                    :loading="thisUser.profilePicLoading"
-                    @loading-complete="thisUser.profilePicLoading = false"
+                    :loading="
+                      thisUser.user_meta
+                        ? thisUser.user_meta.profilePicLoading
+                        : false
+                    "
+                    @loading-complete="
+                      thisUser.user_meta
+                        ? (thisUser.user_meta.profilePicLoading = false)
+                        : true
+                    "
                   />
                 </div>
                 <div class="user-details">
@@ -42,9 +52,11 @@
                     <div class="text-xl font-semibold text-shadow py-2 lg:py-0">
                       {{ thisUser.name }}
                     </div>
-                    <div class="text-lg text-shadow w-full lg:w-2/3">
-                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                      Eos nisi facilis perferendis cumque a.
+                    <div
+                      v-if="thisUser.user_meta"
+                      class="text-lg text-shadow w-full lg:w-2/3"
+                    >
+                      {{ thisUser.user_meta.bio_text }}
                     </div>
                   </div>
                 </div>
@@ -52,6 +64,7 @@
               </div>
             </div>
             <div
+              v-if="thisUser.uuid === user.id"
               class="w-full space-x-2 lg:w-1/3 flex items-center justify-center lg:justify-end py-2 lg:py-0"
             >
               <button
@@ -63,51 +76,63 @@
               <button
                 class="p-1 px-4 text-lg bg-blue-200 hover:bg-blue-300 px-4 text-blue-600 inline rounded-full"
               >
-                <icon name="edit" />
+                <icon name="user-edit"  />
                 <span>Edit Profile</span>
               </button>
             </div>
           </div>
+          <!-- Mobile View -->
           <div class="lg:hidden flex py-2 px-4 flex-col lg:flex-row">
-            <div class="flex flex-row justify-start items-center space-x-2">
-              <div class="user-picture">
-                <profile-picture
-                  :linkToProfile="false"
-                  :size="16"
-                  :userId="thisUser.id"
-                  :url="
-                    thisUser.user_meta ? thisUser.user_meta.display_picture : ''
-                  "
-                  :loading="thisUser.profilePicLoading"
-                  @loading-complete="thisUser.profilePicLoading = false"
-                />
-              </div>
-              <div class="flex flex-col">
-                <div class="text-xl font-semibold">
-                  {{ thisUser.name }}
+            <div class="flex flex-row justify-between items-center">
+              <div class="user-information flex flex-row items-center space-x-2">
+                <div class="user-picture">
+                  <profile-picture
+                    :linkToProfile="false"
+                    :size="16"
+                    :userId="thisUser.id"
+                    :url="
+                      thisUser.user_meta
+                        ? thisUser.user_meta.display_picture
+                        : ''
+                    "
+                    :loading="
+                      thisUser.user_meta
+                        ? thisUser.user_meta.profilePicLoading
+                        : false
+                    "
+                    @loading-complete="
+                      thisUser.user_meta
+                        ? (thisUser.user_meta.profilePicLoading = false)
+                        : true
+                    "
+                  />
                 </div>
-                <div class="text-md leading-0">
-                  Lorem ipsum, dolor sit amet...
+                <div class="flex flex-col">
+                  <div class="text-xl font-semibold">
+                    {{ thisUser.name }}
+                  </div>
+                  <div class="text-md leading-0" v-if="thisUser.user_meta">
+                    {{ thisUser.user_meta.bio_text }}
+                  </div>
                 </div>
               </div>
-              <div class="flex flex-col">
+              <div class="flex justify-end space-x-2" v-if="thisUser.uuid === user.id">
                 <button
-                  class="p-1 bg-blue-200 hover:bg-blue-300 px-4 text-blue-600 inline rounded-full"
+                  class="bg-blue-200 p-2 px-3 hover:bg-blue-300 text-blue-600 text-center inline rounded-full"
+                >
+                  <icon name="user-edit" />
+                  <span class="hidden md:inline">Edit Profile</span>
+                </button>
+                <button
+                  class="bg-gray-200 p-2 px-3 hover:bg-gray-300 text-gray-800 text-center inline rounded-full"
                 >
                   <icon name="edit" />
-                  <span>Edit Profile</span>
+                  <span>Profile Picture</span>
                 </button>
               </div>
             </div>
-            <div class="flex mt-1">
-              <button
-                class="p-1 bg-gray-200 hover:bg-gray-300 px-4 text-gray-800 text-left inline rounded-full"
-              >
-                <icon name="edit" />
-                <span>Profile Picture</span>
-              </button>
-            </div>
           </div>
+          <!-- Mobile View -->
           <horizontal-bar color="#538dd5" height="1" />
           <div
             class="tabs-container flex flex-col items-center lg:items-start px-4"
@@ -134,10 +159,7 @@
         </div>
       </div>
       <!-- Selected Tab Span -->
-      <div
-        v-if="displayPage !== ''"
-        class="flex mt-2 flex-col relative"
-      >
+      <div v-if="displayPage !== ''" class="flex mt-2 flex-col relative">
         <div class="tab-span show p-4"><slot></slot></div>
       </div>
       <div v-else class="flex mt-2 flex-col relative px-2 lg:px-0">
@@ -202,10 +224,15 @@ export default {
       thisUser: {},
     };
   },
-  async mounted() {
-    let { data } = await axiosGet("users/" + this.profileId);
-    this.thisUser = { ...data.user, profilePicLoading: false };
-    this.$emit("user-data-loaded", this.thisUser);
+  async created() {
+    if (this.profileId) {
+      let { data } = await axiosGet("users/" + this.profileId);
+      this.thisUser = {
+        ...data.user,
+        user_meta: { ...data.user.user_meta, profilePicLoading: true },
+      };
+      this.$emit("user-data-loaded", this.thisUser);
+    }
   },
 };
 </script>

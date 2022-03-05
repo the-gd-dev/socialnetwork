@@ -3,13 +3,18 @@
     <div
       v-for="file in images"
       :key="file.id"
-      class="single-photo h-20 w-20 px-2 flex items-start justify-end rounded-lg"
+      class="single-photo h-20 w-20 p-1  flex items-start justify-end rounded-lg"
       :style="`
         background: url(${file.url}) center no-repeat;
         background-size: cover;
       `"
     >
-      <button @click="$emit('remove-image', file.id)" class="remove"><icon name="times" /></button>
+      <button
+        @click="$emit('remove-image', file.id)"
+        class="bg-white text-gray-800 w-5 h-5 rounded-full flex justify-center items-center"
+      >
+        <icon name="times" />
+      </button>
     </div>
     <!-- <div 
             class="single-photo h-20 w-20 px-2 bg-gray-200 hover:bg-gray-300 flex items-center justify-center rounded-lg" 

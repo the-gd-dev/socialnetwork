@@ -86,7 +86,6 @@ export default {
         let { data } = await axiosGet("posts");
         this.posts = data.posts.data;
       } catch (response) {
-        console.log(response.data);
       }
     },
     aPostIsDeleted(id) {

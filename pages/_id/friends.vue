@@ -1,16 +1,29 @@
 <template>
   <profile-layout :profileId="userId" :displayPage="'friends'">
-    <div class="flex justify-end flex-col">
+    <div class="flex flex-col">
       <div
-        class="w-full flex bg-white flex-col rounded-xl shadow-md border border-gray-200 justify-between"
+        class="w-full flex justify-between bg-white rounded-xl shadow-md border border-gray-200"
       >
-        <div class="tab-span show py-2 px-4">
+        <div class="inline show py-2 px-4">
           <div class="text-lg font-semibold text-gray-900">Friends</div>
+        </div>
+        <div class="inline show py-2 px-4">
+          <privacy
+            v-if="userId === user.id"
+            :toggle="showPopup"
+            @toggle-privacy="(v) => (showPopup = !showPopup)"
+          />
         </div>
       </div>
       <div
         class="w-full flex bg-white flex-col md:flex-row md:flex-wrap rounded-xl shadow-lg border border-gray-200 justify-start pr-4 py-4 mt-4"
       >
+        <div
+          v-if="loading"
+          class="flex justify-center py-6 items-center w-full"
+        >
+          <spinner spinnerSize="spinner-xl" />
+        </div>
         <div
           v-for="friend in friends"
           :key="friend.id"
@@ -54,12 +67,12 @@
         </div>
         <div
           v-if="friends.length === 0"
-          class="flex w-full flex-col justify-center items-center px-4"
+          class="flex w-full flex-col justify-center items-center px-4 py-8"
         >
           <div class="text-3xl font-semibold text-gray-800">
             No Friends
-            <div class="text-lg text-gray-600">You've no friends yet.</div>
-            <div class="text-lg text-gray-600">
+            <div class="text-sm text-gray-600">You've no friends yet.</div>
+            <div class="text-sm text-gray-600">
               Find people and send them a request if they accept.
             </div>
             <div class="">
@@ -74,23 +87,28 @@
 </template>
 
 <script>
+import Privacy from "~/components/Privacy.vue";
 import ProfileLayout from "~/components/Profile/index.vue";
-import { axiosGet } from '~/helpers/axiosHelpers';
+import { axiosGet } from "~/helpers/axiosHelpers";
 export default {
   name: "Friends",
   layout: "auth",
-  components: { ProfileLayout },
+  components: { ProfileLayout, Privacy },
   data() {
     return {
       userId: "",
       friends: [],
+      showPopup: "",
+      loading : true
     };
   },
   async created() {
+    this.loading = true;
     this.userId = this.$route.params.id;
     let { data } = await axiosGet("friends", "userId=" + this.userId);
     this.friends = data.friends;
-  }
+    this.loading = false;
+  },
 };
 </script>
 <style scoped></style>

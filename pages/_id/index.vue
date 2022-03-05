@@ -1,6 +1,6 @@
 <template>
   <profile-layout :profileId="userId" @user-data-loaded="setUserData">
-    <div class="flex flex-col  lg:flex-row justify-center items-start">
+    <div class="flex flex-col lg:flex-row justify-center items-start">
       <div class="w-full hidden lg:block lg:w-1/3 px-4 sticky top-72">
         <div
           class="flex bg-white mt-2 flex-col rounded-xl shadow-lg border border-gray-200"
@@ -34,8 +34,10 @@
         </div>
       </div>
       <div class="w-full lg:w-1/3 lg:flex justify-end lg:pl-4 py-2 pr-4">
-        <div class="flex flex-col ">
-          <div class="flex lg:hidden flex-col space-y-2 py-2 px-4 bg-white mb-4 rounded-xl shadow-lg border border-gray-200">
+        <div class="flex flex-col">
+          <div
+            class="flex lg:hidden flex-col space-y-2 py-2 px-4 bg-white mb-4 rounded-xl shadow-lg border border-gray-200"
+          >
             <div class="flex flex-col lg:flex-row lg:items-center">
               <div class="w-full lg:w-1/6">
                 <div class="text-lg font-semibold">Date :</div>
@@ -86,7 +88,9 @@
           />
         </div>
       </div>
-      <div class="w-full hidden lg:w-1/3 lg:flex justify-end px-4 sticky top-72">
+      <div
+        class="w-full hidden lg:w-1/3 lg:flex justify-end px-4 sticky top-72"
+      >
         <div
           class="w-full flex bg-white mt-2 flex-col rounded-xl shadow-lg border border-gray-200"
         >
@@ -119,7 +123,7 @@
                 </div>
               </div>
             </div>
-            <div class="flex items-center">
+            <div class="flex items-center" v-if="userId === user.id">
               <div class="w-1/5">
                 <div class="text-lg font-semibold">Privacy :</div>
               </div>

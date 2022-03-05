@@ -1,13 +1,14 @@
 <template>
-  <div class="flex space-x-4">
-    <div class="my-auto">
+  <div class="flex space-x-4" v-if="owner">
+    <div class="my-auto border px-2 rounded-xl" >
       <privacy
-        v-if="owner"
+        :selected="privacyID"
         :toggle="showPopup"
-        @toggle-privacy="(v) => (showPopup = !showPopup)"
+        @toggle-privacy="togglePrivacyHandler"
+        @set-privacy="setPrivacyHandler"
       />
     </div>
-    <button @click="$emit('delete')" v-if="owner">
+    <button @click="$emit('delete')">
       <Icon
         name="trash"
         type="fa"
@@ -21,7 +22,7 @@
 <script>
 import Privacy from "../Privacy.vue";
 export default {
-  props : ['owner'],
+  props: ["owner", "privacyID"],
   components: { Privacy },
   name: "PostOptions",
   data() {
@@ -29,10 +30,19 @@ export default {
       showPopup: false,
     };
   },
+  methods: {
+    setPrivacyHandler(v) {
+      this.togglePrivacyHandler();
+      this.$emit("privacy", v);
+    },
+    togglePrivacyHandler() {
+      this.showPopup = !this.showPopup;
+    },
+  },
 };
 </script>
 <style>
-.privacy-options .drop-popup{
+.privacy-options .drop-popup {
   margin-top: -20px;
 }
 </style>

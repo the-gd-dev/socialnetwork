@@ -124,7 +124,6 @@ export default {
         this.friendRequests = data.requests;
         this.friendRequests.map((r) => (r.user.request_sent = true));
       } catch (response) {
-        console.log(response.data);
       }
     },
     removeFriendRequest(requestId) {
