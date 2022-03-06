@@ -37,6 +37,14 @@
                 id="sn-photo"
                 maxlength="5"
               />
+              <input
+                class="hidden"
+                @change="(e) => uploadVideos(e.target.files)"
+                type="file"
+                name="files"
+                accept=".avi, .mp4, .mov, .wmv, .webm, .ogg"
+                id="sn-video"
+              />
             </div>
             <div
               class="flex z-10 space-x-2 justify-end items-baseline px-2 py-2 border-top"
@@ -46,8 +54,12 @@
                 class="transition add-post-action cursor-pointer px-2 rounded-lg bg-green-200 text-green-900 hover:bg-green-500 hover:text-white"
                 ><icon name="camera" customClass="" /> Add Photos</label
               >
-              <!-- <button class="transition add-post-action  px-2 rounded-lg bg-rose-200 text-rose-900 hover:bg-rose-500 hover:text-white"><icon name="video" customClass="" /> Video</button>
-                <button class="transition add-post-action  px-2 rounded-lg bg-yellow-200 text-yellow-900 hover:bg-yellow-500 hover:text-white"><icon name="face-smile" customClass="" /> Feelings</button>
+              <label
+                for="sn-video"
+                class="transition add-post-action px-2 rounded-lg bg-rose-200 text-rose-900 hover:bg-rose-500 hover:text-white"
+                ><icon name="video" customClass="" /> Add Video</label
+              >
+              <!-- <button class="transition add-post-action  px-2 rounded-lg bg-yellow-200 text-yellow-900 hover:bg-yellow-500 hover:text-white"><icon name="face-smile" customClass="" /> Feelings</button>
                 <button class="transition add-post-action  px-2 rounded-lg bg-blue-200 text-blue-900 hover:bg-blue-500 hover:text-white"><icon name="person-running" customClass="" /> Activity</button> -->
             </div>
             <!-- <horizontal-bar /> -->
@@ -88,6 +100,7 @@ export default {
       showPostForm: false,
       showStoryCreate: false,
       uploaded_photos: [],
+      uploaded_videos: [],
       post: {
         text: "",
         photos: [],
@@ -101,6 +114,26 @@ export default {
         this.uploaded_photos = this.uploaded_photos.filter(
           (photo) => photo.id != id
         );
+      }
+    },
+    removeVideo(id) {
+      if (confirm("are you sure ?")) {
+        this.uploaded_videos = this.uploaded_videos.filter((v) => v.id != id);
+      }
+    },
+    async uploadVideos(files) {
+      this.uploaded_photos = [];
+      if (files.length > 1) {
+        return alert("only 1 video allowed per post.");
+      } else {
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i];
+          this.uploaded_videos.push({
+            id: i + 1,
+            url: URL.createObjectURL(file),
+          });
+          this.post.videos.push(file);
+        }
       }
     },
     async uploadPhotos(files) {
@@ -122,7 +155,7 @@ export default {
       let createStatus =
         this.post.text ||
         this.post.photos.length > 0 ||
-        this.post.videos.length;
+        this.post.videos.length > 0;
       if (!createStatus) {
         return alert("Can't create an empty post.");
       } else {

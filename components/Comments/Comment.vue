@@ -43,7 +43,7 @@
         </button>
         <button class="text-sm font-semibold">Reply</button>
       </div>
-      <div class="comment-actions" v-if="user.id === comment.user.uuid">
+      <div class="comment-actions" v-if="actions">
         <button
           class="bg-red-200 hover:bg-red-500 hover:text-white text-sm text-red-500 py-1 px-2 rounded-lg"
         >
@@ -59,7 +59,7 @@
 import ProfilePicture from "../ProfilePicture.vue";
 export default {
   components: { ProfilePicture },
-  props: ["comment"],
+  props: ["comment", "actions"],
 };
 </script>
 

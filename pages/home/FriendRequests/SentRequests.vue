@@ -31,7 +31,7 @@
         v-for="request in friendRequests"
         :key="request.id"
         :personData="{
-          ...request.user,
+          ...request.friend,
           requestType: 'sent',
           requestId: request.id,
         }"
@@ -122,7 +122,7 @@ export default {
       try {
         let { data } = await axiosGet("friends/requests", "type=sent");
         this.friendRequests = data.requests;
-        this.friendRequests.map((r) => (r.user.request_sent = true));
+        this.friendRequests.map((r) => (r.friend.request_sent = true));
       } catch (response) {
       }
     },

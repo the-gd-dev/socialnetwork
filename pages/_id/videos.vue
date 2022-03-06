@@ -1,45 +1,25 @@
 <template>
-  <profile-layout :profileId="userId" :displayPage="'videos'">
+  <profile-layout
+    :profileId="userId"
+    :displayPage="'videos'"
+    @image-updated="getPhotos"
+  >
     <div class="flex justify-end flex-col">
       <div
         class="w-full flex bg-white flex-col rounded-xl shadow-md border border-gray-200 justify-between"
       >
         <div class="tab-span show py-2 px-4">
-          <div class="text-lg font-semibold text-gray-900">Videos</div>
+          <div class="text-2xl font-semibold text-gray-800">Videos</div>
         </div>
       </div>
       <div
-        class="w-full flex bg-white flex-wrap md:flex-row rounded-xl shadow-lg border border-gray-200 justify-start pr-4 py-4 mt-4"
+        class="w-full flex flex-col bg-white rounded-xl shadow-lg border border-gray-200 justify-start pr-4 py-4 mt-4"
       >
-        <div
-          v-for="i in 25"
-          :key="i"
-          class="friend-wrapper w-full md:w-1/2 lg:w-1/3 xl:w-1/6 pb-4 pl-4"
-        >
-          <div
-            class="friend flex justify-center items-center border-1 rounded-lg border-gray-200 overflow-hidden"
-          >
-            <div
-              class="flex flex-col overflow-hidden w-96 h-96 md:w-96 md:h-96 lg:w-64 lg:h-64 rounded-lg"
-              :style="`background:url(https://picsum.photos/1000/1000) no-repeat center;background-size:cover;`"
-            >
-              <div class="flex justify-end space-y-2 px-4 w-full py-4">
-                <button
-                  class="bg-gray-100 hover:bg-gray-200 shadow-md w-8 h-8 text-gray-600 hover:text-gray-800 p-1 rounded-lg"
-                >
-                  <Icon name="trash" />
-                </button>
-              </div>
-              <div class="flex justify-center space-y-2 px-4 w-full py-4 mt-20 md:mt-20 lg:mt-4">
-                <button
-                  class="bg-teal-200 hover:bg-teal-400 shadow-md w-12 h-12 text-gray-600 hover:text-gray-800 p-1 rounded-lg"
-                >
-                  <Icon name="play" />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <UserMediaGroups
+          mediaGroupType="videos"
+          :groups="photoSections"
+          :loadingData="loading"
+        />
       </div>
     </div>
   </profile-layout>
@@ -47,12 +27,43 @@
 
 <script>
 import ProfileLayout from "~/components/Profile/index.vue";
+import { axiosGet } from "~/helpers/axiosHelpers";
+import UserMediaGroups from "~/components/UserMediaGroups/index.vue";
+import { globalEvent } from "~/helpers/globalEvent";
 export default {
   name: "Videos",
   layout: "auth",
-  components: { ProfileLayout },
-  asyncData({ params }) {
-    return { userId: params.id };
+  components: { ProfileLayout, UserMediaGroups },
+
+  data() {
+    return {
+      userId: "",
+      photos: [],
+      loading: true,
+      photoSections: [
+        {
+          id: 1,
+          label: "Video Uploads",
+          items: [],
+        },
+      ],
+    };
+  },
+  async created() {
+    globalEvent.$on("media-deleted", (payload) => {
+      this.getVideos();
+    });
+    await this.getVideos();
+  },
+  methods: {
+    async getVideos() {
+      this.loading = true;
+      this.userId = this.$route.params.id;
+      let { data } = await axiosGet("videos", "userId=" + this.userId);
+      this.photos = data.photos;
+      this.photoSections[0].items = this.photos;
+      this.loading = false;
+    },
   },
 };
 </script>

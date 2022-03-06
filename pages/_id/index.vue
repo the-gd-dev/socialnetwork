@@ -154,6 +154,7 @@ import UserPosts from "~/components/Posts/UserPosts.vue";
 import calculateAge from "~/helpers/calculateAge";
 import { axiosGet } from "~/helpers/axiosHelpers";
 import Privacy from "~/components/Privacy.vue";
+import { globalEvent } from "~/helpers/globalEvent";
 export default {
   name: "About",
   layout: "auth",
@@ -170,6 +171,9 @@ export default {
     return { userId: params.id };
   },
   async created() {
+    globalEvent.$on("post-deleted", (id) => {
+      this.posts = this.posts.filter((p) => p.id != id);
+    });
     let { data } = await axiosGet("posts", "id=" + this.userId);
     this.posts = data.posts.data;
   },

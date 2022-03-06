@@ -64,10 +64,18 @@
           </div>
         </div>
         <div class="comment-actions" v-if="user.id === comment.user.uuid">
-          <button class="bg-red-200 hover:bg-red-500 hover:text-white text-sm text-red-500 py-1 px-2 rounded-lg">
+          <button
+            class="bg-red-200 hover:bg-red-500 hover:text-white text-sm text-red-500 py-1 px-2 rounded-lg"
+          >
             <Icon name="trash" />
           </button>
         </div>
+      </div>
+      <div class="flex justify-center">
+        <button class="bg-blue-200 text-blue-500 mt-2 rounded-full px-2 py-1 text-sm">
+          <Icon name="refresh" />
+          Load Comments
+        </button>
       </div>
     </div>
   </div>
@@ -82,6 +90,6 @@ export default {
 
 <style scoped>
 .comment:not(:last-child) {
-  border-bottom: solid 1px #8b8b8b;
+  border-bottom: solid 1px #e0e0e0;
 }
 </style>

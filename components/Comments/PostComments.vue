@@ -7,6 +7,7 @@
     </div>
     <div v-else class="flex flex-col">
       <comment
+      :actions="comment.user.uuid === user.id || postOwner.uuid === user.id"
         v-for="comment in comments"
         :key="comment.id"
         :comment="comment"
@@ -24,6 +25,7 @@ export default {
   props: {
     reload: { default: false },
     postId: { default: null },
+    postOwner: { default: null },
   },
   data() {
     return {

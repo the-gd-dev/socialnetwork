@@ -9,6 +9,7 @@
       >
         <div class="flex-w-full" v-if="thisUser.uuid === user.id">
           <button
+            @click="uploadOrSelectNewDP('cover')"
             class="bg-gray-100 p-1 px-4 text-white shadow-lg rounded-full"
           >
             <icon name="edit" customClass="text-gray-800" />
@@ -18,10 +19,10 @@
       </div>
       <div class="px-4 profile-navigation-box sticky top-16 lg:top-20 z-20">
         <div
-          class="flex bg-white border border-gray-100 flex-col shadow-lg rounded-xl"
+          class="flex bg-white border border-gray-100 flex-col shadow-lg rounded-xl overflow-hidden"
         >
-          <div class="lg:flex hidden py-4 px-4 flex-col lg:flex-row">
-            <div class="flex justify-center lg:justify-start w-full lg:w-2/3">
+          <div class="lg:flex hidden py-4 px-4 flex-row">
+            <div class="flex justify-start w-1/2">
               <div
                 class="flex flex-col lg:flex-row items-center justify-center lg:justify-start lg:space-x-4"
               >
@@ -65,9 +66,10 @@
             </div>
             <div
               v-if="thisUser.uuid === user.id"
-              class="w-full space-x-2 lg:w-1/3 flex items-center justify-center lg:justify-end py-2 lg:py-0"
+              class="space-x-2 w-1/2 flex items-center justify-end py-2 lg:py-0"
             >
               <button
+                @click="uploadOrSelectNewDP('display_picture')"
                 class="p-1 text-lg px-4 bg-gray-200 hover:bg-gray-300 px-4 text-gray-800 text-left inline rounded-full"
               >
                 <icon name="edit" />
@@ -76,7 +78,7 @@
               <button
                 class="p-1 px-4 text-lg bg-blue-200 hover:bg-blue-300 px-4 text-blue-600 inline rounded-full"
               >
-                <icon name="user-edit"  />
+                <icon name="user-edit" />
                 <span>Edit Profile</span>
               </button>
             </div>
@@ -84,7 +86,9 @@
           <!-- Mobile View -->
           <div class="lg:hidden flex py-2 px-4 flex-col lg:flex-row">
             <div class="flex flex-row justify-between items-center">
-              <div class="user-information flex flex-row items-center space-x-2">
+              <div
+                class="user-information flex flex-row items-center space-x-2"
+              >
                 <div class="user-picture">
                   <profile-picture
                     :linkToProfile="false"
@@ -116,18 +120,22 @@
                   </div>
                 </div>
               </div>
-              <div class="flex justify-end space-x-2" v-if="thisUser.uuid === user.id">
+              <div
+                class="flex justify-end space-x-2"
+                v-if="thisUser.uuid === user.id"
+              >
                 <button
                   class="bg-blue-200 p-2 px-3 hover:bg-blue-300 text-blue-600 text-center inline rounded-full"
                 >
                   <icon name="user-edit" />
-                  <span class="hidden md:inline">Edit Profile</span>
+                  <span class="hidden sm:inline">Edit Profile</span>
                 </button>
                 <button
+                  @click="uploadOrSelectNewDP('display_picture')"
                   class="bg-gray-200 p-2 px-3 hover:bg-gray-300 text-gray-800 text-center inline rounded-full"
                 >
                   <icon name="edit" />
-                  <span>Profile Picture</span>
+                  <span class="hidden sm:inline">Profile Picture</span>
                 </button>
               </div>
             </div>
@@ -139,7 +147,7 @@
           >
             <div class="flex tab">
               <nuxt-link
-                class="text-lg font-semibold py-2 px-3 border-b-2"
+                class="text-md lg:text-lg font-semibold py-2 px-3 border-b-2"
                 v-for="tab in tabs"
                 :key="tab._id"
                 :to="`/${profileId}${tab._slug ? '/' + tab._slug : ''}`"
@@ -165,19 +173,96 @@
       <div v-else class="flex mt-2 flex-col relative px-2 lg:px-0">
         <slot></slot>
       </div>
+      <!-- Selected Tab Span -->
     </div>
+    <modal
+      rounded="0"
+      :showFooterHeader="false"
+      headerTitle="Delete Post"
+      animation="slide"
+      height="75%"
+      width="80%"
+      background=""
+      overlayHeight="800"
+      :showModal="uploadDisplayPictureModal"
+    >
+      <div class="flex flex-col py-2 justify-center items-center">
+        <div
+          class="flex w-full justify-between items-center px-4 border-b pb-3"
+        >
+          <div class="text-xl font-semibold">Update New Image/Picture</div>
+          <div
+            class="text-2xl font-semibold cursor-pointer"
+            @click="uploadDisplayPictureModal = false"
+          >
+            <icon name="times" />
+          </div>
+        </div>
+        <div
+          class="user-photos-scroll flex w-full flex-wrap justify-center items-center px-0 lg:px-4 py-4 h-64 lg:h-full overflow-y-scroll lg:overflow-y-auto"
+        >
+          <user-media-items
+            @photo-clicked="(photo) => (selectedPhoto = photo)"
+            :select="true"
+            :fetchingData="loading"
+            :userMediaItems="photos"
+            :selectData="selectedPhoto"
+            customClasses="flex overflow-hidden w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-lg cursor-pointer border"
+          />
+          <!-- flex overflow-hidden w-28 h-28 sm:w-32 sm:h-32 md:w-36 md:h-36 lg:w-40 lg:h-40 rounded-lg -->
+        </div>
+        <div
+          v-if="photos.length > 0 || loading"
+          class="flex w-full items-center py-4"
+        >
+          <div class="w-1/2"><HorizontalBar height="1" /></div>
+          <div class="text-center">
+            <span class="text-gray-800 font-semibold text-2xl">OR</span>
+          </div>
+          <div class="w-1/2"><HorizontalBar height="1" /></div>
+        </div>
+        <div class="flex" v-if="selectedPhoto.id">
+          <button
+            @click="choosePicture"
+            for="new-profile-picture  w-full justify-center items-center"
+            class="cursor-pointer hover:bg-green-600 bg-green-400 text-white py-2 px-4 text-md lg:text-xl rounded-xl"
+          >
+            Choose This Picture
+          </button>
+        </div>
+        <div class="flex w-full justify-center items-center h-28">
+          <input
+            type="file"
+            @change="(e) => uploadNewPicture(e.target.files[0])"
+            id="new-profile-picture"
+            class="hidden"
+          />
+          <label
+            for="new-profile-picture"
+            class="cursor-pointer hover:bg-blue-600 bg-blue-400 text-white py-2 px-4 text-md lg:text-xl rounded-xl"
+          >
+            Choose From Your Device
+          </label>
+        </div>
+      </div>
+    </modal>
   </div>
 </template>
 
 <script>
-import { axiosGet } from "~/helpers/axiosHelpers";
+import { axiosGet, axiosPost } from "~/helpers/axiosHelpers";
+import UserMediaItems from "../UserMediaItems/index.vue";
 export default {
+  components: { UserMediaItems },
   props: {
     displayPage: { default: "" },
     profileId: { default: "" },
   },
   data() {
     return {
+      changeImageUploadType: "",
+      loading: false,
+      photos: [],
       tabs: [
         {
           _id: 1,
@@ -222,6 +307,8 @@ export default {
         },
       ],
       thisUser: {},
+      uploadDisplayPictureModal: false,
+      selectedPhoto: {},
     };
   },
   async created() {
@@ -234,9 +321,42 @@ export default {
       this.$emit("user-data-loaded", this.thisUser);
     }
   },
+  methods: {
+    async updateNewPicture(requestPayload, config) {
+      let { data } = await axiosPost("users/update", requestPayload, config);
+      this.thisUser.user_meta[this.changeImageUploadType] =
+        data[this.changeImageUploadType];
+      this.uploadDisplayPictureModal = false;
+      this.selectedPhoto = {};
+      this.changeImageUploadType = "";
+      this.$emit("image-updated");
+    },
+    async choosePicture() {
+      let payload = {};
+      payload[this.changeImageUploadType] = this.selectedPhoto.url;
+      await this.updateNewPicture(payload);
+    },
+    async uploadNewPicture(file) {
+      let formPayload = new FormData();
+      formPayload.append("image", file);
+      formPayload.append("type", this.changeImageUploadType);
+      await this.updateNewPicture(formPayload, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    },
+    async uploadOrSelectNewDP(type) {
+      this.changeImageUploadType = type;
+      this.uploadDisplayPictureModal = true;
+      this.loading = true;
+      let { data } = await axiosGet("photos", "userId=" + this.thisUser.uuid);
+      this.photos = data.photos;
+      this.loading = false;
+    },
+  },
 };
 </script>
-
 <style scoped>
 .user-cover {
   background-size: cover !important;
@@ -264,5 +384,15 @@ export default {
 }
 .profile-navigation-box {
   margin-top: -195px;
+}
+.user-photos-scroll::-webkit-scrollbar {
+  width: 5px;
+}
+.user-photos-scroll::-webkit-scrollbar-track {
+  background: #c3c3c3;
+}
+.user-photos-scroll::-webkit-scrollbar-thumb {
+  background: #575757;
+  border-radius: 8px;
 }
 </style>

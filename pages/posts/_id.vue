@@ -46,7 +46,7 @@
               >
                 <Reactions
                   @reaction="(v) => setReaction(v, post)"
-                  :selected="post.reaction"
+                  :selected="post.reactions.length > 0 ? post.reactions[0].reaction : null"
                 />
               </div>
             </div>
@@ -116,6 +116,7 @@
           </div>
           <div class="post-comments-container-wrap-scroll" v-if="post.id">
             <post-comments
+              :postOwner="post.user"
               :reload="reloadComments"
               :postId="post.id"
               @comments-loaded="loadCommentsHandler"

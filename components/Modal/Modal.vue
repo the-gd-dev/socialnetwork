@@ -2,22 +2,22 @@
   <div
     :class="`overlay-modal ${showModal ? 'show' : ''} ${position}`"
     :style="{
-      height: overlayHeight != '100%' ? overlayHeight + 'px' : overlayHeight,
+      height: overlayHeight.toString().indexOf('%') == -1 ? overlayHeight + 'px' : overlayHeight,
     }"
     @click="close"
   >
     <div
       :class="`modal-wrapper  border border-gray-300 ${
         showModal ? animation + 'In' : animation + 'Out'
-      } bg-gradient-to-tl from-${background}-300 to-${background}-100`"
+      } ${ background ? 'bg-gradient-to-tl from-'+background+'-300 to-'+background+'-100' : 'bg-white'}`"
       :style="{
-        width: width + 'px',
-        height: height + 'px',
+        width: width.indexOf('%') == -1 ? width + 'px' : width,
+        height: height.indexOf('%') == -1 ? height + 'px' : height,
         borderRadius: rounded + 'px',
       }"
     >
       <div class="modal-container px-4 py-2">
-        <div class="modal-header">
+        <div class="modal-header" v-if="showFooterHeader">
           <slot name="modal-header">
             <div class="flex justify-between">
               <div class="text-xl font-semibold">{{ headerTitle }}</div>
@@ -30,7 +30,7 @@
         <div class="modal-content">
           <slot></slot>
         </div>
-        <div class="modal-footer">
+        <div class="modal-footer" v-if="showFooterHeader">
           <slot name="modal-footer"></slot>
         </div>
       </div>
@@ -41,10 +41,11 @@
 <script>
 export default {
   props: {
+    showFooterHeader: { default: true },
     position: { default: "absolute" },
     background: { default: "gray" },
     width: { default: 500 },
-    height: { default: "100%" },
+    height: { default: "auto" },
     overlayHeight: { default: "100%" },
     rounded: { default: 10 },
     showModal: { default: false },
@@ -56,7 +57,7 @@ export default {
   head() {
     return {
       bodyAttrs: {
-        class: this.isModalToggle ? "modal-opened" : "",
+        class: this.isModalToggle ? "overlay-opened" : "",
       },
     };
   },
@@ -67,7 +68,9 @@ export default {
   },
   computed: {
     isModalToggle() {
-      if (this.position === "fixed") return this.showModal;
+      if (this.position === "fixed" || this.position === "absolute"){
+        return this.showModal;
+      }
       return false;
     },
   },

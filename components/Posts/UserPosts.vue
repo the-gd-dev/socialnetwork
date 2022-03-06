@@ -2,7 +2,6 @@
   <div class="flex w-full flex-col">
     <div v-if="!loading" class="post-skeleton">
       <user-post
-        @post-deleted="(v) => $emit('on-delete', v)"
         v-for="post in computedPosts"
         :key="post.id"
         :post="post"
@@ -34,6 +33,7 @@ export default {
       });
     },
   },
+  
 };
 </script>
 

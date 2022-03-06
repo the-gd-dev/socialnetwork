@@ -76,7 +76,7 @@ export default {
   methods: {
     async randomPeople() {
       this.loading = true;
-      let { data } = await axiosGet("people");
+      let { data } = await axiosGet("people", "userUuid="+this.user.id);
       this.people = data.people.filter((u) => {
         if (u.uuid !== this.user.id) {
           u.request_sent = false;

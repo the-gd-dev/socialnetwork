@@ -14,7 +14,7 @@
     />
     <post-content :post="post" />
     <post-footer
-      :postReaction="post.reaction"
+      :postReaction="post.reactions.length > 0 ? post.reactions[0].reaction : null"
       :post="post"
       @reaction-handler="(v) => setReaction(v, post)"
     />

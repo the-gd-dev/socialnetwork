@@ -31,7 +31,7 @@
         v-for="request in friendRequests"
         :key="request.id"
         :personData="{
-          ...request.request,
+          ...request.user,
           requestType: 'recieved',
           requestId: request.id,
         }"
@@ -133,8 +133,7 @@ export default {
         let { data } = await axiosGet("friends/requests", "type=recieved");
         this.friendRequests = data.requests;
         this.friendRequests.map((r) => (r.user.request_sent = true));
-      } catch (response) {
-      }
+      } catch (response) {}
     },
     removeFriendRequest(requestId) {
       this.removeFriendAlert = true;
