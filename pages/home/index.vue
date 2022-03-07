@@ -74,7 +74,17 @@ export default {
     this.postsLoading = true;
     await this.$store.dispatch("utility/fetchReactions");
     await this.$store.dispatch("utility/fetchPrivacy");
-    await this.getPosts();
+    try {
+      await this.getPosts();
+    } catch (error) {
+      this.$notify({
+        type: "err",
+        duration: 3000,
+        title: "Data Fetching Failed.",
+        text: "Apologies from our side. We're trying again!",
+      });
+      await this.getPosts();
+    }
     this.postsLoading = false;
   },
   methods: {
@@ -91,6 +101,9 @@ export default {
         this.posts = data.posts.data;
       } catch (response) {}
     },
+  },
+  beforeDestroy() {
+    globalEvent.$off("post-deleted");
   },
 };
 </script>

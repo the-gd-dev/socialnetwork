@@ -111,7 +111,7 @@
               </button>
             </template>
             <template #drop-content>
-              <notifications />
+              <!-- <notifications /> -->
             </template>
           </drop-popup>
           <drop-popup :popup="popups.useroptions" customClass="custom-zindex">
@@ -251,6 +251,9 @@ export default {
         }
       }
     },
+  },
+   beforeDestroy() {
+    globalEvent.$off("container-clicked");
   },
 };
 </script>

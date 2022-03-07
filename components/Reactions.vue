@@ -77,9 +77,11 @@ export default {
     this.loading = true;
     var rxns = this.$store.getters["utility/getReactions"].slice();
     if (rxns.length === 0) {
-      const response = await api.utils.reactions();
-      rxns = response.data.reactions.slice();
-      this.$store.commit("utility/set_reactions", rxns);
+      try {
+        const response = await api.utils.reactions();
+        rxns = response.data.reactions.slice();
+        this.$store.commit("utility/set_reactions", rxns);
+      } catch (error) {}
     }
     this.reactionList = rxns;
     if (this.selected) {

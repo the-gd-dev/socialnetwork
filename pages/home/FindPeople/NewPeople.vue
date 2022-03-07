@@ -68,7 +68,17 @@ export default {
     };
   },
   async created() {
-    await this.randomPeople();
+    try {
+      await this.randomPeople();
+    } catch (error) {
+      this.$notify({
+        type: "err",
+        duration: 3000,
+        title: "Data Fetching Failed.",
+        text: "Apologies from our side. We're trying again!",
+      });
+      await this.randomPeople();
+    }
   },
   mounted() {
     this.windowInnerWidth = window.innerWidth;
@@ -76,7 +86,7 @@ export default {
   methods: {
     async randomPeople() {
       this.loading = true;
-      let { data } = await axiosGet("people", "userUuid="+this.user.id);
+      let { data } = await axiosGet("people", "userUuid=" + this.user.id);
       this.people = data.people.filter((u) => {
         if (u.uuid !== this.user.id) {
           u.request_sent = false;
@@ -87,7 +97,9 @@ export default {
       return true;
     },
     async addFriend(payload) {
-      let { data } = await axiosPost("friends/add", { id: payload.person.uuid });
+      let { data } = await axiosPost("friends/add", {
+        id: payload.person.uuid,
+      });
       payload.person.request_sent = true;
       payload.person.requestId = data.id;
       this.showUndoButton = true;

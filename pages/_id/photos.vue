@@ -13,6 +13,7 @@
         </div>
       </div>
       <div
+        v-if="photos.length > 0 && !loading"
         class="w-full flex flex-col bg-white rounded-xl shadow-lg border border-gray-200 justify-start pr-4 py-4 mt-4"
       >
         <UserMediaGroups
@@ -20,6 +21,14 @@
           :groups="photoSections"
           :loadingData="loading"
         />
+      </div>
+      <div
+        class="w-full justify-center items-center flex flex-col bg-white rounded-xl shadow-lg border border-gray-200 justify-start pr-4 py-4 mt-4"
+        v-else
+      >
+        <Icon name="file-image" size="50px" customClass="text-gray-500" />
+        <div class="text-lg text-gray-500">No Photos Found</div>
+        <div class="text-md text-gray-500">Upload some photos/profile pictures.</div>
       </div>
     </div>
   </profile-layout>
@@ -39,7 +48,7 @@ export default {
     return {
       userId: "",
       photos: [],
-      loading: true,
+      loading: false,
       photoSections: [
         {
           id: 1,
@@ -64,7 +73,10 @@ export default {
   },
   async created() {
     globalEvent.$on("media-deleted", (payload) => {
-      this.getPhotos();
+      console.log(payload);
+      if ((payload.type = "photos")) {
+        this.getPhotos();
+      }
     });
     await this.getPhotos();
   },
@@ -84,6 +96,9 @@ export default {
     getUserUploads() {
       return this.photos.filter((p) => !!p.post_id);
     },
+  },
+  beforeDestroy() {
+    globalEvent.$off("media-deleted");
   },
 };
 </script>

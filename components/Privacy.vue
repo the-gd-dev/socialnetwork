@@ -43,11 +43,13 @@ export default {
   },
   async created() {
     if (this.$store.state.utility.privacy.length === 0) {
-      const response = await api.utils.privacy();
-      this.$store.commit("utility/set_privacy", response.data.privacies);
+      try {
+        const response = await api.utils.privacy();
+        this.$store.commit("utility/set_privacy", response.data.privacies);
+      } catch (error) {}
     }
     this.privacies = [...this.$store.state.utility.privacy];
-    this.privacySelected = this.privacies.find(p => p.id == this.selected);
+    this.privacySelected = this.privacies.find((p) => p.id == this.selected);
   },
   methods: {
     onSelect(selected, index) {

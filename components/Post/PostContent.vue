@@ -25,6 +25,20 @@
         :items="postData.photos"
       />
     </div>
+    <div class="flex w-full h-full flex-col" v-else-if="postData.video">
+      <nuxt-link :to="`posts/${postData.id}`" class="m-auto w-full relative">
+        <button
+          class="absolute z-20 bg-white h-20 w-20 rounded-full"
+          style="top: 35%; left: 45%"
+        >
+          <Icon name="play" size="25px" />
+        </button>
+        <video
+          class="relative z-10 w-full h-full"
+          :src="postData.video.url"
+        ></video>
+      </nuxt-link>
+    </div>
     <div v-else class="bg-gray-100 post-content flex w-full px-4"></div>
   </div>
 </template>
@@ -43,7 +57,6 @@ export default {
 </script>
 
 <style scoped>
-
 .post-content {
   min-height: 200px;
 }

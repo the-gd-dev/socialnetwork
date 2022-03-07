@@ -12,7 +12,7 @@
           />
           <profile-picture
             v-else
-            size="10"
+            size="35"
             :userId="comment.user.uuid"
             :url="comment.user.user_meta.display_picture"
             :loading="comment.user.user_meta.profilePicLoading"
@@ -45,6 +45,7 @@
       </div>
       <div class="comment-actions" v-if="actions">
         <button
+          @click="trashComment"
           class="bg-red-200 hover:bg-red-500 hover:text-white text-sm text-red-500 py-1 px-2 rounded-lg"
         >
           <Icon name="trash" />
@@ -56,10 +57,19 @@
 </template>
 
 <script>
+import { axiosPost } from "~/helpers/axiosHelpers";
 import ProfilePicture from "../ProfilePicture.vue";
 export default {
   components: { ProfilePicture },
   props: ["comment", "actions"],
+  methods: {
+    async trashComment() {
+      if (confirm("are you sure")) {
+        await axiosPost("comments/delete", { id: this.comment.id });
+        this.$emit('comment-trashed')
+      }
+    },
+  },
 };
 </script>
 

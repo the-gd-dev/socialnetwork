@@ -1,6 +1,31 @@
 <template>
-  <div class="post-footer px-3 py-2 flex flex-col justify-center w-full">
+  <div class="post-footer px-3 flex flex-col justify-center w-full">
     <div class="flex justify-between items-center w-full">
+      <div
+        class="w-1/4 flex space-x-1 justify-start items-center"
+        v-if="totalRxnsCount > 0"
+      >
+        <div class="flex">
+          <label v-for="rxn in rxns" :key="rxn.id" :class="rxn.customClass">
+            <div
+              class="flex items-center h-10"
+              v-if="post.ReactionCounter[rxn.label.toLowerCase()] > 0"
+            >
+              <icon :name="rxn.name" :size="'22px'" />
+            </div>
+          </label>
+        </div>
+        <strong class="text-bold text-md">{{ totalRxnsCount }}</strong>
+      </div>
+      <div class="flex" v-if="post.CommentsCount > 0">
+        <strong class="text-bold text-md">{{
+          post.CommentsCount > 1
+            ? post.CommentsCount + " comments"
+            : post.CommentsCount + " comment"
+        }}</strong>
+      </div>
+    </div>
+    <div class="flex justify-between items-center w-full mb-2">
       <div class="w-1/7">
         <div class="rounded-full bg-white flex justify-center items-center">
           <Reactions
@@ -40,7 +65,7 @@
       </div>
     </div>
     <div
-      class="flex flex-col w-full mt-2 border-t"
+      class="flex flex-col w-full my-2 border-t"
       v-if="post.comments.length > 0"
     >
       <div
@@ -51,7 +76,7 @@
         <div class="flex items-center space-x-2 py-2">
           <div class="flex">
             <profile-picture
-              size="10"
+              size="35"
               :userId="comment.user.uuid"
               :url="comment.user.user_meta.display_picture"
             />
@@ -72,7 +97,9 @@
         </div>
       </div>
       <div class="flex justify-center">
-        <button class="bg-blue-200 text-blue-500 mt-2 rounded-full px-2 py-1 text-sm">
+        <button
+          class="bg-blue-200 text-blue-500 mt-2 rounded-full px-2 py-1 text-sm"
+        >
           <Icon name="refresh" />
           Load Comments
         </button>
@@ -85,6 +112,23 @@
 export default {
   name: "PostFooter",
   props: ["shareBtnTitle", "postReaction", "post"],
+  data() {
+    return {
+      rxns: [],
+    };
+  },
+  computed: {
+    totalRxnsCount() {
+      var total = 0;
+      for (const key in this.post.ReactionCounter) {
+        total += parseInt(this.post.ReactionCounter[key]);
+      }
+      return total;
+    },
+  },
+  created() {
+    this.rxns = this.$store.getters["utility/getReactions"].slice();
+  },
 };
 </script>
 

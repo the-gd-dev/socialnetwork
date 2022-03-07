@@ -28,7 +28,12 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [{ src: "~/plugins/mixins/global.js" }, { src: "~/api/init.js" }],
+  plugins: [
+    { src: "~/plugins/mixins/global.js" },
+    { src: "~/api/init.js" },
+    { src: "~/plugins/vue-notification-client", mode: "client" },
+    { src: "~/plugins/vue-notification-server", mode: "server" },
+  ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,

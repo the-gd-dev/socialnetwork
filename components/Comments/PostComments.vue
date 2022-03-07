@@ -7,7 +7,8 @@
     </div>
     <div v-else class="flex flex-col">
       <comment
-      :actions="comment.user.uuid === user.id || postOwner.uuid === user.id"
+        @comment-trashed="$emit('reload-comments')"
+        :actions="comment.user.uuid === user.id || postOwner.uuid === user.id"
         v-for="comment in comments"
         :key="comment.id"
         :comment="comment"
@@ -38,7 +39,7 @@ export default {
     if (!this.postId) return false;
     const { data } = await axiosGet("comments/all", "post_id=" + this.postId);
     this.comments = data.comments.data;
-    this.$emit("comments-loaded",  data.comments.total);
+    this.$emit("comments-loaded", data.comments.total);
     this.loadingComments = false;
   },
   watch: {

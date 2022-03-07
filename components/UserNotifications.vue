@@ -61,7 +61,7 @@
 import Icon from "./Icon.vue";
 export default {
   components: { Icon },
-  name: "Notifications",
+  name: "UserNotifications",
   data(){
     return {
       loading : false

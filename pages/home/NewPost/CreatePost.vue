@@ -37,12 +37,13 @@
                 id="sn-photo"
                 maxlength="5"
               />
+              <!--   accept=".avi, .mp4, .mov, .wmv, .webm, .ogg" -->
               <input
                 class="hidden"
                 @change="(e) => uploadVideos(e.target.files)"
                 type="file"
                 name="files"
-                accept=".avi, .mp4, .mov, .wmv, .webm, .ogg"
+                accept=".mp4"
                 id="sn-video"
               />
             </div>
@@ -70,6 +71,11 @@
               @remove-image="removeImage"
               :images="uploaded_photos"
             />
+            <!-- Videos Section -->
+            <uploaded-videos
+              @remove-video="removeVideo"
+              :videos="uploaded_videos"
+            />
           </div>
           <div class="bg-transparant pt-2">
             <div class="flex space-x-2 justify-end">
@@ -90,9 +96,10 @@
 <script>
 import { axiosPost } from "~/helpers/axiosHelpers";
 import { globalEvent } from "~/helpers/globalEvent";
+import UploadedVideos from "./UploadedVideos.vue";
 import UploadedPhotos from "./UploadPhotos.vue";
 export default {
-  components: { UploadedPhotos },
+  components: { UploadedPhotos, UploadedVideos },
   name: "CreatePost",
   data() {
     return {
@@ -163,11 +170,17 @@ export default {
         try {
           let requestPayload = new FormData();
           requestPayload.append("text", this.post.text);
+          // photos to fileData
           for (var i = 0; i < this.post.photos.length; i++) {
             let file = this.post.photos[i];
             requestPayload.append("photos[" + i + "]", file);
           }
-          requestPayload.append("videos[]", this.post.videos);
+          // videos to fileData
+          for (var i = 0; i < this.post.videos.length; i++) {
+            let file = this.post.videos[i];
+            requestPayload.append("videos[" + i + "]", file);
+          }
+          
           let response = await axiosPost("posts/create", requestPayload, {
             headers: {
               "Content-Type": "multipart/form-data",
@@ -183,6 +196,7 @@ export default {
     },
     resetPost() {
       this.uploaded_photos = [];
+      this.uploaded_videos = [];
       this.post = {
         text: "",
         photos: [],

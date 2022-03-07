@@ -7,10 +7,10 @@
         <div class="xl:w-64 hidden xl:inline-block"><Sidebar /></div>
         <div class="w-full" @click="containerClickHandler">
           <Nuxt />
+          <notifications />
         </div>
       </div>
     </div>
-   
   </div>
 </template>
 <script>
@@ -39,6 +39,9 @@ export default {
     containerClickHandler() {
       globalEvent.$emit("container-clicked");
     },
+  },
+  beforeDestroy() {
+    globalEvent.$off("overlay");
   },
 };
 </script>

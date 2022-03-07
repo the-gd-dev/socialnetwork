@@ -37,21 +37,29 @@
             :items="post.photos"
           />
         </div>
+        <div class="flex w-full h-full flex-col" v-if="post.video">
+          <video :src="post.video.url" controls class="w-full"></video>
+        </div>
         <!-- Post Footer -->
-        <div class="post-footer px-4 py-2 flex justify-center w-full">
-          <div class="flex space-x-3 items-center justify-center w-full">
-            <div class="w-1/7">
-              <div
-                class="px-3 rounded-full bg-white flex justify-center items-center"
-              >
-                <Reactions
-                  @reaction="(v) => setReaction(v, post)"
-                  :selected="post.reactions.length > 0 ? post.reactions[0].reaction : null"
-                />
+        <div class="post-footer px-4 py-2 flex justify-between w-full">
+          <div class="flex space-x-3 items-center justify-start w-full">
+            <div class="w-1/7 flex space-x-1 justify-start items-center">
+              <div class="w-1/7">
+                <div
+                  class="px-3 rounded-full bg-white flex justify-center items-center"
+                >
+                  <Reactions
+                    @reaction="(v) => setReaction(v, post)"
+                    :selected="
+                      post.reactions.length > 0
+                        ? post.reactions[0].reaction
+                        : null
+                    "
+                  />
+                </div>
               </div>
-            </div>
 
-            <!-- <div class="w-1/7">
+              <!-- <div class="w-1/7">
               <button
                 class="flex bg-white h-8 mr-1 bg-gray-800 space-x-2 text-white px-4 items-center rounded-full"
                 type="button"
@@ -60,14 +68,44 @@
                 <div>Sticker React</div>
               </button>
             </div> -->
-            <div class="w-1/7">
-              <button
-                class="flex bg-white h-8 mr-1 bg-gray-800 space-x-2 text-white px-4 items-center rounded-full"
-                type="button"
-              >
-                <icon type="fa-solid" name="share-nodes" />
-                <div>Share</div>
-              </button>
+              <div class="w-1/7">
+                <button
+                  class="flex bg-white h-8 mr-1 bg-gray-800 space-x-2 text-white px-4 items-center rounded-full"
+                  type="button"
+                >
+                  <icon type="fa-solid" name="share-nodes" />
+                  <div>Share</div>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="flex space-x-3 items-center justify-end w-full">
+            <div
+              class="w-1/7 flex space-x-1 justify-start items-center"
+              v-if="totalRxnsCount > 0"
+            >
+              <div class="flex">
+                <label
+                  v-for="rxn in rxns"
+                  :key="rxn.id"
+                  :class="rxn.customClass"
+                >
+                  <div
+                    class="flex items-center h-10"
+                    v-if="post.ReactionCounter[rxn.label.toLowerCase()] > 0"
+                  >
+                    <icon :name="rxn.name" :size="'22px'" />
+                  </div>
+                </label>
+              </div>
+              <strong class="text-bold text-md">{{ totalRxnsCount }}</strong>
+            </div>
+            <div class="w-1/7" v-if="post.CommentsCount > 0">
+              <strong class="text-bold text-md">{{
+                post.CommentsCount > 1
+                  ? post.CommentsCount + " comments"
+                  : post.CommentsCount + " comment"
+              }}</strong>
             </div>
           </div>
         </div>
@@ -119,6 +157,7 @@
               :postOwner="post.user"
               :reload="reloadComments"
               :postId="post.id"
+              @reload-comments="reloadComments = true"
               @comments-loaded="loadCommentsHandler"
             />
             <div class="flex justify-center">
@@ -142,6 +181,7 @@
 </template>
 
 <script>
+import api from "~/api";
 import PostComments from "~/components/Comments/PostComments.vue";
 import SinglePost from "~/components/Post/index.vue";
 import PostFooter from "~/components/Post/PostFooter.vue";
@@ -159,19 +199,34 @@ export default {
       comment: "",
       commentsCount: 0,
       post: null,
+      rxns: [],
     };
   },
   async created() {
+    const response = await api.utils.reactions();
+    let rxns = response.data.reactions.slice();
+    this.$store.commit("utility/set_reactions", rxns);
+    this.rxns = this.$store.getters["utility/getReactions"].slice();
     let postId = this.$route.params.id;
     let { data } = await axiosGet("posts/" + postId);
     this.post = data.post;
   },
+  computed: {
+    totalRxnsCount() {
+      var total = 0;
+      for (const key in this.post.ReactionCounter) {
+        total += parseInt(this.post.ReactionCounter[key]);
+      }
+      return total;
+    },
+  },
   methods: {
-    deleteCallBack(){
-      this.$router.push('/home');
+    deleteCallBack() {
+      this.$router.push("/home");
     },
     loadCommentsHandler(count) {
       this.commentsCount = count;
+      this.post.CommentsCount = count;
       this.reloadComments = false;
     },
     async postComment() {

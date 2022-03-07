@@ -10,7 +10,7 @@
         :trash="true"
         :fetchingData="loadingData"
         :userMediaItems="items"
-        customClasses="flex overflow-hidden w-28 h-28 sm:w-32 sm:h-32 md:w-36 md:h-36 lg:w-40 lg:h-40 rounded-lg"
+        :customClasses="mediaItemClasses"
       />
     </div>
   </section>
@@ -27,6 +27,15 @@ export default {
     loadingData: { default: false },
     heading: { default: "" },
   },
+  computed : {
+    mediaItemClasses () {
+      if(this.mediaType === 'videos'){
+        return "flex overflow-hidden border w-28 h-28 sm:w-32 sm:h-32 md:w-36 md:h-36 lg:w-40 lg:h-40 rounded-lg"
+      }else{
+        return "flex overflow-hidden w-28 h-28 sm:w-32 sm:h-32 md:w-36 md:h-36 lg:w-40 lg:h-40 rounded-lg"
+      }
+    }
+  }
 };
 </script>
 

@@ -10,6 +10,7 @@
       class="grid grid-cols-3 gap-3 sm:grid-cols-4 sm:gap-4 md:grid-cols-4 md:gap-4 lg:grid-cols-6 lg:gap-6 xl:grid-cols-7 xl:gap-7 px-4"
     >
       <user-media
+        :mediaType="type"
         v-for="item in userMediaItems"
         :key="item.id"
         :class="customClasses"
@@ -45,23 +46,30 @@ export default {
   name: "UserMediaItems",
   components: { UserMedia },
   props: {
-    type: { default: "" },
+    type: { default: "photos" },
     customClasses: { default: "" },
     userMediaItems: { default: [] },
     fetchingData: { default: false },
     trash: { default: false },
     select: { default: false },
-    selectData: { default: () => ({id : ""}) },
+    selectData: { default: () => ({ id: "" }) },
   },
   methods: {
     async itemTrashed(item) {
-      if (this.type == "photos" && confirm('Are you  sure ?')) {
+      if (this.type == "photos" && confirm("Are you  sure ?")) {
         await axiosPost("photos/delete", { id: item.id });
+        globalEvent.$emit("media-deleted", {
+          type: "photos",
+          item,
+        });
       }
-      globalEvent.$emit("media-deleted", {
-        type: this.type,
-        item,
-      });
+      if (this.type == "videos" && confirm("Are you  sure ?")) {
+        await axiosPost("videos/delete", { id: item.id });
+        globalEvent.$emit("media-deleted", {
+          type: "videos",
+          item,
+        });
+      }
     },
   },
 };

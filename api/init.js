@@ -6,3 +6,18 @@ axios.defaults.baseURL = config.axios.baseURL;
 const token = cookies.get("authorization");
 if (token) setAuthToken(token);
 else resetAuthToken();
+axios.interceptors.response.use(
+  function (response) {
+    return response;
+  },
+  function (error) {
+    let response = error.response;
+    let status = response.status;
+    if (status === 401) {
+      resetAuthToken();
+    }
+    // Do something with response error
+    console.log(response);
+    return Promise.reject(error);
+  }
+);

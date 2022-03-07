@@ -31,6 +31,7 @@ export default {
           reaction_id: rxn.id.toString(),
         });
         let newReaction = data.postReaction.reaction;
+        post.ReactionCounter = data.reactionCounter;
         post.reactions = [
           {
             ...data.postReaction,

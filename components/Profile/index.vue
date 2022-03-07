@@ -1,179 +1,33 @@
 <template>
   <div class="outer-profile-container mt-3">
     <div class="flex flex-col lg:px-6">
-      <div
-        class="mb-12 lg:rounded-xl p-4 user-cover"
-        :style="`background: url(${
-          thisUser.user_meta ? thisUser.user_meta.cover : ''
-        }) no-repeat center;`"
-      >
-        <div class="flex-w-full" v-if="thisUser.uuid === user.id">
-          <button
-            @click="uploadOrSelectNewDP('cover')"
-            class="bg-gray-100 p-1 px-4 text-white shadow-lg rounded-full"
-          >
-            <icon name="edit" customClass="text-gray-800" />
-            <span class="text-gray-800">Change Cover</span>
-          </button>
-        </div>
-      </div>
+      <!-- User Cover Image -->
+      <user-cover-photo
+        :thisUser="thisUser"
+        @upload-new-cover="uploadOrSelectNewDP('cover')"
+      />
       <div class="px-4 profile-navigation-box sticky top-16 lg:top-20 z-20">
         <div
           class="flex bg-white border border-gray-100 flex-col shadow-lg rounded-xl overflow-hidden"
         >
-          <div class="lg:flex hidden py-4 px-4 flex-row">
-            <div class="flex justify-start w-1/2">
-              <div
-                class="flex flex-col lg:flex-row items-center justify-center lg:justify-start lg:space-x-4"
-              >
-                <div class="user-picture">
-                  <profile-picture
-                    :linkToProfile="false"
-                    :size="28"
-                    :userId="thisUser.id"
-                    :url="
-                      thisUser.user_meta
-                        ? thisUser.user_meta.display_picture
-                        : ''
-                    "
-                    :loading="
-                      thisUser.user_meta
-                        ? thisUser.user_meta.profilePicLoading
-                        : false
-                    "
-                    @loading-complete="
-                      thisUser.user_meta
-                        ? (thisUser.user_meta.profilePicLoading = false)
-                        : true
-                    "
-                  />
-                </div>
-                <div class="user-details">
-                  <div class="flex flex-col items-center lg:items-start">
-                    <div class="text-xl font-semibold text-shadow py-2 lg:py-0">
-                      {{ thisUser.name }}
-                    </div>
-                    <div
-                      v-if="thisUser.user_meta"
-                      class="text-lg text-shadow w-full lg:w-2/3"
-                    >
-                      {{ thisUser.user_meta.bio_text }}
-                    </div>
-                  </div>
-                </div>
-                <!-- <div class="w-full lg:w-2/7"></div> -->
-              </div>
-            </div>
-            <div
-              v-if="thisUser.uuid === user.id"
-              class="space-x-2 w-1/2 flex items-center justify-end py-2 lg:py-0"
-            >
-              <button
-                @click="uploadOrSelectNewDP('display_picture')"
-                class="p-1 text-lg px-4 bg-gray-200 hover:bg-gray-300 px-4 text-gray-800 text-left inline rounded-full"
-              >
-                <icon name="edit" />
-                <span>Profile Picture</span>
-              </button>
-              <button
-                class="p-1 px-4 text-lg bg-blue-200 hover:bg-blue-300 px-4 text-blue-600 inline rounded-full"
-              >
-                <icon name="user-edit" />
-                <span>Edit Profile</span>
-              </button>
-            </div>
-          </div>
-          <!-- Mobile View -->
-          <div class="lg:hidden flex py-2 px-4 flex-col lg:flex-row">
-            <div class="flex flex-row justify-between items-center">
-              <div
-                class="user-information flex flex-row items-center space-x-2"
-              >
-                <div class="user-picture">
-                  <profile-picture
-                    :linkToProfile="false"
-                    :size="16"
-                    :userId="thisUser.id"
-                    :url="
-                      thisUser.user_meta
-                        ? thisUser.user_meta.display_picture
-                        : ''
-                    "
-                    :loading="
-                      thisUser.user_meta
-                        ? thisUser.user_meta.profilePicLoading
-                        : false
-                    "
-                    @loading-complete="
-                      thisUser.user_meta
-                        ? (thisUser.user_meta.profilePicLoading = false)
-                        : true
-                    "
-                  />
-                </div>
-                <div class="flex flex-col">
-                  <div class="text-xl font-semibold">
-                    {{ thisUser.name }}
-                  </div>
-                  <div class="text-md leading-0" v-if="thisUser.user_meta">
-                    {{ thisUser.user_meta.bio_text }}
-                  </div>
-                </div>
-              </div>
-              <div
-                class="flex justify-end space-x-2"
-                v-if="thisUser.uuid === user.id"
-              >
-                <button
-                  class="bg-blue-200 p-2 px-3 hover:bg-blue-300 text-blue-600 text-center inline rounded-full"
-                >
-                  <icon name="user-edit" />
-                  <span class="hidden sm:inline">Edit Profile</span>
-                </button>
-                <button
-                  @click="uploadOrSelectNewDP('display_picture')"
-                  class="bg-gray-200 p-2 px-3 hover:bg-gray-300 text-gray-800 text-center inline rounded-full"
-                >
-                  <icon name="edit" />
-                  <span class="hidden sm:inline">Profile Picture</span>
-                </button>
-              </div>
-            </div>
-          </div>
-          <!-- Mobile View -->
+          <!-- User Header -->
+          <header-view
+            @add-friend="addFriend"
+            @remove-friend-request="removeFriend"
+            :isRequestSent="is_request_sent"
+            :isFriend="is_friend"
+            :thisUser="thisUser"
+            @upload-profile-picture="uploadOrSelectNewDP('display_picture')"
+          />
+          
           <horizontal-bar color="#538dd5" height="1" />
-          <div
-            class="tabs-container flex flex-col items-center lg:items-start px-4"
-          >
-            <div class="flex tab">
-              <nuxt-link
-                class="text-md lg:text-lg font-semibold py-2 px-3 border-b-2"
-                v-for="tab in tabs"
-                :key="tab._id"
-                :to="`/${profileId}${tab._slug ? '/' + tab._slug : ''}`"
-                :class="`${
-                  tab._slug === displayPage
-                    ? 'border-blue-400'
-                    : 'border-transparent hover:bg-gray-100'
-                }`"
-              >
-                {{ tab.title }}
-                <span class="text-gray-400" v-if="tab.count">{{
-                  tab.count
-                }}</span>
-              </nuxt-link>
-            </div>
-          </div>
+          <!-- User Info Pages Tabs -->
+          <profile-page-tabs :profile="profileId" :selected="displayPage" />
         </div>
       </div>
-      <!-- Selected Tab Span -->
-      <div v-if="displayPage !== ''" class="flex mt-2 flex-col relative">
-        <div class="tab-span show p-4"><slot></slot></div>
-      </div>
-      <div v-else class="flex mt-2 flex-col relative px-2 lg:px-0">
+      <profile-page-contents :selectedPage="displayPage">
         <slot></slot>
-      </div>
-      <!-- Selected Tab Span -->
+      </profile-page-contents>
     </div>
     <modal
       rounded="0"
@@ -202,6 +56,7 @@
           class="user-photos-scroll flex w-full flex-wrap justify-center items-center px-0 lg:px-4 py-4 h-64 lg:h-full overflow-y-scroll lg:overflow-y-auto"
         >
           <user-media-items
+            mediaType="photos"
             @photo-clicked="(photo) => (selectedPhoto = photo)"
             :select="true"
             :fetchingData="loading"
@@ -252,8 +107,18 @@
 <script>
 import { axiosGet, axiosPost } from "~/helpers/axiosHelpers";
 import UserMediaItems from "../UserMediaItems/index.vue";
+import HeaderView from "./HeaderView.vue";
+import ProfilePageContents from "./ProfilePageContents.vue";
+import ProfilePageTabs from "./ProfilePageTabs.vue";
+import UserCoverPhoto from "./UserCoverPhoto.vue";
 export default {
-  components: { UserMediaItems },
+  components: {
+    UserMediaItems,
+    HeaderView,
+    ProfilePageTabs,
+    ProfilePageContents,
+    UserCoverPhoto,
+  },
   props: {
     displayPage: { default: "" },
     profileId: { default: "" },
@@ -262,50 +127,9 @@ export default {
     return {
       changeImageUploadType: "",
       loading: false,
+      is_friend: false,
+      is_request_sent: false,
       photos: [],
-      tabs: [
-        {
-          _id: 1,
-          _slug: "",
-          title: "About",
-          customClass: "",
-          count: 0,
-          active: true,
-        },
-
-        {
-          _id: 2,
-          _slug: "friends",
-          title: "Friends",
-          customClass: "",
-          count: 0,
-          active: false,
-        },
-        {
-          _id: 3,
-          _slug: "photos",
-          title: "Photos",
-          customClass: "",
-          count: 0,
-          active: false,
-        },
-        {
-          _id: 4,
-          _slug: "videos",
-          title: "Videos",
-          customClass: "",
-          count: 0,
-          active: false,
-        },
-        {
-          _id: 5,
-          _slug: "followers",
-          title: "Followers",
-          customClass: "",
-          count: 0,
-          active: false,
-        },
-      ],
       thisUser: {},
       uploadDisplayPictureModal: false,
       selectedPhoto: {},
@@ -313,15 +137,40 @@ export default {
   },
   async created() {
     if (this.profileId) {
+      try {
+        await this.fetchUserData();
+      } catch (error) {
+        this.$notify({
+          type: "err",
+          duration: 3000,
+          title: "User Data Fetching Failed.",
+          text: "Apologies from our side. We're trying again!",
+        });
+        await this.fetchUserData();
+      }
+    }
+  },
+  methods: {
+    async fetchUserData() {
       let { data } = await axiosGet("users/" + this.profileId);
+      this.is_friend = data.is_friend;
+      this.is_request_sent = data.is_request_sent;
       this.thisUser = {
         ...data.user,
         user_meta: { ...data.user.user_meta, profilePicLoading: true },
       };
       this.$emit("user-data-loaded", this.thisUser);
-    }
-  },
-  methods: {
+    },
+    async addFriend() {
+      let { data } = await axiosPost("friends/add", { id: this.thisUser.uuid });
+      this.is_request_sent = true;
+    },
+    async removeFriend(id) {
+      if (confirm("Are you sure ?")) {
+        await axiosPost("friends/remove", { id: id });
+        this.is_request_sent = false;
+      }
+    },
     async updateNewPicture(requestPayload, config) {
       let { data } = await axiosPost("users/update", requestPayload, config);
       this.thisUser.user_meta[this.changeImageUploadType] =

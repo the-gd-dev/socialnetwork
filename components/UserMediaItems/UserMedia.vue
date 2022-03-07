@@ -1,7 +1,11 @@
 <template>
+  <!-- Is Photo Media -->
   <div
+    v-if="mediaType === 'photos'"
     @click="$emit('on-click')"
-    :style="`background:url(${url}) no-repeat center;background-size:cover; ${isNonTrashableImage ? 'opacity:0.5;' :''}`"
+    :style="`background:url(${url}) no-repeat center;background-size:cover; ${
+      isNonTrashableImage ? 'opacity:0.5;' : ''
+    }`"
   >
     <div
       v-if="mediaOwner.uuid === user.id"
@@ -22,11 +26,33 @@
       </button>
     </div>
   </div>
+  <!-- Is Video Media -->
+  <div v-else class="flex flex-col h-full w-full relative">
+    <div class="flex space-x-2 p-2">
+      <button
+        class="bg-gray-100 hover:bg-gray-200 shadow-md w-full h-full flex space-x-2 justify-center items-center text-gray-600 hover:text-gray-800 p-1 rounded-lg border"
+      >
+        <Icon name="play" />
+        <span class="hidden lg:inline">Play</span>
+      </button>
+      <button
+        v-if="trashIcon && mediaOwner.uuid === user.id"
+        @click="$emit('delete')"
+        class="bg-gray-100 hover:bg-gray-200 shadow-md w-full h-full flex space-x-2 justify-center items-center text-gray-600 hover:text-gray-800 p-1 rounded-lg border"
+      >
+        <Icon name="trash" />
+        <span class="hidden lg:inline">Delete</span>
+      </button>
+    </div>
+
+    <video :src="url" style="height: 100%; width: 100%"></video>
+  </div>
 </template>
 
 <script>
 export default {
   props: {
+    mediaType: { default: "photos" },
     url: { default: "" },
     mediaOwner: { default: "" },
     trashIcon: { default: false },

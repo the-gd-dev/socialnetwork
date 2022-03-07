@@ -108,10 +108,10 @@ export default {
     let { data } = await axiosGet("friends", "userId=" + this.userId);
     this.friends = [];
     data.friends.map((frnd) => {
-      if (frnd.user.uuid !== this.user.id) {
+      if (frnd.user.uuid !== this.userId) {
         this.friends.push(frnd.user);
       }
-      if (frnd.friend.uuid !== this.user.id) {
+      if (frnd.friend.uuid !== this.userId) {
         this.friends.push(frnd.friend);
       }
     });

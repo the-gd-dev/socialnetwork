@@ -2,7 +2,7 @@
   <profile-layout
     :profileId="userId"
     :displayPage="'videos'"
-    @image-updated="getPhotos"
+    @image-updated="getVideos"
   >
     <div class="flex justify-end flex-col">
       <div
@@ -13,6 +13,7 @@
         </div>
       </div>
       <div
+        v-if="videos.length > 0 && !loading"
         class="w-full flex flex-col bg-white rounded-xl shadow-lg border border-gray-200 justify-start pr-4 py-4 mt-4"
       >
         <UserMediaGroups
@@ -20,6 +21,14 @@
           :groups="photoSections"
           :loadingData="loading"
         />
+      </div>
+      <div
+        class="w-full justify-center items-center flex flex-col bg-white rounded-xl shadow-lg border border-gray-200 justify-start pr-4 py-4 mt-4"
+        v-else
+      >
+        <Icon name="file-image" size="50px" customClass="text-gray-500"/>
+        <div class="text-lg text-gray-500">No Videos Found</div>
+        <div class="text-md text-gray-500">Upload some videos via posts.</div>
       </div>
     </div>
   </profile-layout>
@@ -38,8 +47,8 @@ export default {
   data() {
     return {
       userId: "",
-      photos: [],
-      loading: true,
+      videos: [],
+      loading: false,
       photoSections: [
         {
           id: 1,
@@ -51,7 +60,10 @@ export default {
   },
   async created() {
     globalEvent.$on("media-deleted", (payload) => {
-      this.getVideos();
+      console.log(payload);
+      if ((payload.type = "videos")) {
+        this.getVideos();
+      }
     });
     await this.getVideos();
   },
@@ -60,10 +72,13 @@ export default {
       this.loading = true;
       this.userId = this.$route.params.id;
       let { data } = await axiosGet("videos", "userId=" + this.userId);
-      this.photos = data.photos;
-      this.photoSections[0].items = this.photos;
+      this.videos = data.videos;
+      this.photoSections[0].items = this.videos;
       this.loading = false;
     },
+  },
+  beforeDestroy() {
+    globalEvent.$off("media-deleted");
   },
 };
 </script>

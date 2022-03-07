@@ -20,6 +20,7 @@
       />
       <profile-picture
         v-else
+        customClass="h-10 w-10"
         :linkToProfile="!linkToProfileDisable"
         :userId="thisUser.uuid"
         :url="thisUser.user_meta.display_picture"

@@ -155,6 +155,7 @@ import calculateAge from "~/helpers/calculateAge";
 import { axiosGet } from "~/helpers/axiosHelpers";
 import Privacy from "~/components/Privacy.vue";
 import { globalEvent } from "~/helpers/globalEvent";
+import api from "~/api";
 export default {
   name: "About",
   layout: "auth",
@@ -171,6 +172,8 @@ export default {
     return { userId: params.id };
   },
   async created() {
+    await this.getReactions();
+    await this.getPrivacies();
     globalEvent.$on("post-deleted", (id) => {
       this.posts = this.posts.filter((p) => p.id != id);
     });
@@ -178,6 +181,15 @@ export default {
     this.posts = data.posts.data;
   },
   methods: {
+    async getReactions() {
+      const response = await api.utils.reactions();
+      let rxns = response.data.reactions.slice();
+      this.$store.commit("utility/set_reactions", rxns);
+    },
+    async getPrivacies() {
+      const response = await api.utils.privacy();
+      this.$store.commit("utility/set_privacy", response.data.privacies);
+    },
     setUserData(value) {
       this.aboutData = value.user_meta;
     },
@@ -187,6 +199,9 @@ export default {
     calcuateAgeFromDob(date) {
       return calculateAge(date);
     },
+  },
+  beforeDestroy() {
+    globalEvent.$off("post-deleted");
   },
 };
 </script>
