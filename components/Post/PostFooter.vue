@@ -1,6 +1,6 @@
 <template>
   <div class="post-footer px-3 flex flex-col justify-center w-full">
-    <div class="flex justify-between items-center w-full">
+    <div class="flex justify-between items-center w-full mt-2">
       <div
         class="w-1/4 flex space-x-1 justify-start items-center"
         v-if="totalRxnsCount > 0"

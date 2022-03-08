@@ -17,14 +17,17 @@
         <!-- Post Text -->
         <div
           class="bg-gray-100 post-content flex w-full px-4"
-          v-if="post.text && post.photos.length === 0"
+          v-if="post.text && post.photos.length === 0 && !post.video"
         >
           <div class="text-3xl text-gray-800 text-center m-auto">
             {{ post.text }}
           </div>
         </div>
         <!-- Post Content -->
-        <div class="flex w-full h-full flex-col" v-if="post.photos.length > 0">
+        <div
+          class="flex w-full h-full flex-col"
+          v-if="post.photos.length > 0 && !post.video"
+        >
           <div class="bg-white flex w-full py-2 px-2" v-if="post.text">
             <div class="text-md text-gray-600 text-center">
               {{ post.text }}
@@ -38,7 +41,39 @@
           />
         </div>
         <div class="flex w-full h-full flex-col" v-if="post.video">
-          <video :src="post.video.url" controls class="w-full"></video>
+          <div class="bg-white flex w-full py-4 px-2" v-if="post.text">
+            <div class="text-lg text-gray-600 text-center">
+              {{ post.text }}
+            </div>
+          </div>
+          <div class="post_content_video w-full h-full relative">
+            <video
+              :id="`post__video__${post.id}`"
+              :src="post.video.url"
+              class="w-full relative video-file"
+            ></video>
+            <div
+              class="video-actions absolute z-20 overflow-hidden flex justify-center items-center"
+              style="top: 40%; left: 45%"
+            >
+              <button
+                id="video-play-btn"
+                :class="{ active: !videoPlayState }"
+                class="justify-center items-center btn-play bg-white h-20 w-20 rounded-full"
+                @click="playVideo(post)"
+              >
+                <Icon name="play" size="25px" />
+              </button>
+              <button
+                id="video-pause-btn"
+                :class="{ active: videoPlayState }"
+                class="justify-center items-center btn-pause bg-white h-20 w-20 rounded-full"
+                @click="pauseVideo(post)"
+              >
+                <Icon name="pause" size="25px" />
+              </button>
+            </div>
+          </div>
         </div>
         <!-- Post Footer -->
         <div class="post-footer px-4 py-2 flex justify-between w-full">
@@ -188,6 +223,7 @@ import PostFooter from "~/components/Post/PostFooter.vue";
 import PostUser from "~/components/Post/PostUser.vue";
 import Spinner from "~/components/Spinner.vue";
 import { axiosGet, axiosPost } from "~/helpers/axiosHelpers";
+import { globalEvent } from "~/helpers/globalEvent";
 import postActions from "~/mixin/postActions";
 export default {
   mixins: [postActions],
@@ -195,6 +231,7 @@ export default {
   layout: "auth",
   data() {
     return {
+      videoPlayState: false,
       reloadComments: false,
       comment: "",
       commentsCount: 0,
@@ -203,13 +240,24 @@ export default {
     };
   },
   async created() {
+    globalEvent.$on("post-deleted", (id) => {
+      this.$router.push("/home");
+    });
     const response = await api.utils.reactions();
     let rxns = response.data.reactions.slice();
     this.$store.commit("utility/set_reactions", rxns);
     this.rxns = this.$store.getters["utility/getReactions"].slice();
-    let postId = this.$route.params.id;
-    let { data } = await axiosGet("posts/" + postId);
-    this.post = data.post;
+    try {
+      await this.getPostData();
+    } catch (error) {
+      this.$notify({
+        type: "err",
+        duration: 3000,
+        title: "Data Fetching Failed.",
+        text: "Apologies from our side. We're trying again!",
+      });
+      await this.getPostData();
+    }
   },
   computed: {
     totalRxnsCount() {
@@ -221,6 +269,32 @@ export default {
     },
   },
   methods: {
+    getVideoElements(postData) {
+      return {
+        playBtn: document.getElementById("video-play-btn"),
+        pauseBtn: document.getElementById("video-pause-btn"),
+        video: document.getElementById(`post__video__${postData.id}`),
+      };
+    },
+    pauseVideo(postData) {
+      let videoElements = this.getVideoElements(postData);
+      videoElements.pauseBtn.classList.add("active");
+      videoElements.playBtn.classList.remove("active");
+      videoElements.video.pause();
+      this.videoPlayState = false;
+    },
+    playVideo(postData) {
+      let videoElements = this.getVideoElements(postData);
+      videoElements.pauseBtn.classList.remove("active");
+      videoElements.playBtn.classList.add("active");
+      videoElements.video.play();
+      this.videoPlayState = true;
+    },
+    async getPostData() {
+      let postId = this.$route.params.id;
+      let { data } = await axiosGet("posts/" + postId);
+      this.post = data.post;
+    },
     deleteCallBack() {
       this.$router.push("/home");
     },
@@ -238,9 +312,36 @@ export default {
       this.reloadComments = true;
     },
   },
+  beforeDestroy() {
+    globalEvent.$off("post-deleted");
+  },
 };
 </script>
 <style scoped>
+.btn-pause:hover,
+.btn-play:hover {
+  background: white;
+}
+.btn-pause,
+.btn-play {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.video-actions button {
+  display: none;
+}
+.video-actions button.active {
+  display: flex;
+}
+.post_content_video {
+  cursor: pointer;
+}
+.post_content_video .video-actions {
+  display: none;
+}
+.post_content_video:hover .video-actions {
+  display: inline-flex;
+}
 .post-content {
   min-height: 250px;
 }
