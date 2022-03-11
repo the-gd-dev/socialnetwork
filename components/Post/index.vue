@@ -2,7 +2,7 @@
   <!-- bg-gradient-to-tl from-gray-300 to-gray-200 -->
   <div
     v-if="post"
-    class="overflow-hidden post flex flex-col w-full bg-white shadow-md border border-gray-200 mb-2 last:mb-0 rounded-md"
+    class="overflow-hidden post flex flex-col w-full bg-white shadow-md border border-gray-200 mb-2 last:mb-0"
   >
     <post-header
       @privacy-handler="(v) => setPrivacySettings(v, post)"

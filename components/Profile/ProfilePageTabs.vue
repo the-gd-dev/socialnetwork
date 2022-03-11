@@ -2,7 +2,7 @@
   <div class="tabs-container flex flex-col items-start px-4">
     <div class="flex tab">
       <nuxt-link
-        class="text-lg font-semibold py-2 px-3 border-b-2"
+        class="text-md sm:text-lg font-semibold py-2 px-3 border-b-2"
         v-for="tab in tabs"
         :key="tab._id"
         :to="`/${profile}${tab._slug ? '/' + tab._slug : ''}`"

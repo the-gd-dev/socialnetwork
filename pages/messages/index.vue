@@ -41,7 +41,7 @@
               <div
                 class="messages-container flex flex-col w-full py-2 px-4 mb-0"
               >
-                <div class="message w-full" v-for="i in 8" :key="i">
+                <div class="message w-full" v-for="i in 100" :key="i">
                   <div
                     v-if="i % 5 == 0"
                     class="flex w-full justify-center sticky top-2"
@@ -141,7 +141,7 @@ import ProfilePicture from "~/components/ProfilePicture.vue";
 import Reactions from "~/components/Reactions.vue";
 import PersonSkeleton from "~/components/Person/PersonSkeleton.vue";
 import UserStatus from "~/components/UserStatus.vue";
-import { axiosGet } from '~/helpers/axiosHelpers';
+import { axiosGet } from "~/helpers/axiosHelpers";
 export default {
   name: "Messages",
   layout: "auth",
@@ -161,15 +161,22 @@ export default {
     };
   },
   async created() {
-    this.loading = true;
-    let { data } = await axiosGet("people", "user=" + this.user.id);
-    data.people.map(d => d.selected = false);
-    this.users = data.people.filter((u) => u.uuid !== this.user.id);
-    this.users[0].selected  = true;
-    this.selectedUser = this.users[0];
-    this.loading = false;
+    try {
+      await this.fetchConversations();
+    } catch (error) {
+      await this.fetchConversations();
+    }
   },
   methods: {
+    async fetchConversations() {
+      this.loading = true;
+      let { data } = await axiosGet("people", "userUuid=" + this.user.id);
+      data.people.map((d) => (d.selected = false));
+      this.users = data.people.filter((u) => u.uuid !== this.user.id);
+      this.users[0].selected = true;
+      this.selectedUser = this.users[0];
+      this.loading = false;
+    },
     messageToHandler(person) {
       this.users.map((u) => {
         if (u.id === person.id) {

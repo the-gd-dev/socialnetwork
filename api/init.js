@@ -17,7 +17,6 @@ axios.interceptors.response.use(
       resetAuthToken();
     }
     // Do something with response error
-    console.log(response);
     return Promise.reject(error);
   }
 );

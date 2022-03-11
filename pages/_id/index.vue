@@ -177,8 +177,19 @@ export default {
     globalEvent.$on("post-deleted", (id) => {
       this.posts = this.posts.filter((p) => p.id != id);
     });
-    let { data } = await axiosGet("posts", "id=" + this.userId);
-    this.posts = data.posts.data;
+    try {
+      let { data } = await axiosGet("posts", "id=" + this.userId);
+      this.posts = data.posts.data;
+    } catch (error) {
+      this.$notify({
+        type: "err",
+        duration: 3000,
+        title: "User Posts Fetching Failed.",
+        text: "Apologies from our side. We're trying again!",
+      });
+      let { data } = await axiosGet("posts", "id=" + this.userId);
+      this.posts = data.posts.data;
+    }
   },
   methods: {
     async getReactions() {

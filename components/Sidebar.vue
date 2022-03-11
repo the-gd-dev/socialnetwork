@@ -1,13 +1,14 @@
 <template>
-  <div
-    class="sticky top-20 flex w-full flex-col bg-gray-100 shadow-md border border-gray-200 rounded-md"
-  >
+  <div class="sidebar-container" :class="{ show: toggle }">
     <div class="flex flex-col justify-center w-full pt-2 sidebar-wrapper">
       <nuxt-link
         :to="item.url"
         v-for="item in sidemenu"
         :key="item._id"
-        class="sidebar-item text-gray-800 hover:bg-gray-300 w-full py-2 px-4"
+        :class="
+          $route.path === item.url ? 'bg-blue-600 text-white' : 'text-blue-500'
+        "
+        class="xl:border xl:rounded-lg sidebar-item hover:bg-blue-600 hover:text-white hover:border-blue-500 w-full py-2 px-4"
       >
         <div>
           <span class="mr-2">
@@ -30,7 +31,13 @@
 </template>
 
 <script>
+import { globalEvent } from "~/helpers/globalEvent";
 export default {
+  props: {
+    toggle: {
+      default: false,
+    },
+  },
   name: "Sidebar",
   data() {
     return {
@@ -55,11 +62,31 @@ export default {
         },
         {
           _id: 3,
-          title: "Messages",
-          url: "/messages",
+          title: "Settings",
+          url: "/settings",
           icon: {
             type: "fa",
-            name: "comment",
+            name: "cog",
+          },
+        },
+
+        {
+          _id: 4,
+          title: "Privacy",
+          url: "/privacy",
+          icon: {
+            type: "fa",
+            name: "lock",
+          },
+        },
+
+        {
+          _id: 5,
+          title: "Help",
+          url: "/help",
+          icon: {
+            type: "fa",
+            name: "info-circle",
           },
         },
       ],
@@ -69,14 +96,63 @@ export default {
     let option = this.sidemenu.find((i) => i.title === "Profile");
     option.url = "/" + this.user.id;
   },
+  methods: {
+    nuxtClicked() {
+      globalEvent.$emit("overlay", { toggle: false });
+    },
+  },
+  watch: {
+    toggle(v) {
+      globalEvent.$emit("overlay", { toggle: v });
+    },
+  },
 };
 </script>
-
 <style scoped>
+.sidebar-container.show {
+  opacity: 1;
+  transform: translateX(0px);
+}
+.sidebar-container {
+  background: white;
+  position: fixed;
+  height: 100%;
+  width: 60%;
+  z-index: 1000;
+  padding: 10px 15px;
+  opacity: 1;
+  transform: translateX(-350px);
+  transition: all ease-in-out 0.3s;
+}
+@media (min-width: 576px) {
+  .sidebar-container {
+    width: 40%;
+  }
+}
+@media (min-width: 767px) {
+  .sidebar-container {
+    width: 30%;
+  }
+}
+@media (min-width: 1280px) {
+  .sidebar-container {
+    background: white;
+    /* position: sticky ; */
+    height: 100%;
+    top: 70px;
+    width: 12.5%;
+    z-index: 1;
+    opacity: 1;
+    transform: translateX(0px);
+    padding: 0;
+  }
+}
 .from-top-64 {
   top: 70px;
 }
-
+.z-1000 {
+  z-index: 1000;
+}
 .sidebar-item {
   transition: all ease-in-out 0.25s;
 }

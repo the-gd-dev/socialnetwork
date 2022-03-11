@@ -33,13 +33,13 @@
       </div>
       <nuxt-link :to="`posts/${postData.id}`" class="m-auto w-full relative">
         <button
-          class="absolute z-20 bg-white h-20 w-20 rounded-full"
+          class="absolute z-10 bg-white h-20 w-20 rounded-full"
           style="top: 35%; left: 45%"
         >
           <Icon name="play" size="25px" />
         </button>
         <video
-          class="relative z-10 w-full h-full"
+          class="relative z-5 w-full h-full"
           :src="postData.video.url"
         ></video>
       </nuxt-link>

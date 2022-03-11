@@ -1,12 +1,13 @@
 <template>
-  <div class="flex flex-col sticky top-20 z-999">
+  <div class="flex flex-col sticky top-16 z-999">
     <div class="flex">
       <div class="inline-flex space-x-3 bg-white p-1 rounded-full">
         <button
           @click="() => toggleCreateOptions('post')"
-          class="bg-gradient-to-tr from-rose-500 to-yellow-300 rounded-full p-2 px-3 text-white"
+          class="bg-gradient-to-tr from-blue-500 to-blue-300 rounded-full p-2 px-3 text-white"
         >
-          <icon name="pencil" customClass="text-white" /> Create Post
+          <icon name="pencil" customClass="text-white" /> 
+          <span class="hidden lg:inline text-md font-semibold ml-1">Create Post</span>
         </button>
         <!-- <button @click="toggleCreateOptions('story')" class="bg-gradient-to-tr from-blue-500 to-sky-300 rounded-full p-2 text-white"><icon name="circle-o" customClass="text-white" /> New Story</button> -->
       </div>
@@ -17,7 +18,7 @@
     >
       <div class="relative z-5 p-1">
         <div
-          class="flex flex-col bg-gradient-to-tl from-rose-500 to-yellow-300 rounded-xl p-2"
+          class="flex flex-col bg-gradient-to-tl from-blue-500 to-blue-300 rounded-xl p-2"
         >
           <!-- <h2 class="text-lg mb-2 text-white cursor-pointer"><icon name="plus-circle" customClass="text-white" /> New Post</h2> -->
           <div class="z-5 bg-white rounded-xl overflow-hidden">

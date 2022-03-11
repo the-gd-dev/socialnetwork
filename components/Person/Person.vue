@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex person justify-between items-center px-2 cursor-pointer hover:bg-gray-300 py-2"
+    class="flex person justify-between items-center px-2 cursor-pointer hover:bg-gray-100 py-2"
     :class="person.selected ? 'bg-gray-300 sticky top-0' : ''"
     @click="$emit('person-clicked', person)"
   >

@@ -2,7 +2,7 @@
   <div class="right-side">
     <div class="flex items-start">
       <div
-        class="relative top-3 flex flex-col w-full md:w-3/5 lg:w-1/2 xl:w-1/3 mx-6"
+        class="relative top-3 flex flex-col w-full md:w-3/5 lg:w-1/2 xl:w-1/3 mx-2 lg:mx-6"
       >
         <!-- user-posts -->
         <create-post
@@ -11,20 +11,21 @@
         />
         <!-- user-posts -->
         <user-posts
+          class="mt-2"
           @on-post-delete="(v) => aPostIsDeleted(v)"
           :posts="posts"
           :loading="postsLoading"
           v-if="posts.length > 0"
         />
-        <div v-else>Create an beautiful post up there.</div>
+        <div v-if="!postsLoading && posts.length === 0">Create an beautiful post up there.</div>
       </div>
       <div
-        class="sticky top-20 hidden md:inline-block md:w-2/5 lg:w-1/2 xl:w-1/3"
+        class="sticky top-16 hidden md:inline-block md:w-2/5 lg:w-1/2 xl:w-1/3"
       >
         <!-- <memories /> -->
         <find-people />
       </div>
-      <div class="sticky top-20 w-1/3 ml-4 hidden xl:inline-block">
+      <div class="sticky top-16 w-1/3 ml-4 hidden xl:inline-block">
         <friend-requests />
       </div>
     </div>

@@ -1,11 +1,16 @@
 <template>
   <div class="flex justify-center">
-    <div :class="`overlay ${overlay ? 'show' : ''}`"></div>
-    <div class="w-full xl:mx-4">
-      <Navbar :auth="true" />
+    <div
+      :class="`overlay ${overlay ? 'show' : ''}`"
+      @click="toggleNavbar = !toggleNavbar"
+    ></div>
+    <div class="w-full xl:mx-6">
+      <Navbar :auth="true" @toggle-sidebar="toggleNavbar = !toggleNavbar" />
       <div class="flex relative">
-        <div class="xl:w-64 hidden xl:inline-block"><Sidebar /></div>
-        <div class="w-full" @click="containerClickHandler">
+        <div class="xl:w-64 xl:inline-block relative">
+          <Sidebar :toggle="toggleNavbar" />
+        </div>
+        <div class="w-full relative px-4" @click="containerClickHandler">
           <Nuxt />
           <notifications />
         </div>
@@ -18,6 +23,7 @@ import { globalEvent } from "@/helpers/globalEvent";
 export default {
   data() {
     return {
+      toggleNavbar: false,
       toggleOverlay: false,
     };
   },
@@ -43,6 +49,13 @@ export default {
   beforeDestroy() {
     globalEvent.$off("overlay");
   },
+  watch: {
+    $route() {
+      if(this.toggleNavbar){
+        this.toggleNavbar = !this.toggleNavbar;
+      }
+    },
+  },
 };
 </script>
 <style>
@@ -63,6 +76,7 @@ body.overlay-opened {
   backdrop-filter: blur(3px);
   -webkit-backdrop-filter: blur(3px);
   -moz-backdrop-filter: blur(3px);
+  background: rgba(0, 0, 0, 0.5);
   width: 100%;
   height: 100%;
   overflow: hidden;

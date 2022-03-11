@@ -26,7 +26,7 @@
         class="w-full justify-center items-center flex flex-col bg-white rounded-xl shadow-lg border border-gray-200 justify-start pr-4 py-4 mt-4"
         v-else
       >
-        <Icon name="file-image" size="50px" customClass="text-gray-500"/>
+        <Icon name="file-image" size="50px" customClass="text-gray-500" />
         <div class="text-lg text-gray-500">No Videos Found</div>
         <div class="text-md text-gray-500">Upload some videos via posts.</div>
       </div>
@@ -68,13 +68,27 @@ export default {
     await this.getVideos();
   },
   methods: {
-    async getVideos() {
+    async fetchVideos() {
       this.loading = true;
       this.userId = this.$route.params.id;
       let { data } = await axiosGet("videos", "userId=" + this.userId);
       this.videos = data.videos;
       this.photoSections[0].items = this.videos;
       this.loading = false;
+    },
+    async getVideos() {
+      try {
+        await this.fetchVideos();
+        this.posts = data.posts.data;
+      } catch (error) {
+        this.$notify({
+          type: "err",
+          duration: 3000,
+          title: "User Videos Fetching Failed.",
+          text: "Apologies from our side. We're trying again!",
+        });
+        await this.fetchVideos();
+      }
     },
   },
   beforeDestroy() {

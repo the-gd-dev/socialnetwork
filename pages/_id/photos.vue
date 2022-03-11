@@ -28,7 +28,9 @@
       >
         <Icon name="file-image" size="50px" customClass="text-gray-500" />
         <div class="text-lg text-gray-500">No Photos Found</div>
-        <div class="text-md text-gray-500">Upload some photos/profile pictures.</div>
+        <div class="text-md text-gray-500">
+          Upload some photos/profile pictures.
+        </div>
       </div>
     </div>
   </profile-layout>
@@ -81,7 +83,7 @@ export default {
     await this.getPhotos();
   },
   methods: {
-    async getPhotos() {
+    async fetchPhotos() {
       this.loading = true;
       this.userId = this.$route.params.id;
       let { data } = await axiosGet("photos", "userId=" + this.userId);
@@ -89,6 +91,20 @@ export default {
       this.photoSections[0].items = this.getProfilePictures();
       this.photoSections[1].items = this.getUserUploads();
       this.loading = false;
+    },
+    async getPhotos() {
+      try {
+        await this.fetchPhotos();
+        this.posts = data.posts.data;
+      } catch (error) {
+        this.$notify({
+          type: "err",
+          duration: 3000,
+          title: "User Photos Fetching Failed.",
+          text: "Apologies from our side. We're trying again!",
+        });
+        await this.fetchPhotos();
+      }
     },
     getProfilePictures() {
       return this.photos.filter((p) => !p.post_id);

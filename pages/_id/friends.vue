@@ -103,19 +103,34 @@ export default {
     };
   },
   async created() {
-    this.loading = true;
-    this.userId = this.$route.params.id;
-    let { data } = await axiosGet("friends", "userId=" + this.userId);
-    this.friends = [];
-    data.friends.map((frnd) => {
-      if (frnd.user.uuid !== this.userId) {
-        this.friends.push(frnd.user);
-      }
-      if (frnd.friend.uuid !== this.userId) {
-        this.friends.push(frnd.friend);
-      }
-    });
-    this.loading = false;
+    try {
+      await this.getFriends();
+    } catch (error) {
+      this.$notify({
+        type: "err",
+        duration: 3000,
+        title: "User Friend Fetching Failed.",
+        text: "Apologies from our side. We're trying again!",
+      });
+      await this.getFriends();
+    }
+  },
+  methods: {
+    async getFriends() {
+      this.loading = true;
+      this.userId = this.$route.params.id;
+      let { data } = await axiosGet("friends", "userId=" + this.userId);
+      this.friends = [];
+      data.friends.map((frnd) => {
+        if (frnd.user.uuid !== this.userId) {
+          this.friends.push(frnd.user);
+        }
+        if (frnd.friend.uuid !== this.userId) {
+          this.friends.push(frnd.friend);
+        }
+      });
+      this.loading = false;
+    },
   },
 };
 </script>

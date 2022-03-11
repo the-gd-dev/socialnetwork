@@ -1,22 +1,20 @@
 <template>
-  <div>
+  <div class="border">
     <div
-      class="flex justify-between items-center bg-gradient-to-r from-blue-400 to-blue-200 pr-2 pl-4 py-2 rounded-lg mb-2"
+      class="flex justify-between items-center bg-blue-500 to-blue-200 pr-2 pl-4 py-2"
     >
-      <div class="text-lg font-semibold">Notifications</div>
+      <div class="text-lg font-semibold text-white">Notifications</div>
       <div class="flex space-x-2">
         <div
-          class="flex items-center rounded-full h-8 w-8 text-center bg-blue-600 text-white"
+          class="flex items-center rounded-full h-8 w-8 text-center bg-white text-blue-600"
         >
-          <span class="m-auto text-lg">10</span>
+          <span class="m-auto text-lg font-semibold">10</span>
         </div>
       </div>
     </div>
 
-    <div
-      class="flex notification-wrapper flex-col bg-gradient-to-t from-gray-100 to-gray-200 rounded-lg"
-    >
-      <div v-if="!loading">
+    <div class="flex notification-wrapper flex-col bg-gray-100">
+      <div v-if="loading">
         <div
           v-for="item in 12"
           :key="item"
@@ -32,7 +30,7 @@
       <div v-else>
         <div
           class="pr-2 pl-4 py-2 flex items-center flex-col cursor-pointer"
-          v-for="item in 50"
+          v-for="item in notifications"
           :key="item"
         >
           <div
@@ -52,21 +50,35 @@
           </div>
           <div class="horizontal-bar"></div>
         </div>
+        <div
+          v-if="notifications.length === 0"
+          class="flex h-full w-full items-center flex-col cursor-pointer"
+        >
+          <div class="m-auto text-lg">
+            <Icon name="bell" />
+            No Notifications found.
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Icon from "./Icon.vue";
+import Icon from "../Icon.vue";
 export default {
+  props: {
+    notifications: {
+      default: () => [],
+    },
+  },
   components: { Icon },
   name: "UserNotifications",
-  data(){
+  data() {
     return {
-      loading : false
-    }
-  }
+      loading: false,
+    };
+  },
 };
 </script>
 
@@ -77,7 +89,7 @@ export default {
 } */
 .notification-wrapper {
   width: 400px;
-  max-height: 500px;
+  height: 500px;
   overflow-y: auto;
 }
 .notification-wrapper::-webkit-scrollbar {

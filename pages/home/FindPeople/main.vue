@@ -1,8 +1,6 @@
 <template>
-  <div class="bg-gray-100 shadow-md border border-gray-200 rounded-xl py-2">
-    <div>
-      <new-people />
-    </div>
+  <div class="bg-white border shadow-md py-2">
+    <new-people />
   </div>
 </template>
 
@@ -15,6 +13,6 @@ export default {
     return {
       showRequests: false,
     };
-  }
+  },
 };
 </script>

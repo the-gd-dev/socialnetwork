@@ -38,7 +38,7 @@
 
 <script>
 export default {
-  props: ["name"],
+  name : "ProfilePicture",
   props: {
     customClass: { default: "h-10 w-10" },
     linkToProfile: { default: true },
