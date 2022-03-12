@@ -16,7 +16,7 @@
           "
         />
         &nbsp;
-        <span class="text-sm font-semibold"> {{ selectedReaction.label }}</span>
+        <span class="text-sm font-semibold md:hidden lg:inline"> {{ selectedReaction.label }}</span>
       </button>
       <div class="reactions bg-white rounded-full px-2">
         <div v-if="loading" class="flex items-center space-x-2">

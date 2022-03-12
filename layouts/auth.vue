@@ -10,7 +10,7 @@
         <div class="xl:w-64 xl:inline-block relative">
           <Sidebar :toggle="toggleNavbar" />
         </div>
-        <div class="w-full relative px-4" @click="containerClickHandler">
+        <div class="w-full relative sm:px-4" @click="containerClickHandler">
           <Nuxt />
           <notifications />
         </div>
@@ -48,6 +48,7 @@ export default {
   },
   beforeDestroy() {
     globalEvent.$off("overlay");
+    globalEvent.$off("container-clicked");
   },
   watch: {
     $route() {
@@ -66,7 +67,7 @@ body.overlay-opened {
 <style scoped>
 .overlay.show {
   display: flex;
-  z-index: 900;
+  z-index: 1000;
 }
 .overlay {
   position: fixed;

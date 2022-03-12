@@ -2,7 +2,7 @@
   <div class="post-footer px-3 flex flex-col justify-center w-full">
     <div class="flex justify-between items-center w-full mt-2">
       <div
-        class="w-1/4 flex space-x-1 justify-start items-center"
+        class="flex space-x-1 justify-start items-center"
         v-if="totalRxnsCount > 0"
       >
         <div class="flex">
@@ -26,7 +26,7 @@
       </div>
     </div>
     <div class="flex justify-between items-center w-full mb-2">
-      <div class="w-1/7">
+      <div>
         <div class="rounded-full bg-white flex justify-center items-center">
           <Reactions
             @reaction="(v) => $emit('reaction-handler', v)"
@@ -46,10 +46,12 @@
               aria-label="Full name"
             />
             <button
-              class="flex-shrink-0 bg-blue-500 hover:bg-blue-700 w-24 h-8 mr-1 text-white rounded-full"
+              class="flex-shrink-0 bg-blue-500 hover:bg-blue-700 w-16 lg:w-24 h-8 mr-1 text-white rounded-full"
               type="button"
             >
-              comment
+              <span class="inline lg:hidden"><Icon name="check-circle" /></span>
+              <span class="hidden lg:inline">comment</span>
+              
             </button>
           </div>
         </form>

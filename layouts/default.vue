@@ -6,13 +6,9 @@
           <div
             class="text-2xl font-semibold inline-flex space-x-2 justify-center items-center"
           >
-            <icon
-              name="share-nodes"
-              :size="18"
-              customClass="text-gray-100 text-2xl lg:text-4xl"
-            />
-            <span class="text-2xl lg:text-4xl text-gray-100"
-              >SocialNetwork</span
+            <img src="http://socialnetwork.io/logo.png" alt="freakbook" />
+            <span class="text-2xl lg:text-2xl text-gray-100"
+              >Freakbook</span
             >
           </div>
           <div>

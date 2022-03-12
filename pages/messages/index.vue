@@ -5,7 +5,7 @@
     <div class="w-full">
       <div class="flex flex-col bg-gray-100 shadow-md border border-gray-200">
         <div class="flex message-header justify-between p-2 px-3">
-          <div class="text-lg text-gray-800 font-semibold">Messages</div>
+          <div class="text-lg text-gray-800 font-semibold"></div>
           <div class="flex flex-col justify-end" v-if="selectedUser.name">
             <div class="flex items-center space-x-2">
               <div class="text-md text-gray-800 font-semibold">
@@ -20,7 +20,7 @@
         </div>
         <horizontal-bar :height="1" />
         <div class="message-content flex">
-          <div class="w-1/4">
+          <div class="w-full lg:w-1/4 hidden lg:block">
             <div class="buddies-load" v-if="loading">
               <person-skeleton v-for="p in 12" :key="p" />
             </div>
@@ -36,7 +36,7 @@
               />
             </div>
           </div>
-          <div class="w-3/4 bg-white flex flex-col items-baseline">
+          <div class="w-full lg:w-3/4 bg-white flex flex-col items-baseline">
             <div class="messages-wrapper flex flex-col w-full mt-auto">
               <div
                 class="messages-container flex flex-col w-full py-2 px-4 mb-0"
@@ -53,10 +53,10 @@
                     </div>
                   </div>
                   <div class="flex w-full justify-between my-2">
-                    <div class="w-1/2 flex justify-start">
+                    <div class="w-full md:w-3/4 xl:w-1/2 flex justify-start">
                       <div
                         v-if="i % 2 === 0"
-                        class="message-wrap flex flex-wrap w-1/2 flex-col space-y-0 friend-msg"
+                        class="message-wrap flex flex-wrap w-full md:w-1/2 flex-col space-y-0 friend-msg"
                       >
                         <div class="flex space-x-1">
                           <profile-picture />
@@ -74,10 +74,10 @@
                         </div>
                       </div>
                     </div>
-                    <div class="w-1/2 flex justify-end">
+                    <div class="w-full md:w-3/4 xl:w-1/2 flex justify-end">
                       <div
                         v-if="i % 2 !== 0"
-                        class="message-wrap flex flex-wrap w-1/2 flex-col space-y-0 my-msg"
+                        class="message-wrap flex flex-wrap w-full md:w-1/2 flex-col space-y-0 my-msg"
                       >
                         <div
                           class="text bg-cyan-400 text-gray-800 p-2 px-4 rounded-full"

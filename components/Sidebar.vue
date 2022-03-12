@@ -10,7 +10,9 @@
         "
         class="xl:border xl:rounded-lg sidebar-item hover:bg-blue-600 hover:text-white hover:border-blue-500 w-full py-2 px-4"
       >
-        <div>
+        <div
+          @click="() => (item.onClickHandler ? item.onClickHandler() : false)"
+        >
           <span class="mr-2">
             <Icon :name="item.icon.name" :type="item.icon.type" size="18px" />
           </span>
@@ -69,19 +71,22 @@ export default {
             name: "cog",
           },
         },
-
-        {
-          _id: 4,
-          title: "Privacy",
-          url: "/privacy",
-          icon: {
-            type: "fa",
-            name: "lock",
-          },
-        },
-
         {
           _id: 5,
+          title: "Logout",
+          url: "#",
+          onClickHandler: (params) => {
+            if (confirm("leaving so soon ?")) {
+              this.logOut();
+            }
+          },
+          icon: {
+            type: "fa",
+            name: "sign-out",
+          },
+        },
+        {
+          _id: 6,
           title: "Help",
           url: "/help",
           icon: {
@@ -93,8 +98,7 @@ export default {
     };
   },
   created() {
-    let option = this.sidemenu.find((i) => i.title === "Profile");
-    option.url = "/" + this.user.id;
+    this.sidemenu[1].url = "/" + this.user.id;
   },
   methods: {
     nuxtClicked() {
@@ -117,11 +121,11 @@ export default {
   background: white;
   position: fixed;
   height: 100%;
-  width: 60%;
+  width: 50%;
   z-index: 1000;
   padding: 10px 15px;
   opacity: 1;
-  transform: translateX(-350px);
+  transform: translateX(-380px);
   transition: all ease-in-out 0.3s;
 }
 @media (min-width: 576px) {

@@ -69,9 +69,10 @@
 </template>
 
 <script>
+import HeaderBtn from './HeaderBtn.vue';
 import HeaderBtnGroup from "./HeaderBtnGroup.vue";
 export default {
-  components: { HeaderBtnGroup },
+  components: { HeaderBtnGroup, HeaderBtn },
   name: "HeaderBtnGroups",
   props: ["isMyProfile", "isRequestSent", "isFriend"],
 };

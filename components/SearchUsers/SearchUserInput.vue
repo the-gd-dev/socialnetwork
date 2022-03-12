@@ -1,20 +1,24 @@
 <template>
   <div class="flex lg:flex-col w-full lg:w-96 relative">
-    <div class="relative hidden lg:flex items-center  h-10 overflow-hidden border">
+    <div
+      class="relative flex items-center w-full h-10 overflow-hidden border"
+    >
       <input
         @input="getUsersOnSearch"
         v-model.trim="searchQuery"
         type="text"
         name="browser"
         id="users"
-        style="border:none !important; outline:none;"
+        placeholder="Search People ..."
+        style="border: none !important; outline: none"
         class="h-full w-full px-2 text-md"
       />
-      <button class="bg-gray-100 text-gray-600 absolute right-0 py-2 px-3 border-l">
+      <button
+        class="bg-gray-100 text-gray-600 absolute right-0 py-2 px-3 border-l"
+      >
         <Icon name="search" size="20px" />
       </button>
     </div>
-   
   </div>
 </template>
 
@@ -22,6 +26,9 @@
 import { axiosGet } from "~/helpers/axiosHelpers";
 import { globalEvent } from "~/helpers/globalEvent";
 export default {
+  props: {
+    resetSearchInput: { default: false },
+  },
   name: "SearchUsers",
   data() {
     return {
@@ -47,6 +54,17 @@ export default {
         console.log(error);
       }
       this.loading = false;
+    },
+  },
+  // beforeDestroy() {
+  //   globalEvent.$off("route-changed");
+  // },
+  watch: {
+    resetSearchInput(v) {
+      if (v) {
+        this.searchQuery = "";
+        this.$emit('input-resetted')
+      }
     },
   },
 };

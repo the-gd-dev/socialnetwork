@@ -61,6 +61,9 @@
         </div>
       </div>
     </div>
+    <div class="bg-blue-500 w-full py-2 px-4 text-center">
+      <nuxt-link to="/notifications" class="text-white">View all notifications</nuxt-link>
+    </div>
   </div>
 </template>
 

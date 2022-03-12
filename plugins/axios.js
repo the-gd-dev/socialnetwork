@@ -7,7 +7,7 @@ export default ({ $axios, redirect, app }, inject) => {
 
       throw error;
     }
-
+    
     // Handle other types of errors (e.g., redirect to login on 401 errors)
 
     throw error;

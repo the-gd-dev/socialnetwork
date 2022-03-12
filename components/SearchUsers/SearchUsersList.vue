@@ -21,14 +21,17 @@
       v-for="item in searchItems"
       :key="item.id"
       class="search-user-single hover:bg-gray-200"
+      @click="$emit('result-click')"
     >
-      <div class="flex w-full justify-start items-center space-x-2">
-        <profile-picture
-          :linkToProfile="false"
-          :url="item.user_meta.display_picture"
-        />
-        <div class="text-lg font-semibold">{{ item.name }}</div>
-      </div>
+      <nuxt-link :to="`/${item.uuid}`">
+        <div class="flex w-full justify-start items-center space-x-2">
+          <profile-picture
+            :linkToProfile="false"
+            :url="item.user_meta.display_picture"
+          />
+          <div class="text-lg font-semibold">{{ item.name }}</div>
+        </div>
+      </nuxt-link>
     </li>
   </ul>
 </template>

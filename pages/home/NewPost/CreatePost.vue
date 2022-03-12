@@ -1,13 +1,15 @@
 <template>
   <div class="flex flex-col sticky top-16 z-999">
-    <div class="flex">
+    <div class="flex justify-end md:justify-start">
       <div class="inline-flex space-x-3 bg-white p-1 rounded-full">
         <button
           @click="() => toggleCreateOptions('post')"
-          class="bg-gradient-to-tr from-blue-500 to-blue-300 rounded-full p-2 px-3 text-white"
+          class="bg-blue-400 rounded-full p-2 px-3 text-white"
         >
-          <icon name="pencil" customClass="text-white" /> 
-          <span class="hidden lg:inline text-md font-semibold ml-1">Create Post</span>
+          <icon name="pencil" customClass="text-white" />
+          <span class="hidden lg:inline text-md font-semibold ml-1"
+            >Create Post</span
+          >
         </button>
         <!-- <button @click="toggleCreateOptions('story')" class="bg-gradient-to-tr from-blue-500 to-sky-300 rounded-full p-2 text-white"><icon name="circle-o" customClass="text-white" /> New Story</button> -->
       </div>
@@ -116,6 +118,13 @@ export default {
       },
     };
   },
+  created() {
+    // globalEvent.$on("container-clicked", () => {
+    //   if (this.showPostForm === true) {
+    //     this.showPostForm = false;
+    //   }
+    // });
+  },
   methods: {
     removeImage(id) {
       if (confirm("are you sure ?")) {
@@ -181,7 +190,7 @@ export default {
             let file = this.post.videos[i];
             requestPayload.append("videos[" + i + "]", file);
           }
-          
+
           let response = await axiosPost("posts/create", requestPayload, {
             headers: {
               "Content-Type": "multipart/form-data",

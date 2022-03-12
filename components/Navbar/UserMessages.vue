@@ -64,8 +64,12 @@
       >
         <div class="m-auto text-lg">
           <Icon name="comments" />
-          No messages found.</div>
+          No messages found.
+        </div>
       </div>
+    </div>
+    <div class="bg-blue-500 w-full py-2 px-4 text-center">
+      <nuxt-link to="/messages" class="text-white">View all messages</nuxt-link>
     </div>
   </div>
 </template>

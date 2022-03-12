@@ -6,9 +6,9 @@
         :thisUser="thisUser"
         @upload-new-cover="uploadOrSelectNewDP('cover')"
       />
-      <div class="px-4 profile-navigation-box sticky top-16 lg:top-20 z-20">
+      <div class="lg:px-4 profile-navigation-box sticky top-12 lg:top-20 z-20">
         <div
-          class="flex bg-white border border-gray-100 flex-col shadow-lg rounded-xl overflow-hidden"
+          class="flex bg-white border border-gray-100 flex-col shadow-lg lg:rounded-xl overflow-hidden"
         >
           <!-- User Header -->
           <header-view
