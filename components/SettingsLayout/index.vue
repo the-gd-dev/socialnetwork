@@ -4,11 +4,14 @@
       <div
         class="header bg-gray-100 font-semibold text-2xl border-b py-2 text-blue-900 px-4"
       >
-        Settings  <span class="text-gray-500 text-lg" v-if="pageName"> / {{ pageName }}</span>
+        Settings
+        <span class="text-gray-500 text-lg" v-if="pageName">
+          / {{ pageName }}</span
+        >
       </div>
       <div class="flex content">
         <div class="w-1/6 bg-gray-100 lg:w-1/5 pb-4">
-          <div class="sidebar-container h-96" :class="{ show: toggle }">
+          <div class="sidebar-container h-96">
             <div
               class="flex flex-col justify-center w-full pt-2 sidebar-wrapper"
             >
@@ -21,7 +24,7 @@
                     ? 'bg-blue-600 text-white'
                     : 'text-blue-500'
                 "
-                class="sidebar-item hover:bg-blue-500 hover:text-white hover:border-blue-500 w-full py-2 px-4 "
+                class="sidebar-item hover:bg-blue-500 hover:text-white hover:border-blue-500 w-full py-2 px-4"
               >
                 <div
                   class="flex justify-center lg:justify-start items-center"
