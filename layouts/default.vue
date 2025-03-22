@@ -6,7 +6,7 @@
           <div
             class="text-2xl font-semibold inline-flex space-x-2 justify-center items-center"
           >
-            <img src="http://socialnetwork.io/logo.png" alt="freakbook" />
+            <img src="http://localhost:8000/logo.png" alt="freakbook" />
             <span class="text-2xl lg:text-2xl text-gray-100"
               >Freakbook</span
             >

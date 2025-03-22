@@ -4,7 +4,7 @@
       <!-- Hero Image -->
       <div class="hidden lg:flex lg:w-1/3 py-12">
         <img
-          src="http://socialnetwork.io/india-map.png"
+          src="http://localhost:8000/india-map.png"
           alt=""
           srcset=""
           class="m-auto"
